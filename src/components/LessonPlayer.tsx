@@ -90,7 +90,10 @@ export function LessonPlayer({ lesson }: Props) {
 
   const vizType = beat?.viz?.type ?? 'formula'
   const showFloatMath =
-    !!beat?.math && vizType !== 'formula' && vizType !== 'none'
+    !!beat?.math &&
+    vizType !== 'formula' &&
+    vizType !== 'none' &&
+    vizType !== 'pythagorasLab'
   const isLabScene = lesson.lab && vizType === 'pythagorasLab'
   const labProps = (beat?.viz?.props ?? { mode: 'ask' }) as PythagorasLabProps
 

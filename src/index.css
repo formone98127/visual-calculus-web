@@ -257,8 +257,8 @@ a.primary {
   width: min(920px, 100%);
   height: 100%;
   display: grid;
-  grid-template-rows: 1fr auto;
-  gap: 0.75rem;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.55rem;
   align-items: center;
 }
 
@@ -266,7 +266,8 @@ a.primary {
   position: relative;
   display: grid;
   place-items: center;
-  min-height: min(62vh, 560px);
+  min-height: min(54vh, 520px);
+  z-index: 1;
   animation: fade-up 0.38s ease;
 }
 
@@ -284,22 +285,27 @@ a.primary {
 .prompt {
   margin: 0;
   text-align: center;
-  color: var(--muted);
+  color: #c5cee0;
   font-size: clamp(0.95rem, 2.4vw, 1.1rem);
-  max-width: 36ch;
+  max-width: 40ch;
   justify-self: center;
+  z-index: 2;
+  padding: 0.35rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(11, 16, 32, 0.55);
 }
 
 .caption-chip {
   justify-self: center;
+  z-index: 2;
   padding: 0.55rem 1.1rem;
   border-radius: 999px;
-  background: var(--glass);
+  background: rgba(11, 16, 32, 0.88);
   border: 1px solid var(--line);
   backdrop-filter: blur(10px);
   font-size: 0.95rem;
   letter-spacing: 0.01em;
-  color: var(--ink);
+  color: #f2f5ff;
 }
 
 .caption-chip.pulse {
@@ -326,13 +332,15 @@ a.primary {
 .math-float {
   position: absolute;
   left: 50%;
-  bottom: 0;
+  bottom: 0.35rem;
   transform: translateX(-50%);
-  padding: 0.35rem 0.85rem;
+  z-index: 3;
+  padding: 0.4rem 0.95rem;
   border-radius: 12px;
-  background: rgba(11, 16, 32, 0.82);
+  background: rgba(11, 16, 32, 0.92);
   border: 1px solid var(--line);
   backdrop-filter: blur(8px);
+  pointer-events: none;
 }
 
 .math-float .math-block {
@@ -342,9 +350,15 @@ a.primary {
   border: none;
 }
 
+.math-float .katex,
+.math-float .katex *,
+.math-block .katex,
+.math-block .katex * {
+  color: #eef3ff !important;
+}
+
 .math-float .katex {
   font-size: 1.15em;
-  color: var(--ink);
 }
 
 .math-block {
@@ -365,7 +379,6 @@ a.primary {
 
 .math-block .katex {
   font-size: 1.45em;
-  color: #eef3ff;
 }
 
 .math-block.huge .katex {
@@ -642,8 +655,12 @@ a.primary {
 }
 
 .pythagoras .side-label {
-  fill: var(--muted);
+  fill: #dce3f5;
   font-size: 13px;
+  paint-order: stroke fill;
+  stroke: rgba(11, 16, 32, 0.85);
+  stroke-width: 3px;
+  stroke-linejoin: round;
 }
 
 .pythagoras .area-label {
@@ -778,6 +795,10 @@ a.primary {
   font-size: 16px;
   font-weight: 700;
   pointer-events: none;
+  paint-order: stroke fill;
+  stroke: rgba(11, 16, 32, 0.9);
+  stroke-width: 4px;
+  stroke-linejoin: round;
 }
 .lab-area.a {
   fill: var(--sin);

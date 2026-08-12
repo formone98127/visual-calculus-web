@@ -406,7 +406,7 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
             {flags.generalize ? 'b²' : `${B}² = ${B * B}`}
           </text>
         )}
-        {flags.showC && (
+        {flags.showC && !showFitted && (
           <text
             x={localToWorld(sqC, sqC.side / 2, sqC.side / 2).x}
             y={localToWorld(sqC, sqC.side / 2, sqC.side / 2).y + 6}
