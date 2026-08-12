@@ -711,25 +711,59 @@ a.primary {
   overflow: visible;
 }
 
+.lab-svg .sq-fill {
+  stroke-width: 2.5;
+}
+
+.lab-svg .sq-a {
+  fill: rgba(255, 107, 122, 0.12);
+  stroke: var(--sin);
+}
+.lab-svg .sq-b {
+  fill: rgba(76, 201, 240, 0.12);
+  stroke: var(--cos);
+}
+.lab-svg .sq-c {
+  fill: rgba(184, 242, 124, 0.1);
+  stroke: var(--op);
+}
+
 .lab-tile {
+  transform-box: view-box;
+  transform-origin: 0 0;
   transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .lab-tile rect {
-  stroke: rgba(11, 16, 32, 0.45);
+  stroke: rgba(11, 16, 32, 0.5);
   stroke-width: 1;
 }
 
 .lab-tile.kind-a rect {
-  fill: rgba(255, 107, 122, 0.85);
+  fill: rgba(255, 107, 122, 0.9);
 }
 
 .lab-tile.kind-b rect {
-  fill: rgba(76, 201, 240, 0.85);
+  fill: rgba(76, 201, 240, 0.9);
+}
+
+.shared-edge {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.shared-edge.a {
+  stroke: var(--sin);
+}
+.shared-edge.b {
+  stroke: var(--cos);
+}
+.shared-edge.c {
+  stroke: var(--op);
 }
 
 .sq-c-waiting {
-  stroke-dasharray: 8 6;
+  stroke-dasharray: 10 7;
   animation: dash-move 1.2s linear infinite;
   filter: drop-shadow(0 0 8px rgba(184, 242, 124, 0.35));
 }

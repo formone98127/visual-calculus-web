@@ -10,8 +10,8 @@ export const pythagorasLessons: Lesson[] = [
     beats: [
       {
         id: 'p0',
-        caption: 'Watch the squares',
-        prompt: 'How do these three squares relate?',
+        caption: 'One side, one square',
+        prompt: 'Each square is built outward on a side of the triangle.',
         viz: { type: 'pythagorasLab', props: { mode: 'ask' } },
       },
       {

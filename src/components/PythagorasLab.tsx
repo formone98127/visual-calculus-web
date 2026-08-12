@@ -4,16 +4,9 @@ import type { PythagorasLabMode, PythagorasLabProps } from '../data/types'
 const A = 3
 const B = 4
 const C = 5
-const U = 28
+const U = 32
 
-type Pose = { x: number; y: number; rot: number }
-
-type Tile = {
-  id: string
-  kind: 'a' | 'b'
-  home: Pose
-  fit: Pose
-}
+type Pt = { x: number; y: number }
 
 function beep() {
   try {
@@ -34,122 +27,63 @@ function beep() {
   }
 }
 
-function squareFrame(
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number,
-  px: number,
-  py: number,
-) {
-  const dx = x2 - x1
-  const dy = y2 - y1
+/** Outward unit normal from segment P→Q, away from point R. */
+function outwardNormal(P: Pt, Q: Pt, R: Pt): Pt {
+  const dx = Q.x - P.x
+  const dy = Q.y - P.y
   const len = Math.hypot(dx, dy) || 1
   let nx = -dy / len
   let ny = dx / len
-  const mx = (x1 + x2) / 2
-  const my = (y1 + y2) / 2
-  if (
-    (mx + nx - px) ** 2 + (my + ny - py) ** 2 <
-    (mx - nx - px) ** 2 + (my - ny - py) ** 2
-  ) {
+  const mx = (P.x + Q.x) / 2
+  const my = (P.y + Q.y) / 2
+  // If midpoint+normal is closer to R, flip (we want away from R)
+  const dPlus = (mx + nx - R.x) ** 2 + (my + ny - R.y) ** 2
+  const dMinus = (mx - nx - R.x) ** 2 + (my - ny - R.y) ** 2
+  if (dPlus < dMinus) {
     nx = -nx
     ny = -ny
   }
-  const ux = dx / len
-  const uy = dy / len
-  return { x1, y1, ux, uy, nx, ny, len }
+  return { x: nx, y: ny }
 }
 
-function tilePose(
-  frame: ReturnType<typeof squareFrame>,
-  i: number,
-  j: number,
-  n: number,
-): Pose {
-  const step = frame.len / n
-  const x =
-    frame.x1 + frame.ux * (i + 0.5) * step + frame.nx * (j + 0.5) * step
-  const y =
-    frame.y1 + frame.uy * (i + 0.5) * step + frame.ny * (j + 0.5) * step
-  const rot = (Math.atan2(frame.uy, frame.ux) * 180) / Math.PI
-  return { x, y, rot }
+type SquareGeom = {
+  /** Corner on triangle, start of shared side */
+  P: Pt
+  /** Corner on triangle, end of shared side */
+  Q: Pt
+  /** Outward normal */
+  N: Pt
+  /** Side length in px */
+  side: number
+  /** Shared-side unit direction P→Q */
+  T: Pt
+  /** Four corners: P, Q, Q+N*side, P+N*side */
+  corners: Pt[]
+  /** SVG transform placing local (0,0)-(side,side) so +x = T, +y = N */
+  transform: string
 }
 
-function polyFromFrame(frame: ReturnType<typeof squareFrame>) {
-  const { x1, y1, ux, uy, nx, ny, len } = frame
-  const p0 = `${x1},${y1}`
-  const p1 = `${x1 + ux * len},${y1 + uy * len}`
-  const p2 = `${x1 + ux * len + nx * len},${y1 + uy * len + ny * len}`
-  const p3 = `${x1 + nx * len},${y1 + ny * len}`
-  return `${p0} ${p1} ${p2} ${p3}`
+function squareOnSide(P: Pt, Q: Pt, inside: Pt, side: number): SquareGeom {
+  const dx = Q.x - P.x
+  const dy = Q.y - P.y
+  const len = Math.hypot(dx, dy) || 1
+  const T = { x: dx / len, y: dy / len }
+  const N = outwardNormal(P, Q, inside)
+  const corners: Pt[] = [
+    P,
+    Q,
+    { x: Q.x + N.x * side, y: Q.y + N.y * side },
+    { x: P.x + N.x * side, y: P.y + N.y * side },
+  ]
+  // Local: x along T, y along N. Map local (0,0) → P
+  // SVG matrix: [T.x N.x P.x; T.y N.y P.y; 0 0 1]
+  const transform = `matrix(${T.x} ${T.y} ${N.x} ${N.y} ${P.x} ${P.y})`
+  return { P, Q, N, T, side, corners, transform }
 }
 
-function buildTiles(): Tile[] {
-  const Ax = 0
-  const Ay = 0
-  const Bx = A * U
-  const By = 0
-  const Cx = 0
-  const Cy = -B * U
-
-  const frameA = squareFrame(Ax, Ay, Bx, By, Cx, Cy)
-  const frameB = squareFrame(Ax, Ay, Cx, Cy, Bx, By)
-  const frameC = squareFrame(Bx, By, Cx, Cy, Ax, Ay)
-
-  const tiles: Tile[] = []
-  let fitIndex = 0
-
-  for (let i = 0; i < A; i++) {
-    for (let j = 0; j < A; j++) {
-      const fi = fitIndex % C
-      const fj = Math.floor(fitIndex / C)
-      tiles.push({
-        id: `a-${i}-${j}`,
-        kind: 'a',
-        home: tilePose(frameA, i, j, A),
-        fit: tilePose(frameC, fi, fj, C),
-      })
-      fitIndex++
-    }
-  }
-
-  for (let i = 0; i < B; i++) {
-    for (let j = 0; j < B; j++) {
-      const fi = fitIndex % C
-      const fj = Math.floor(fitIndex / C)
-      tiles.push({
-        id: `b-${i}-${j}`,
-        kind: 'b',
-        home: tilePose(frameB, i, j, B),
-        fit: tilePose(frameC, fi, fj, C),
-      })
-      fitIndex++
-    }
-  }
-
-  return tiles
+function poly(pts: Pt[]) {
+  return pts.map((p) => `${p.x},${p.y}`).join(' ')
 }
-
-const GEOM = (() => {
-  const Ax = 0
-  const Ay = 0
-  const Bx = A * U
-  const By = 0
-  const Cx = 0
-  const Cy = -B * U
-  return {
-    Ax,
-    Ay,
-    Bx,
-    By,
-    Cx,
-    Cy,
-    frameA: squareFrame(Ax, Ay, Bx, By, Cx, Cy),
-    frameB: squareFrame(Ax, Ay, Cx, Cy, Bx, By),
-    frameC: squareFrame(Bx, By, Cx, Cy, Ax, Ay),
-  }
-})()
 
 function modeFlags(mode: PythagorasLabMode) {
   return {
@@ -157,8 +91,8 @@ function modeFlags(mode: PythagorasLabMode) {
     showA: ['squareA', 'squareB', 'squareC', 'challenge', 'fitted', 'generalize'].includes(mode),
     showB: ['squareB', 'squareC', 'challenge', 'fitted', 'generalize'].includes(mode),
     showC: ['squareC', 'challenge', 'fitted', 'generalize'].includes(mode),
-    showTilesA: ['squareA', 'squareB', 'squareC', 'challenge', 'fitted', 'generalize'].includes(mode),
-    showTilesB: ['squareB', 'squareC', 'challenge', 'fitted', 'generalize'].includes(mode),
+    tilesA: ['squareA', 'squareB', 'squareC', 'challenge', 'fitted', 'generalize'].includes(mode),
+    tilesB: ['squareB', 'squareC', 'challenge', 'fitted', 'generalize'].includes(mode),
     challenge: mode === 'challenge',
     fitted: mode === 'fitted' || mode === 'generalize',
     generalize: mode === 'generalize',
@@ -166,25 +100,88 @@ function modeFlags(mode: PythagorasLabMode) {
   }
 }
 
-function areaLabel(
-  frame: ReturnType<typeof squareFrame>,
-  text: string,
-  cls: string,
-) {
-  const cx = frame.x1 + (frame.ux + frame.nx) * frame.len * 0.5
-  const cy = frame.y1 + (frame.uy + frame.ny) * frame.len * 0.5
-  return (
-    <text x={cx} y={cy + 6} className={`lab-area ${cls}`} textAnchor="middle">
-      {text}
-    </text>
-  )
+type TileSpec = {
+  id: string
+  kind: 'a' | 'b'
+  /** local grid index in home square */
+  i: number
+  j: number
+  nHome: number
+  /** destination cell in C (5×5) */
+  fi: number
+  fj: number
+}
+
+function buildTileSpecs(): TileSpec[] {
+  const tiles: TileSpec[] = []
+  let k = 0
+  for (let i = 0; i < A; i++) {
+    for (let j = 0; j < A; j++) {
+      tiles.push({
+        id: `a-${i}-${j}`,
+        kind: 'a',
+        i,
+        j,
+        nHome: A,
+        fi: k % C,
+        fj: Math.floor(k / C),
+      })
+      k++
+    }
+  }
+  for (let i = 0; i < B; i++) {
+    for (let j = 0; j < B; j++) {
+      tiles.push({
+        id: `b-${i}-${j}`,
+        kind: 'b',
+        i,
+        j,
+        nHome: B,
+        fi: k % C,
+        fj: Math.floor(k / C),
+      })
+      k++
+    }
+  }
+  return tiles
+}
+
+/** Map local square coords → world via square transform basis */
+function localToWorld(sq: SquareGeom, lx: number, ly: number): Pt {
+  return {
+    x: sq.P.x + sq.T.x * lx + sq.N.x * ly,
+    y: sq.P.y + sq.T.y * lx + sq.N.y * ly,
+  }
+}
+
+function cellCenter(sq: SquareGeom, i: number, j: number, n: number): Pt {
+  const step = sq.side / n
+  return localToWorld(sq, (i + 0.5) * step, (j + 0.5) * step)
+}
+
+function cellAngle(sq: SquareGeom) {
+  return (Math.atan2(sq.T.y, sq.T.x) * 180) / Math.PI
 }
 
 export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) {
-  const tiles = useMemo(() => buildTiles(), [])
   const flags = modeFlags(mode)
   const [fitted, setFitted] = useState(false)
   const completedRef = useRef(false)
+  const tileSpecs = useMemo(() => buildTileSpecs(), [])
+
+  // Right triangle: right angle at A, legs along +x and -y
+  const geom = useMemo(() => {
+    const P_A: Pt = { x: 0, y: 0 }
+    const P_B: Pt = { x: A * U, y: 0 }
+    const P_C: Pt = { x: 0, y: -B * U }
+    // Square on AB (leg a) — side length a
+    const sqA = squareOnSide(P_A, P_B, P_C, A * U)
+    // Square on AC (leg b) — side length b
+    const sqB = squareOnSide(P_A, P_C, P_B, B * U)
+    // Square on BC (hypotenuse) — side length c = |BC|
+    const sqC = squareOnSide(P_B, P_C, P_A, C * U)
+    return { P_A, P_B, P_C, sqA, sqB, sqC }
+  }, [])
 
   useEffect(() => {
     if (mode === 'challenge') {
@@ -199,6 +196,7 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
   }, [mode])
 
   const showFitted = fitted || flags.fitted
+  const { P_A, P_B, P_C, sqA, sqB, sqC } = geom
 
   const runAutoFit = () => {
     if (showFitted) return
@@ -209,31 +207,26 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
         completedRef.current = true
         onInteractComplete?.()
       }
-    }, 850)
+    }, 900)
   }
 
-  const { Ax, Ay, Bx, By, Cx, Cy, frameA, frameB, frameC } = GEOM
-
-  const pad = 48
-  const corners = [
-    { x: Ax, y: Ay },
-    { x: Bx, y: By },
-    { x: Cx, y: Cy },
-    ...[frameA, frameB, frameC].flatMap((f) => [
-      { x: f.x1, y: f.y1 },
-      { x: f.x1 + f.ux * f.len, y: f.y1 + f.uy * f.len },
-      {
-        x: f.x1 + f.ux * f.len + f.nx * f.len,
-        y: f.y1 + f.uy * f.len + f.ny * f.len,
-      },
-      { x: f.x1 + f.nx * f.len, y: f.y1 + f.ny * f.len },
-    ]),
+  // ViewBox from all square corners + triangle
+  const allPts = [
+    P_A,
+    P_B,
+    P_C,
+    ...sqA.corners,
+    ...sqB.corners,
+    ...sqC.corners,
   ]
-  const minX = Math.min(...corners.map((p) => p.x)) - pad
-  const maxX = Math.max(...corners.map((p) => p.x)) + pad
-  const minY = Math.min(...corners.map((p) => p.y)) - pad
-  const maxY = Math.max(...corners.map((p) => p.y)) + pad
+  const pad = 40
+  const minX = Math.min(...allPts.map((p) => p.x)) - pad
+  const maxX = Math.max(...allPts.map((p) => p.x)) + pad
+  const minY = Math.min(...allPts.map((p) => p.y)) - pad
+  const maxY = Math.max(...allPts.map((p) => p.y)) + pad
   const vb = `${minX} ${minY} ${maxX - minX} ${maxY - minY}`
+
+  const mid = (P: Pt, Q: Pt) => ({ x: (P.x + Q.x) / 2, y: (P.y + Q.y) / 2 })
 
   return (
     <div
@@ -241,7 +234,7 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
     >
       {flags.ask && (
         <p className="lab-hook">
-          Three squares. One triangle. What’s the secret?
+          Each square sits on one side of the triangle.
         </p>
       )}
 
@@ -249,91 +242,180 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
         className="pythagoras lab-svg"
         viewBox={vb}
         role="img"
-        aria-label="Pythagorean tile lab"
+        aria-label="Pythagorean theorem: squares on each side of a right triangle"
       >
+        {/* Squares as groups in local side-aligned coords — edges share the triangle */}
         {flags.showA && (
-          <polygon className="sq sq-a" points={polyFromFrame(frameA)} />
+          <g className="sq-group" transform={sqA.transform}>
+            <rect
+              className="sq-fill sq-a"
+              x={0}
+              y={0}
+              width={sqA.side}
+              height={sqA.side}
+            />
+          </g>
         )}
         {flags.showB && (
-          <polygon className="sq sq-b" points={polyFromFrame(frameB)} />
+          <g className="sq-group" transform={sqB.transform}>
+            <rect
+              className="sq-fill sq-b"
+              x={0}
+              y={0}
+              width={sqB.side}
+              height={sqB.side}
+            />
+          </g>
         )}
         {flags.showC && (
-          <polygon
-            className={`sq sq-c ${flags.challenge && !showFitted ? 'sq-c-waiting' : ''}`}
-            points={polyFromFrame(frameC)}
-          />
+          <g className="sq-group" transform={sqC.transform}>
+            <rect
+              className={`sq-fill sq-c ${flags.challenge && !showFitted ? 'sq-c-waiting' : ''}`}
+              x={0}
+              y={0}
+              width={sqC.side}
+              height={sqC.side}
+            />
+          </g>
         )}
 
-        {tiles.map((t) => {
+        {/* Unit tiles — always axis-aligned in their square's local frame via world pose */}
+        {tileSpecs.map((t) => {
+          const homeSq = t.kind === 'a' ? sqA : sqB
           const visible =
-            (t.kind === 'a' && flags.showTilesA) ||
-            (t.kind === 'b' && flags.showTilesB)
+            (t.kind === 'a' && flags.tilesA) || (t.kind === 'b' && flags.tilesB)
           if (!visible) return null
-          const pose = showFitted ? t.fit : t.home
+
+          const home = cellCenter(homeSq, t.i, t.j, t.nHome)
+          const dest = cellCenter(sqC, t.fi, t.fj, C)
+          const pos = showFitted ? dest : home
+          const ang = showFitted ? cellAngle(sqC) : cellAngle(homeSq)
+          const step = showFitted ? sqC.side / C : homeSq.side / t.nHome
+          const gap = 1.2
+
           return (
             <g
               key={t.id}
               className={`lab-tile kind-${t.kind}`}
               style={{
-                transform: `translate(${pose.x}px, ${pose.y}px) rotate(${pose.rot}deg)`,
+                transform: `translate(${pos.x}px, ${pos.y}px) rotate(${ang}deg)`,
               }}
             >
-              <rect x={-U / 2} y={-U / 2} width={U} height={U} rx={2.5} />
+              <rect
+                x={-step / 2 + gap / 2}
+                y={-step / 2 + gap / 2}
+                width={step - gap}
+                height={step - gap}
+                rx={2}
+              />
             </g>
           )
         })}
 
+        {/* Triangle on top so shared sides read clearly */}
         {flags.showTri && (
           <polygon
             className="tri"
-            points={`${Ax},${Ay} ${Bx},${By} ${Cx},${Cy}`}
+            points={poly([P_A, P_B, P_C])}
           />
         )}
         {flags.showTri && (
           <path
             className="right-angle"
-            d={`M ${Ax + 12} ${Ay} L ${Ax + 12} ${Ay - 12} L ${Ax} ${Ay - 12}`}
+            d={`M ${P_A.x + 14} ${P_A.y} L ${P_A.x + 14} ${P_A.y - 14} L ${P_A.x} ${P_A.y - 14}`}
             fill="none"
+          />
+        )}
+
+        {/* Shared-edge emphasis */}
+        {flags.showTri && flags.showA && (
+          <line
+            className="shared-edge a"
+            x1={P_A.x}
+            y1={P_A.y}
+            x2={P_B.x}
+            y2={P_B.y}
+          />
+        )}
+        {flags.showTri && flags.showB && (
+          <line
+            className="shared-edge b"
+            x1={P_A.x}
+            y1={P_A.y}
+            x2={P_C.x}
+            y2={P_C.y}
+          />
+        )}
+        {flags.showTri && flags.showC && (
+          <line
+            className="shared-edge c"
+            x1={P_B.x}
+            y1={P_B.y}
+            x2={P_C.x}
+            y2={P_C.y}
           />
         )}
 
         {flags.showTri && (
           <>
             <text
-              x={(Ax + Bx) / 2}
-              y={Ay + 22}
+              x={mid(P_A, P_B).x}
+              y={mid(P_A, P_B).y + 20}
               className="side-label"
               textAnchor="middle"
             >
-              {flags.generalize ? 'a' : `a=${A}`}
+              {flags.generalize ? 'a' : `a = ${A}`}
             </text>
             <text
-              x={Ax - 20}
-              y={(Ay + Cy) / 2}
+              x={mid(P_A, P_C).x - 18}
+              y={mid(P_A, P_C).y}
               className="side-label"
               textAnchor="middle"
             >
-              {flags.generalize ? 'b' : `b=${B}`}
+              {flags.generalize ? 'b' : `b = ${B}`}
             </text>
             <text
-              x={(Bx + Cx) / 2 + 16}
-              y={(By + Cy) / 2}
+              x={mid(P_B, P_C).x + 14}
+              y={mid(P_B, P_C).y}
               className="side-label"
               textAnchor="middle"
             >
-              {flags.generalize ? 'c' : `c=${C}`}
+              {flags.generalize ? 'c' : `c = ${C}`}
             </text>
           </>
         )}
 
-        {flags.showA &&
-          !showFitted &&
-          areaLabel(frameA, flags.generalize ? 'a²' : '9', 'a')}
-        {flags.showB &&
-          !showFitted &&
-          areaLabel(frameB, flags.generalize ? 'b²' : '16', 'b')}
-        {flags.showC &&
-          areaLabel(frameC, flags.generalize ? 'c²' : '25', 'c')}
+        {/* Area labels at square centers */}
+        {flags.showA && !showFitted && (
+          <text
+            x={localToWorld(sqA, sqA.side / 2, sqA.side / 2).x}
+            y={localToWorld(sqA, sqA.side / 2, sqA.side / 2).y + 6}
+            className="lab-area a"
+            textAnchor="middle"
+          >
+            {flags.generalize ? 'a²' : `${A}² = ${A * A}`}
+          </text>
+        )}
+        {flags.showB && !showFitted && (
+          <text
+            x={localToWorld(sqB, sqB.side / 2, sqB.side / 2).x}
+            y={localToWorld(sqB, sqB.side / 2, sqB.side / 2).y + 6}
+            className="lab-area b"
+            textAnchor="middle"
+          >
+            {flags.generalize ? 'b²' : `${B}² = ${B * B}`}
+          </text>
+        )}
+        {flags.showC && (
+          <text
+            x={localToWorld(sqC, sqC.side / 2, sqC.side / 2).x}
+            y={localToWorld(sqC, sqC.side / 2, sqC.side / 2).y + 6}
+            className="lab-area c"
+            textAnchor="middle"
+          >
+            {flags.generalize ? 'c²' : `${C}² = ${C * C}`}
+          </text>
+        )}
       </svg>
 
       {flags.challenge && !showFitted && (
@@ -345,7 +427,7 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
             runAutoFit()
           }}
         >
-          Auto-fit tiles →
+          Move tiles into the big square →
         </button>
       )}
 
