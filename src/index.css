@@ -604,28 +604,28 @@ a.primary {
 .pythagoras .tri {
   fill: rgba(255, 209, 102, 0.16);
   stroke: var(--accent);
-  stroke-width: 3;
+  stroke-width: 1.25;
 }
 
 .pythagoras .right-angle {
   stroke: var(--accent);
-  stroke-width: 2;
+  stroke-width: 1.25;
 }
 
 .pythagoras .sq-a {
   fill: rgba(255, 107, 122, 0.18);
   stroke: var(--sin);
-  stroke-width: 2.5;
+  stroke-width: 1.25;
 }
 .pythagoras .sq-b {
   fill: rgba(76, 201, 240, 0.18);
   stroke: var(--cos);
-  stroke-width: 2.5;
+  stroke-width: 1.25;
 }
 .pythagoras .sq-c {
   fill: rgba(184, 242, 124, 0.16);
   stroke: var(--op);
-  stroke-width: 2.5;
+  stroke-width: 1.25;
 }
 
 .pythagoras .tile {
@@ -744,7 +744,7 @@ a.primary {
 
 .lab-svg .sq-outer {
   fill: none;
-  stroke-width: 2.75;
+  stroke-width: 1.25;
   stroke-linejoin: miter;
   vector-effect: non-scaling-stroke;
 }
@@ -766,10 +766,16 @@ a.primary {
 .lab-svg .tri-outline {
   fill: none;
   stroke: var(--accent);
-  stroke-width: 1.5;
+  stroke-width: 1.25;
   stroke-linejoin: miter;
   vector-effect: non-scaling-stroke;
   pointer-events: none;
+}
+
+.lab-svg .right-angle {
+  stroke: var(--accent);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
 }
 
 .lab-tile {
@@ -779,8 +785,8 @@ a.primary {
 }
 
 .lab-tile rect {
-  stroke: rgba(11, 16, 32, 0.5);
-  stroke-width: 1;
+  stroke: rgba(11, 16, 32, 0.45);
+  stroke-width: 0.75;
 }
 
 .lab-tile.kind-a rect {
@@ -793,8 +799,9 @@ a.primary {
 
 .shared-edge {
   fill: none;
-  stroke-width: 4;
+  stroke-width: 1.25;
   stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
 }
 .shared-edge.a {
   stroke: var(--sin);
