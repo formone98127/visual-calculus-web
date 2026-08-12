@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { PythagorasLabMode, PythagorasLabProps } from '../data/types'
 
+/** 3-4-5 right triangle in integer grid units */
 const A = 3
 const B = 4
 const C = 5
-const U = 32
+const U = 36
 
 type Pt = { x: number; y: number }
 
@@ -27,62 +28,63 @@ function beep() {
   }
 }
 
-/** Outward unit normal from segment P→Q, away from point R. */
-function outwardNormal(P: Pt, Q: Pt, R: Pt): Pt {
-  const dx = Q.x - P.x
-  const dy = Q.y - P.y
-  const len = Math.hypot(dx, dy) || 1
-  let nx = -dy / len
-  let ny = dx / len
-  const mx = (P.x + Q.x) / 2
-  const my = (P.y + Q.y) / 2
-  // If midpoint+normal is closer to R, flip (we want away from R)
-  const dPlus = (mx + nx - R.x) ** 2 + (my + ny - R.y) ** 2
-  const dMinus = (mx - nx - R.x) ** 2 + (my - ny - R.y) ** 2
-  if (dPlus < dMinus) {
-    nx = -nx
-    ny = -ny
-  }
-  return { x: nx, y: ny }
+function sub(u: Pt, v: Pt): Pt {
+  return { x: u.x - v.x, y: u.y - v.y }
 }
-
-type SquareGeom = {
-  /** Corner on triangle, start of shared side */
-  P: Pt
-  /** Corner on triangle, end of shared side */
-  Q: Pt
-  /** Outward normal */
-  N: Pt
-  /** Side length in px */
-  side: number
-  /** Shared-side unit direction P→Q */
-  T: Pt
-  /** Four corners: P, Q, Q+N*side, P+N*side */
-  corners: Pt[]
-  /** SVG transform placing local (0,0)-(side,side) so +x = T, +y = N */
-  transform: string
+function add(u: Pt, v: Pt): Pt {
+  return { x: u.x + v.x, y: u.y + v.y }
 }
-
-function squareOnSide(P: Pt, Q: Pt, inside: Pt, side: number): SquareGeom {
-  const dx = Q.x - P.x
-  const dy = Q.y - P.y
-  const len = Math.hypot(dx, dy) || 1
-  const T = { x: dx / len, y: dy / len }
-  const N = outwardNormal(P, Q, inside)
-  const corners: Pt[] = [
-    P,
-    Q,
-    { x: Q.x + N.x * side, y: Q.y + N.y * side },
-    { x: P.x + N.x * side, y: P.y + N.y * side },
-  ]
-  // Local: x along T, y along N. Map local (0,0) → P
-  // SVG matrix: [T.x N.x P.x; T.y N.y P.y; 0 0 1]
-  const transform = `matrix(${T.x} ${T.y} ${N.x} ${N.y} ${P.x} ${P.y})`
-  return { P, Q, N, T, side, corners, transform }
+function scale(u: Pt, s: number): Pt {
+  return { x: u.x * s, y: u.y * s }
 }
-
+function len(u: Pt) {
+  return Math.hypot(u.x, u.y)
+}
 function poly(pts: Pt[]) {
   return pts.map((p) => `${p.x},${p.y}`).join(' ')
+}
+
+/**
+ * Square sitting on segment P→Q, outward from the triangle interior point R.
+ * Side length is EXACTLY |PQ| — the square and the triangle share P–Q as one side.
+ */
+function squareOnSegment(P: Pt, Q: Pt, R: Pt) {
+  const PQ = sub(Q, P)
+  const side = len(PQ) // ← only length source
+  const T = scale(PQ, 1 / side)
+  // Rotate T by +90° and −90°; pick the one pointing away from R
+  const n1 = { x: -T.y, y: T.x }
+  const n2 = { x: T.y, y: -T.x }
+  const mid = scale(add(P, Q), 0.5)
+  const d1 = len(sub(add(mid, n1), R))
+  const d2 = len(sub(add(mid, n2), R))
+  const N = d1 >= d2 ? n1 : n2
+
+  // Outward corners: start at P,Q then go out by exactly `side` along N
+  const P2 = add(P, scale(N, side))
+  const Q2 = add(Q, scale(N, side))
+  // corners in order around the boundary: P → Q → Q2 → P2
+  const corners = [P, Q, Q2, P2]
+
+  return { P, Q, N, T, side, corners, P2, Q2 }
+}
+
+type Sq = ReturnType<typeof squareOnSegment>
+
+/** Point inside square from grid (i,j) in an n×n tiling — bilinear on corners */
+function cellCenter(sq: Sq, i: number, j: number, n: number): Pt {
+  const u = (i + 0.5) / n
+  const v = (j + 0.5) / n
+  // P --T--> Q
+  // |         |
+  // P2 <-    Q2
+  const along = add(sq.P, scale(sub(sq.Q, sq.P), u))
+  const out = scale(sq.N, v * sq.side)
+  return add(along, out)
+}
+
+function cellAngle(sq: Sq) {
+  return (Math.atan2(sq.T.y, sq.T.x) * 180) / Math.PI
 }
 
 function modeFlags(mode: PythagorasLabMode) {
@@ -103,11 +105,9 @@ function modeFlags(mode: PythagorasLabMode) {
 type TileSpec = {
   id: string
   kind: 'a' | 'b'
-  /** local grid index in home square */
   i: number
   j: number
   nHome: number
-  /** destination cell in C (5×5) */
   fi: number
   fj: number
 }
@@ -146,21 +146,13 @@ function buildTileSpecs(): TileSpec[] {
   return tiles
 }
 
-/** Map local square coords → world via square transform basis */
-function localToWorld(sq: SquareGeom, lx: number, ly: number): Pt {
-  return {
-    x: sq.P.x + sq.T.x * lx + sq.N.x * ly,
-    y: sq.P.y + sq.T.y * lx + sq.N.y * ly,
-  }
+function mid(P: Pt, Q: Pt): Pt {
+  return scale(add(P, Q), 0.5)
 }
 
-function cellCenter(sq: SquareGeom, i: number, j: number, n: number): Pt {
-  const step = sq.side / n
-  return localToWorld(sq, (i + 0.5) * step, (j + 0.5) * step)
-}
-
-function cellAngle(sq: SquareGeom) {
-  return (Math.atan2(sq.T.y, sq.T.x) * 180) / Math.PI
+/** Label offset slightly outside the square */
+function labelPos(sq: Sq): Pt {
+  return add(mid(sq.P, sq.Q), scale(sq.N, sq.side * 0.5))
 }
 
 export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) {
@@ -169,17 +161,27 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
   const completedRef = useRef(false)
   const tileSpecs = useMemo(() => buildTileSpecs(), [])
 
-  // Right triangle: right angle at A, legs along +x and -y
   const geom = useMemo(() => {
+    // Right angle at A; legs exactly A·U and B·U → hypotenuse exactly C·U
     const P_A: Pt = { x: 0, y: 0 }
     const P_B: Pt = { x: A * U, y: 0 }
     const P_C: Pt = { x: 0, y: -B * U }
-    // Square on AB (leg a) — side length a
-    const sqA = squareOnSide(P_A, P_B, P_C, A * U)
-    // Square on AC (leg b) — side length b
-    const sqB = squareOnSide(P_A, P_C, P_B, B * U)
-    // Square on BC (hypotenuse) — side length c = |BC|
-    const sqC = squareOnSide(P_B, P_C, P_A, C * U)
+
+    const sqA = squareOnSegment(P_A, P_B, P_C) // side = |AB| = A·U
+    const sqB = squareOnSegment(P_A, P_C, P_B) // side = |AC| = B·U
+    const sqC = squareOnSegment(P_B, P_C, P_A) // side = |BC| = C·U
+
+    // Sanity: sides must match triangle edges (exact for 3-4-5)
+    if (import.meta.env.DEV) {
+      const ab = len(sub(P_B, P_A))
+      const ac = len(sub(P_C, P_A))
+      const bc = len(sub(P_C, P_B))
+      console.assert(Math.abs(sqA.side - ab) < 1e-9, 'sqA ≠ AB', sqA.side, ab)
+      console.assert(Math.abs(sqB.side - ac) < 1e-9, 'sqB ≠ AC', sqB.side, ac)
+      console.assert(Math.abs(sqC.side - bc) < 1e-9, 'sqC ≠ BC', sqC.side, bc)
+      console.assert(Math.abs(bc - C * U) < 1e-9, 'BC ≠ 5U', bc, C * U)
+    }
+
     return { P_A, P_B, P_C, sqA, sqB, sqC }
   }, [])
 
@@ -210,7 +212,6 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
     }, 900)
   }
 
-  // ViewBox from all square corners + triangle
   const allPts = [
     P_A,
     P_B,
@@ -219,14 +220,35 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
     ...sqB.corners,
     ...sqC.corners,
   ]
-  const pad = 40
+  const pad = 44
   const minX = Math.min(...allPts.map((p) => p.x)) - pad
   const maxX = Math.max(...allPts.map((p) => p.x)) + pad
   const minY = Math.min(...allPts.map((p) => p.y)) - pad
   const maxY = Math.max(...allPts.map((p) => p.y)) + pad
   const vb = `${minX} ${minY} ${maxX - minX} ${maxY - minY}`
 
-  const mid = (P: Pt, Q: Pt) => ({ x: (P.x + Q.x) / 2, y: (P.y + Q.y) / 2 })
+  /** Draw square fill + only the 3 outer edges (shared edge owned by triangle) */
+  function SquareShape({
+    sq,
+    className,
+    waiting,
+  }: {
+    sq: Sq
+    className: string
+    waiting?: boolean
+  }) {
+    const { P, Q, Q2, P2 } = sq
+    return (
+      <g className={`sq-shape ${className}`}>
+        <polygon className="sq-fill" points={poly([P, Q, Q2, P2])} />
+        <path
+          className={`sq-outer ${waiting ? 'sq-c-waiting' : ''}`}
+          d={`M ${Q.x} ${Q.y} L ${Q2.x} ${Q2.y} L ${P2.x} ${P2.y} L ${P.x} ${P.y}`}
+          fill="none"
+        />
+      </g>
+    )
+  }
 
   return (
     <div
@@ -234,7 +256,7 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
     >
       {flags.ask && (
         <p className="lab-hook">
-          Each square sits on one side of the triangle.
+          Each square uses one side of the triangle as its side.
         </p>
       )}
 
@@ -242,44 +264,18 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
         className="pythagoras lab-svg"
         viewBox={vb}
         role="img"
-        aria-label="Pythagorean theorem: squares on each side of a right triangle"
+        aria-label="Right triangle with squares on each side — sides match exactly"
       >
-        {/* Squares as groups in local side-aligned coords — edges share the triangle */}
-        {flags.showA && (
-          <g className="sq-group" transform={sqA.transform}>
-            <rect
-              className="sq-fill sq-a"
-              x={0}
-              y={0}
-              width={sqA.side}
-              height={sqA.side}
-            />
-          </g>
-        )}
-        {flags.showB && (
-          <g className="sq-group" transform={sqB.transform}>
-            <rect
-              className="sq-fill sq-b"
-              x={0}
-              y={0}
-              width={sqB.side}
-              height={sqB.side}
-            />
-          </g>
-        )}
+        {flags.showA && <SquareShape sq={sqA} className="sq-a" />}
+        {flags.showB && <SquareShape sq={sqB} className="sq-b" />}
         {flags.showC && (
-          <g className="sq-group" transform={sqC.transform}>
-            <rect
-              className={`sq-fill sq-c ${flags.challenge && !showFitted ? 'sq-c-waiting' : ''}`}
-              x={0}
-              y={0}
-              width={sqC.side}
-              height={sqC.side}
-            />
-          </g>
+          <SquareShape
+            sq={sqC}
+            className="sq-c"
+            waiting={flags.challenge && !showFitted}
+          />
         )}
 
-        {/* Unit tiles — always axis-aligned in their square's local frame via world pose */}
         {tileSpecs.map((t) => {
           const homeSq = t.kind === 'a' ? sqA : sqB
           const visible =
@@ -290,8 +286,8 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
           const dest = cellCenter(sqC, t.fi, t.fj, C)
           const pos = showFitted ? dest : home
           const ang = showFitted ? cellAngle(sqC) : cellAngle(homeSq)
-          const step = showFitted ? sqC.side / C : homeSq.side / t.nHome
-          const gap = 1.2
+          const step = (showFitted ? sqC.side : homeSq.side) / (showFitted ? C : t.nHome)
+          const gap = 1.5
 
           return (
             <g
@@ -312,62 +308,53 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
           )
         })}
 
-        {/* Triangle on top so shared sides read clearly */}
-        {flags.showTri && (
-          <polygon
-            className="tri"
-            points={poly([P_A, P_B, P_C])}
-          />
-        )}
-        {flags.showTri && (
-          <path
-            className="right-angle"
-            d={`M ${P_A.x + 14} ${P_A.y} L ${P_A.x + 14} ${P_A.y - 14} L ${P_A.x} ${P_A.y - 14}`}
-            fill="none"
-          />
-        )}
-
-        {/* Shared-edge emphasis */}
-        {flags.showTri && flags.showA && (
-          <line
-            className="shared-edge a"
-            x1={P_A.x}
-            y1={P_A.y}
-            x2={P_B.x}
-            y2={P_B.y}
-          />
-        )}
-        {flags.showTri && flags.showB && (
-          <line
-            className="shared-edge b"
-            x1={P_A.x}
-            y1={P_A.y}
-            x2={P_C.x}
-            y2={P_C.y}
-          />
-        )}
-        {flags.showTri && flags.showC && (
-          <line
-            className="shared-edge c"
-            x1={P_B.x}
-            y1={P_B.y}
-            x2={P_C.x}
-            y2={P_C.y}
-          />
-        )}
-
+        {/* Triangle last: its three edges ARE the shared sides */}
         {flags.showTri && (
           <>
+            <polygon className="tri" points={poly([P_A, P_B, P_C])} />
+            <path
+              className="right-angle"
+              d={`M ${P_A.x + 16} ${P_A.y} L ${P_A.x + 16} ${P_A.y - 16} L ${P_A.x} ${P_A.y - 16}`}
+              fill="none"
+            />
+            {/* Colored shared sides — same endpoints as the squares */}
+            {flags.showA && (
+              <line
+                className="shared-edge a"
+                x1={P_A.x}
+                y1={P_A.y}
+                x2={P_B.x}
+                y2={P_B.y}
+              />
+            )}
+            {flags.showB && (
+              <line
+                className="shared-edge b"
+                x1={P_A.x}
+                y1={P_A.y}
+                x2={P_C.x}
+                y2={P_C.y}
+              />
+            )}
+            {flags.showC && (
+              <line
+                className="shared-edge c"
+                x1={P_B.x}
+                y1={P_B.y}
+                x2={P_C.x}
+                y2={P_C.y}
+              />
+            )}
             <text
               x={mid(P_A, P_B).x}
-              y={mid(P_A, P_B).y + 20}
+              y={mid(P_A, P_B).y + 22}
               className="side-label"
               textAnchor="middle"
             >
               {flags.generalize ? 'a' : `a = ${A}`}
             </text>
             <text
-              x={mid(P_A, P_C).x - 18}
+              x={mid(P_A, P_C).x - 20}
               y={mid(P_A, P_C).y}
               className="side-label"
               textAnchor="middle"
@@ -375,7 +362,7 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
               {flags.generalize ? 'b' : `b = ${B}`}
             </text>
             <text
-              x={mid(P_B, P_C).x + 14}
+              x={mid(P_B, P_C).x + 16}
               y={mid(P_B, P_C).y}
               className="side-label"
               textAnchor="middle"
@@ -385,35 +372,34 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
           </>
         )}
 
-        {/* Area labels at square centers */}
         {flags.showA && !showFitted && (
           <text
-            x={localToWorld(sqA, sqA.side / 2, sqA.side / 2).x}
-            y={localToWorld(sqA, sqA.side / 2, sqA.side / 2).y + 6}
+            x={labelPos(sqA).x}
+            y={labelPos(sqA).y + 6}
             className="lab-area a"
             textAnchor="middle"
           >
-            {flags.generalize ? 'a²' : `${A}² = ${A * A}`}
+            {flags.generalize ? 'a²' : `${A}²`}
           </text>
         )}
         {flags.showB && !showFitted && (
           <text
-            x={localToWorld(sqB, sqB.side / 2, sqB.side / 2).x}
-            y={localToWorld(sqB, sqB.side / 2, sqB.side / 2).y + 6}
+            x={labelPos(sqB).x}
+            y={labelPos(sqB).y + 6}
             className="lab-area b"
             textAnchor="middle"
           >
-            {flags.generalize ? 'b²' : `${B}² = ${B * B}`}
+            {flags.generalize ? 'b²' : `${B}²`}
           </text>
         )}
         {flags.showC && !showFitted && (
           <text
-            x={localToWorld(sqC, sqC.side / 2, sqC.side / 2).x}
-            y={localToWorld(sqC, sqC.side / 2, sqC.side / 2).y + 6}
+            x={labelPos(sqC).x}
+            y={labelPos(sqC).y + 6}
             className="lab-area c"
             textAnchor="middle"
           >
-            {flags.generalize ? 'c²' : `${C}² = ${C * C}`}
+            {flags.generalize ? 'c²' : `${C}²`}
           </text>
         )}
       </svg>

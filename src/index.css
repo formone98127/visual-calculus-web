@@ -729,20 +729,38 @@ a.primary {
 }
 
 .lab-svg .sq-fill {
-  stroke-width: 2.5;
+  stroke: none;
 }
 
-.lab-svg .sq-a {
-  fill: rgba(255, 107, 122, 0.12);
+.lab-svg .sq-a .sq-fill {
+  fill: rgba(255, 107, 122, 0.14);
+}
+.lab-svg .sq-b .sq-fill {
+  fill: rgba(76, 201, 240, 0.14);
+}
+.lab-svg .sq-c .sq-fill {
+  fill: rgba(184, 242, 124, 0.12);
+}
+
+.lab-svg .sq-outer {
+  fill: none;
+  stroke-width: 2.75;
+  stroke-linejoin: miter;
+  vector-effect: non-scaling-stroke;
+}
+.lab-svg .sq-a .sq-outer {
   stroke: var(--sin);
 }
-.lab-svg .sq-b {
-  fill: rgba(76, 201, 240, 0.12);
+.lab-svg .sq-b .sq-outer {
   stroke: var(--cos);
 }
-.lab-svg .sq-c {
-  fill: rgba(184, 242, 124, 0.1);
+.lab-svg .sq-c .sq-outer {
   stroke: var(--op);
+}
+
+.lab-svg .tri {
+  fill: rgba(255, 209, 102, 0.2);
+  stroke: none;
 }
 
 .lab-tile {
