@@ -1,6 +1,6 @@
 import type { Lesson } from './types'
 
-/** Inspired by Short Geometry Labs — Right Triangle Relationships (squares on sides). */
+/** Inspired by Short Geometry Labs — Right Triangle Relationships. */
 export const pythagorasLessons: Lesson[] = [
   {
     id: 'p-squares',
@@ -9,8 +9,7 @@ export const pythagorasLessons: Lesson[] = [
     beats: [
       {
         id: 'p0',
-        caption:
-          'Start with a right triangle: two legs meet at a right angle; the long side is the hypotenuse.',
+        caption: 'Right triangle',
         viz: {
           type: 'pythagoras',
           props: { showTriangle: true, showLabels: true, a: 3, b: 4, c: 5 },
@@ -18,8 +17,7 @@ export const pythagorasLessons: Lesson[] = [
       },
       {
         id: 'p1',
-        caption: 'Build a square outward on leg a. Its area is a².',
-        math: String.raw`\text{area}=a^{2}`,
+        caption: 'Square on a',
         viz: {
           type: 'pythagoras',
           props: {
@@ -27,6 +25,7 @@ export const pythagorasLessons: Lesson[] = [
             showSquareA: true,
             showLabels: true,
             showAreas: true,
+            showTiles: true,
             a: 3,
             b: 4,
             c: 5,
@@ -35,8 +34,7 @@ export const pythagorasLessons: Lesson[] = [
       },
       {
         id: 'p2',
-        caption: 'Build a square on leg b. Its area is b².',
-        math: String.raw`\text{area}=b^{2}`,
+        caption: 'Square on b',
         viz: {
           type: 'pythagoras',
           props: {
@@ -45,6 +43,7 @@ export const pythagorasLessons: Lesson[] = [
             showSquareB: true,
             showLabels: true,
             showAreas: true,
+            showTiles: true,
             a: 3,
             b: 4,
             c: 5,
@@ -53,8 +52,7 @@ export const pythagorasLessons: Lesson[] = [
       },
       {
         id: 'p3',
-        caption: 'Build a square on the hypotenuse c. Its area is c².',
-        math: String.raw`\text{area}=c^{2}`,
+        caption: 'Square on c',
         viz: {
           type: 'pythagoras',
           props: {
@@ -64,6 +62,7 @@ export const pythagorasLessons: Lesson[] = [
             showSquareC: true,
             showLabels: true,
             showAreas: true,
+            showTiles: true,
             a: 3,
             b: 4,
             c: 5,
@@ -72,8 +71,8 @@ export const pythagorasLessons: Lesson[] = [
       },
       {
         id: 'p4',
-        caption: 'Concrete sizes: a 3-square, a 4-square, and a 5-square around a right triangle.',
-        math: String.raw`a=3,\; b=4,\; c=5`,
+        caption: 'Count the tiles',
+        math: String.raw`9\qquad 16\qquad 25`,
         viz: {
           type: 'pythagoras',
           props: {
@@ -83,6 +82,7 @@ export const pythagorasLessons: Lesson[] = [
             showSquareC: true,
             showLabels: true,
             showAreas: true,
+            showTiles: true,
             a: 3,
             b: 4,
             c: 5,
@@ -91,26 +91,7 @@ export const pythagorasLessons: Lesson[] = [
       },
       {
         id: 'p5',
-        caption: 'Count the little unit tiles: 9 on a, 16 on b, 25 on c.',
-        math: String.raw`3^{2}=9,\quad 4^{2}=16,\quad 5^{2}=25`,
-        viz: {
-          type: 'pythagoras',
-          props: {
-            showTriangle: true,
-            showSquareA: true,
-            showSquareB: true,
-            showSquareC: true,
-            showLabels: true,
-            showAreas: true,
-            a: 3,
-            b: 4,
-            c: 5,
-          },
-        },
-      },
-      {
-        id: 'p6',
-        caption: 'The two leg squares fill exactly the hypotenuse square.',
+        caption: 'They match',
         math: String.raw`9+16=25`,
         viz: {
           type: 'pythagoras',
@@ -121,6 +102,7 @@ export const pythagorasLessons: Lesson[] = [
             showSquareC: true,
             showLabels: true,
             showAreas: true,
+            showTiles: true,
             highlightEquation: true,
             a: 3,
             b: 4,
@@ -129,8 +111,8 @@ export const pythagorasLessons: Lesson[] = [
         },
       },
       {
-        id: 'p7',
-        caption: 'For every right triangle, the same relationship holds.',
+        id: 'p6',
+        caption: 'Always',
         math: String.raw`a^{2}+b^{2}=c^{2}`,
         viz: {
           type: 'pythagoras',
@@ -140,25 +122,7 @@ export const pythagorasLessons: Lesson[] = [
             showSquareB: true,
             showSquareC: true,
             showLabels: true,
-            highlightEquation: true,
-            a: 3,
-            b: 4,
-            c: 5,
-          },
-        },
-      },
-      {
-        id: 'p8',
-        caption: 'That’s the Pythagorean theorem — discovered by comparing squares on the sides.',
-        math: String.raw`a^{2}+b^{2}=c^{2}`,
-        viz: {
-          type: 'pythagoras',
-          props: {
-            showTriangle: true,
-            showSquareA: true,
-            showSquareB: true,
-            showSquareC: true,
-            showLabels: true,
+            showAreas: true,
             highlightEquation: true,
             a: 3,
             b: 4,
@@ -171,27 +135,19 @@ export const pythagorasLessons: Lesson[] = [
   {
     id: 'p-check',
     title: 'Check Another Triple',
-    subtitle: 'Does 5–12–13 work the same way?',
+    subtitle: '5–12–13',
     beats: [
       {
         id: 'c0',
-        caption: 'Try a larger right triangle with sides 5, 12, and 13.',
-        math: String.raw`a=5,\; b=12,\; c=13`,
+        caption: '5 · 12 · 13',
         viz: {
           type: 'pythagoras',
-          props: {
-            showTriangle: true,
-            showLabels: true,
-            a: 5,
-            b: 12,
-            c: 13,
-          },
+          props: { showTriangle: true, showLabels: true, a: 5, b: 12, c: 13 },
         },
       },
       {
         id: 'c1',
-        caption: 'Square each side.',
-        math: String.raw`5^{2}=25,\quad 12^{2}=144,\quad 13^{2}=169`,
+        caption: 'Build squares',
         viz: {
           type: 'pythagoras',
           props: {
@@ -209,7 +165,7 @@ export const pythagorasLessons: Lesson[] = [
       },
       {
         id: 'c2',
-        caption: 'Add the leg squares — they match the hypotenuse square again.',
+        caption: 'Still matches',
         math: String.raw`25+144=169`,
         viz: {
           type: 'pythagoras',
@@ -229,7 +185,7 @@ export const pythagorasLessons: Lesson[] = [
       },
       {
         id: 'c3',
-        caption: 'Same rule, new sizes. Squares on the sides still tell the story.',
+        caption: 'Same rule',
         math: String.raw`a^{2}+b^{2}=c^{2}`,
         viz: {
           type: 'pythagoras',

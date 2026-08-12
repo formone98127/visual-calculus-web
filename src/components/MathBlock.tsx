@@ -6,9 +6,10 @@ import type { Highlight } from '../data/types'
 type Props = {
   tex: string
   highlights?: Highlight[]
+  huge?: boolean
 }
 
-export function MathBlock({ tex, highlights = [] }: Props) {
+export function MathBlock({ tex, highlights = [], huge = false }: Props) {
   const html = useMemo(() => {
     try {
       return katex.renderToString(tex, {
@@ -20,14 +21,14 @@ export function MathBlock({ tex, highlights = [] }: Props) {
     }
   }, [tex])
 
-  const classes = ['math-block']
+  const classes = ['math-block', huge ? 'huge' : '']
   if (highlights.includes('sin')) classes.push('hl-sin')
   if (highlights.includes('cos')) classes.push('hl-cos')
   if (highlights.includes('op')) classes.push('hl-op')
 
   return (
     <div
-      className={classes.join(' ')}
+      className={classes.filter(Boolean).join(' ')}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   )

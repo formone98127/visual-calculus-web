@@ -1,6 +1,6 @@
 import type { PythagorasProps } from '../data/types'
 
-const UNIT = 18
+const UNIT = 22
 
 function outwardNormal(
   x1: number,
@@ -54,6 +54,46 @@ function centroid(pts: { x: number; y: number }[]) {
   return { x, y }
 }
 
+function tileGrid(
+  sq: { x: number; y: number }[],
+  n: number,
+  className: string,
+) {
+  // sq[0]=p1, sq[1]=p2 along side, sq[3] outward from p1
+  const tiles = []
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      const u0 = i / n
+      const u1 = (i + 1) / n
+      const v0 = j / n
+      const v1 = (j + 1) / n
+      const corner = (u: number, v: number) => ({
+        x:
+          sq[0].x +
+          (sq[1].x - sq[0].x) * u +
+          (sq[3].x - sq[0].x) * v,
+        y:
+          sq[0].y +
+          (sq[1].y - sq[0].y) * u +
+          (sq[3].y - sq[0].y) * v,
+      })
+      const c00 = corner(u0, v0)
+      const c10 = corner(u1, v0)
+      const c11 = corner(u1, v1)
+      const c01 = corner(u0, v1)
+      tiles.push(
+        <polygon
+          key={`${className}-${i}-${j}`}
+          className={`tile ${className}`}
+          points={polyPoints([c00, c10, c11, c01])}
+          style={{ animationDelay: `${(i * n + j) * 18}ms` }}
+        />,
+      )
+    }
+  }
+  return tiles
+}
+
 export function PythagorasFigure({
   showTriangle = true,
   showSquareA = false,
@@ -61,12 +101,13 @@ export function PythagorasFigure({
   showSquareC = false,
   showLabels = false,
   showAreas = false,
+  showTiles = false,
   highlightEquation = false,
   a = 3,
   b = 4,
   c = 5,
 }: PythagorasProps) {
-  const scale = UNIT
+  const scale = a + b > 14 ? 12 : UNIT
   const Ax = 0
   const Ay = 0
   const Bx = a * scale
@@ -87,15 +128,17 @@ export function PythagorasFigure({
   if (showSquareB) candidates.push(...sqLegB)
   if (showSquareC) candidates.push(...sqHyp)
 
-  const minX = Math.min(...candidates.map((p) => p.x)) - 24
-  const maxX = Math.max(...candidates.map((p) => p.x)) + 24
-  const minY = Math.min(...candidates.map((p) => p.y)) - 24
-  const maxY = Math.max(...candidates.map((p) => p.y)) + 24
+  const pad = 36
+  const minX = Math.min(...candidates.map((p) => p.x)) - pad
+  const maxX = Math.max(...candidates.map((p) => p.x)) + pad
+  const minY = Math.min(...candidates.map((p) => p.y)) - pad
+  const maxY = Math.max(...candidates.map((p) => p.y)) + pad
   const vb = `${minX} ${minY} ${maxX - minX} ${maxY - minY}`
 
   const areaA = a * a
   const areaB = b * b
   const areaC = c * c
+  const useTiles = showTiles && a <= 5 && b <= 5
 
   return (
     <div className={`pythagoras-wrap ${highlightEquation ? 'eq-hot' : ''}`}>
@@ -106,13 +149,22 @@ export function PythagorasFigure({
         aria-label="Right triangle with squares on sides"
       >
         {showSquareA && (
-          <polygon className="sq sq-a" points={polyPoints(sqLegA)} />
+          <g className="sq-group pop-sq">
+            <polygon className="sq sq-a" points={polyPoints(sqLegA)} />
+            {useTiles && tileGrid(sqLegA, a, 'tile-a')}
+          </g>
         )}
         {showSquareB && (
-          <polygon className="sq sq-b" points={polyPoints(sqLegB)} />
+          <g className="sq-group pop-sq">
+            <polygon className="sq sq-b" points={polyPoints(sqLegB)} />
+            {useTiles && tileGrid(sqLegB, b, 'tile-b')}
+          </g>
         )}
         {showSquareC && (
-          <polygon className="sq sq-c" points={polyPoints(sqHyp)} />
+          <g className="sq-group pop-sq">
+            <polygon className="sq sq-c" points={polyPoints(sqHyp)} />
+            {useTiles && c <= 6 && tileGrid(sqHyp, c, 'tile-c')}
+          </g>
         )}
 
         {showTriangle && (
@@ -129,7 +181,7 @@ export function PythagorasFigure({
         {showTriangle && (
           <path
             className="right-angle"
-            d={`M ${Ax + 10} ${Ay} L ${Ax + 10} ${Ay - 10} L ${Ax} ${Ay - 10}`}
+            d={`M ${Ax + 12} ${Ay} L ${Ax + 12} ${Ay - 12} L ${Ax} ${Ay - 12}`}
             fill="none"
           />
         )}
@@ -138,14 +190,14 @@ export function PythagorasFigure({
           <>
             <text
               x={(Ax + Bx) / 2}
-              y={Ay + 16}
+              y={Ay + 20}
               className="side-label"
               textAnchor="middle"
             >
               a={a}
             </text>
             <text
-              x={Ax - 14}
+              x={Ax - 18}
               y={(Ay + Cy) / 2}
               className="side-label"
               textAnchor="middle"
@@ -153,7 +205,7 @@ export function PythagorasFigure({
               b={b}
             </text>
             <text
-              x={(Bx + Cx) / 2 + 10}
+              x={(Bx + Cx) / 2 + 14}
               y={(By + Cy) / 2}
               className="side-label"
               textAnchor="middle"
@@ -166,7 +218,7 @@ export function PythagorasFigure({
         {showAreas && showSquareA && (
           <text
             x={centroid(sqLegA).x}
-            y={centroid(sqLegA).y + 4}
+            y={centroid(sqLegA).y + 6}
             className="area-label a"
             textAnchor="middle"
           >
@@ -176,7 +228,7 @@ export function PythagorasFigure({
         {showAreas && showSquareB && (
           <text
             x={centroid(sqLegB).x}
-            y={centroid(sqLegB).y + 4}
+            y={centroid(sqLegB).y + 6}
             className="area-label b"
             textAnchor="middle"
           >
@@ -186,7 +238,7 @@ export function PythagorasFigure({
         {showAreas && showSquareC && (
           <text
             x={centroid(sqHyp).x}
-            y={centroid(sqHyp).y + 4}
+            y={centroid(sqHyp).y + 6}
             className="area-label c"
             textAnchor="middle"
           >
@@ -195,8 +247,12 @@ export function PythagorasFigure({
         )}
       </svg>
       {highlightEquation && (
-        <p className="pythag-eq">
-          {areaA} + {areaB} = {areaC}
+        <p className="pythag-eq pop-in">
+          <span className="a">{areaA}</span>
+          <span className="op">+</span>
+          <span className="b">{areaB}</span>
+          <span className="op">=</span>
+          <span className="c">{areaC}</span>
         </p>
       )}
     </div>

@@ -3,7 +3,7 @@ export type Highlight = 'sin' | 'cos' | 'op'
 export type UnitCircleProps = {
   showCircle?: boolean
   showAxes?: boolean
-  pointCount?: number // 0..5 for 0, π/6, π/4, π/3, π/2
+  pointCount?: number
   showLabels?: boolean
   emphasize?: 'sin' | 'cos' | 'both' | null
 }
@@ -15,21 +15,26 @@ export type PythagorasProps = {
   showSquareC?: boolean
   showLabels?: boolean
   showAreas?: boolean
+  showTiles?: boolean
   highlightEquation?: boolean
-  /** side lengths; default 3-4-5 scaled */
   a?: number
   b?: number
   c?: number
 }
 
+export type WavesProps = {
+  mode?: 'sin' | 'cos' | 'both' | 'sinDeriv' | 'cosDeriv' | 'all'
+}
+
 export type Beat = {
   id: string
+  /** Ultra-short on-screen chip (≤ ~6 words) */
   caption: string
   math?: string
   highlights?: Highlight[]
   viz?: {
-    type: 'unitCircle' | 'pythagoras' | 'none'
-    props?: UnitCircleProps | PythagorasProps
+    type: 'unitCircle' | 'pythagoras' | 'waves' | 'formula' | 'none'
+    props?: UnitCircleProps | PythagorasProps | WavesProps
   }
 }
 

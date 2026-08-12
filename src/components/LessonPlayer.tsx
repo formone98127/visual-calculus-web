@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import type { Lesson } from '../data/types'
 import { nextLessonId } from '../data/catalog'
-import type { PythagorasProps, UnitCircleProps } from '../data/types'
+import type {
+  Lesson,
+  PythagorasProps,
+  UnitCircleProps,
+  WavesProps,
+} from '../data/types'
 import { MathBlock } from './MathBlock'
 import { PythagorasFigure } from './PythagorasFigure'
 import { UnitCircle } from './UnitCircle'
+import { WaveGraph } from './WaveGraph'
 
 type Props = {
   lesson: Lesson
@@ -18,6 +23,7 @@ export function LessonPlayer({ lesson }: Props) {
   const done = i >= lesson.beats.length
   const beat = done ? null : lesson.beats[i]
   const nextId = nextLessonId(lesson.id)
+  const progress = done ? 1 : (i + 1) / lesson.beats.length
 
   const go = useCallback(
     (delta: number) => {
@@ -56,7 +62,7 @@ export function LessonPlayer({ lesson }: Props) {
     go(e.deltaY > 0 ? 1 : -1)
     window.setTimeout(() => {
       wheelLock.current = false
-    }, 420)
+    }, 380)
   }
 
   const onTouchStart = (e: React.TouchEvent) => {
@@ -67,9 +73,13 @@ export function LessonPlayer({ lesson }: Props) {
     if (touchY.current == null) return
     const dy = touchY.current - e.changedTouches[0].clientY
     touchY.current = null
-    if (Math.abs(dy) < 40) return
+    if (Math.abs(dy) < 36) return
     go(dy > 0 ? 1 : -1)
   }
+
+  const vizType = beat?.viz?.type ?? 'formula'
+  const showFloatMath =
+    !!beat?.math && vizType !== 'formula' && vizType !== 'none'
 
   return (
     <div
@@ -78,76 +88,92 @@ export function LessonPlayer({ lesson }: Props) {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <header className="player-header">
+      <div className="chrome-top">
         <Link to="/" className="back">
-          ← All lessons
+          ←
         </Link>
-        <div className="player-titles">
-          <h1>{lesson.title}</h1>
-          <p>{lesson.subtitle}</p>
-        </div>
+        <div className="chrome-title">{lesson.title}</div>
         <div className="step-count">
-          {done ? 'Done' : `${i + 1} / ${lesson.beats.length}`}
+          {done ? '✓' : `${i + 1}/${lesson.beats.length}`}
         </div>
-      </header>
+      </div>
 
-      <div className="progress">
-        {lesson.beats.map((b, idx) => (
-          <button
-            key={b.id}
-            type="button"
-            className={`dot ${idx === i ? 'active' : ''} ${idx < i || done ? 'passed' : ''}`}
-            aria-label={`Step ${idx + 1}`}
-            onClick={() => setI(idx)}
-          />
-        ))}
+      <div className="rail">
+        <div className="rail-fill" style={{ width: `${progress * 100}%` }} />
       </div>
 
       <main className="stage" onClick={() => !done && go(1)}>
         {done ? (
           <div className="complete">
+            <div className="complete-glyph">◎</div>
             <h2>Got it</h2>
-            <p>You’ve walked every step of this concept.</p>
             <div className="complete-actions">
-              <button type="button" onClick={() => setI(0)}>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setI(0)
+                }}
+              >
                 Replay
               </button>
               {nextId ? (
-                <Link className="primary" to={`/lesson/${nextId}`}>
-                  Next lesson →
+                <Link
+                  className="primary"
+                  to={`/lesson/${nextId}`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Next →
                 </Link>
               ) : (
-                <Link className="primary" to="/">
-                  Back to catalog
+                <Link
+                  className="primary"
+                  to="/"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Catalog
                 </Link>
               )}
             </div>
           </div>
         ) : (
           beat && (
-            <div className="beat" key={beat.id}>
-              <p className="caption">{beat.caption}</p>
-              {beat.math && (
-                <MathBlock tex={beat.math} highlights={beat.highlights} />
-              )}
-              {beat.viz?.type === 'unitCircle' && (
-                <UnitCircle {...((beat.viz.props ?? {}) as UnitCircleProps)} />
-              )}
-              {beat.viz?.type === 'pythagoras' && (
-                <PythagorasFigure
-                  {...((beat.viz.props ?? {}) as PythagorasProps)}
-                />
-              )}
+            <div className="beat-stage">
+              <div className="viz-plane" key={beat.id}>
+                {vizType === 'unitCircle' && (
+                  <UnitCircle
+                    {...((beat.viz?.props ?? {}) as UnitCircleProps)}
+                  />
+                )}
+                {vizType === 'pythagoras' && (
+                  <PythagorasFigure
+                    {...((beat.viz?.props ?? {}) as PythagorasProps)}
+                  />
+                )}
+                {vizType === 'waves' && (
+                  <WaveGraph {...((beat.viz?.props ?? {}) as WavesProps)} />
+                )}
+                {(vizType === 'formula' || vizType === 'none') && beat.math && (
+                  <MathBlock
+                    tex={beat.math}
+                    highlights={beat.highlights}
+                    huge
+                  />
+                )}
+                {showFloatMath && beat.math && (
+                  <div className="math-float">
+                    <MathBlock tex={beat.math} highlights={beat.highlights} />
+                  </div>
+                )}
+              </div>
+
+              <div className="caption-chip">{beat.caption}</div>
             </div>
           )
         )}
       </main>
 
-      <footer className="hint">
-        {done
-          ? 'Lesson complete'
-          : 'Swipe up · scroll · ↓ / Space — next step'}
-      </footer>
+      <footer className="hint">swipe / ↓</footer>
     </div>
   )
 }
