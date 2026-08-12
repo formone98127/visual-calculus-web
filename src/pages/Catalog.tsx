@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
+import { LangSwitch } from '../components/LangSwitch'
 import { heroLessonId, topics } from '../data/catalog'
+import { useI18n } from '../i18n/I18nProvider'
 
 function TrigPreview() {
   return (
@@ -35,46 +37,67 @@ function PythPreview() {
 }
 
 export function Catalog() {
+  const { t, localizeLesson } = useI18n()
+
   return (
     <div className="catalog">
+      <div className="catalog-top">
+        <LangSwitch />
+      </div>
       <header className="catalog-hero">
-        <p className="brand">Visual Math</p>
-        <h1>Math you can see.</h1>
-        <p className="lede">
-          Start with the tile lab — fit the squares, then swipe the rest.
-        </p>
+        <p className="brand">{t.brand}</p>
+        <h1>{t.headline}</h1>
+        <p className="lede">{t.lede}</p>
         <Link className="hero-cta" to={`/lesson/${heroLessonId}`}>
-          Start Pythagorean lab →
+          {t.heroCta}
         </Link>
       </header>
 
-      {topics.map((topic) => (
-        <section key={topic.id} className="topic-block">
-          <header className="topic-head">
-            <h2>{topic.title}</h2>
-            <p>{topic.blurb}</p>
-          </header>
-          <div className="topic-grid">
-            {topic.lessons.map((lesson) => (
-              <Link
-                key={lesson.id}
-                className={`topic-card ${lesson.id === heroLessonId ? 'hero-card' : ''}`}
-                to={`/lesson/${lesson.id}`}
-              >
-                <div className="preview">
-                  {lesson.id.startsWith('p-') ? (
-                    <PythPreview />
-                  ) : (
-                    <TrigPreview />
-                  )}
-                </div>
-                <strong>{lesson.title}</strong>
-                <em>{lesson.subtitle}</em>
-              </Link>
-            ))}
-          </div>
-        </section>
-      ))}
+      {topics.map((topic) => {
+        const title =
+          topic.id === 'pythagorean'
+            ? t.topicTry
+            : topic.id === 'practice'
+              ? t.topicPractice
+              : topic.title
+        const blurb =
+          topic.id === 'pythagorean'
+            ? t.topicTryBlurb
+            : topic.id === 'practice'
+              ? t.topicPracticeBlurb
+              : topic.blurb
+
+        return (
+          <section key={topic.id} className="topic-block">
+            <header className="topic-head">
+              <h2>{title}</h2>
+              <p>{blurb}</p>
+            </header>
+            <div className="topic-grid">
+              {topic.lessons.map((lesson) => {
+                const L = localizeLesson(lesson)
+                return (
+                  <Link
+                    key={lesson.id}
+                    className={`topic-card ${lesson.id === heroLessonId ? 'hero-card' : ''}`}
+                    to={`/lesson/${lesson.id}`}
+                  >
+                    <div className="preview">
+                      {lesson.id.startsWith('p-') ? (
+                        <PythPreview />
+                      ) : (
+                        <TrigPreview />
+                      )}
+                    </div>
+                    <strong>{L.title}</strong>
+                    <em>{L.subtitle}</em>
+                  </Link>
+                )
+              })}
+            </div>
+          </section>
+        )
+      })}
     </div>
   )
 }

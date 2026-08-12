@@ -1,4 +1,5 @@
 import type { WavesProps } from '../data/types'
+import { useI18n } from '../i18n/I18nProvider'
 
 function samples(fn: (x: number) => number, n = 120) {
   const pts: string[] = []
@@ -12,12 +13,18 @@ function samples(fn: (x: number) => number, n = 120) {
 }
 
 export function WaveGraph({ mode = 'sinDeriv' }: WavesProps) {
+  const { t } = useI18n()
   const sin = samples(Math.sin)
   const cos = samples(Math.cos)
   const nsin = samples((x) => -Math.sin(x))
 
   return (
-    <svg className="wave-graph" viewBox="0 0 600 280" role="img" aria-label="Wave graph">
+    <svg
+      className="wave-graph"
+      viewBox="0 0 600 280"
+      role="img"
+      aria-label="Wave graph"
+    >
       <line className="wg-axis" x1="40" y1="110" x2="560" y2="110" />
       <line className="wg-axis" x1="40" y1="20" x2="40" y2="200" />
 
@@ -38,7 +45,10 @@ export function WaveGraph({ mode = 'sinDeriv' }: WavesProps) {
       )}
 
       <g className="wg-legend">
-        {(mode === 'sin' || mode === 'sinDeriv' || mode === 'both' || mode === 'all') && (
+        {(mode === 'sin' ||
+          mode === 'sinDeriv' ||
+          mode === 'both' ||
+          mode === 'all') && (
           <text x="48" y="230" className="lg sin">
             sin x
           </text>
@@ -58,12 +68,12 @@ export function WaveGraph({ mode = 'sinDeriv' }: WavesProps) {
         )}
         {mode === 'sinDeriv' && (
           <text x="320" y="230" className="lg hint">
-            slope of red ≈ blue
+            {t.waveSinDeriv}
           </text>
         )}
         {mode === 'cosDeriv' && (
           <text x="320" y="230" className="lg hint">
-            slope of blue ≈ green
+            {t.waveCosDeriv}
           </text>
         )}
       </g>

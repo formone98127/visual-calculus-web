@@ -1,15 +1,17 @@
-# Visual Math (web demo)
+# 看得見的數學 / Visual Math
 
-Swipe / scroll / ↓ to reveal math steps.
+Swipe / scroll / ↓ to reveal math steps. **Traditional Chinese + English.**
 
 ## Topics
 
-1. **Derivatives of sine, cosine, and tangent** — inspired by *Teach Yourself VISUALLY Calculus*
-2. **Pythagorean theorem** — inspired by *Short Geometry Labs* (Gardella & Delaware): squares on the sides of a right triangle
+1. **畢氏定理實驗室** — tiles on a right triangle → a² + b² = c²  
+2. Practice: trig derivatives and more
 
-## Live demo
+## Live
 
 https://formone98127.github.io/visual-calculus-web/
+
+Toggle **繁中 / EN** in the top corner.
 
 ## Local
 

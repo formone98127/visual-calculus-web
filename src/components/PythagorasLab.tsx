@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { PythagorasLabMode, PythagorasLabProps } from '../data/types'
+import { useI18n } from '../i18n/I18nProvider'
 
 /** 3-4-5 right triangle in integer grid units */
 const A = 3
@@ -156,6 +157,7 @@ function labelPos(sq: Sq): Pt {
 }
 
 export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) {
+  const { t } = useI18n()
   const flags = modeFlags(mode)
   const [fitted, setFitted] = useState(false)
   const completedRef = useRef(false)
@@ -254,11 +256,7 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
     <div
       className={`pythag-lab ${flags.challenge ? 'is-challenge' : ''} ${showFitted ? 'is-fitted' : ''}`}
     >
-      {flags.ask && (
-        <p className="lab-hook">
-          Each square uses one side of the triangle as its side.
-        </p>
-      )}
+      {flags.ask && <p className="lab-hook">{t.labHookAsk}</p>}
 
       <svg
         className="pythagoras lab-svg"
@@ -419,7 +417,7 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
             runAutoFit()
           }}
         >
-          Move tiles into the big square →
+          {t.autoFit}
         </button>
       )}
 

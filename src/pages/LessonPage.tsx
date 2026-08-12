@@ -1,19 +1,21 @@
 import { Link, useParams } from 'react-router-dom'
 import { LessonPlayer } from '../components/LessonPlayer'
 import { getLesson } from '../data/catalog'
+import { useI18n } from '../i18n/I18nProvider'
 
 export function LessonPage() {
   const { id } = useParams()
-  const lesson = id ? getLesson(id) : undefined
+  const { t, localizeLesson } = useI18n()
+  const raw = id ? getLesson(id) : undefined
 
-  if (!lesson) {
+  if (!raw) {
     return (
       <div className="missing">
-        <p>Lesson not found.</p>
-        <Link to="/">Back to catalog</Link>
+        <p>{t.missing}</p>
+        <Link to="/">{t.backHome}</Link>
       </div>
     )
   }
 
-  return <LessonPlayer lesson={lesson} />
+  return <LessonPlayer lesson={localizeLesson(raw)} />
 }

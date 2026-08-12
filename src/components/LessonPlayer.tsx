@@ -8,6 +8,8 @@ import type {
   UnitCircleProps,
   WavesProps,
 } from '../data/types'
+import { useI18n } from '../i18n/I18nProvider'
+import { LangSwitch } from './LangSwitch'
 import { MathBlock } from './MathBlock'
 import { PythagorasFigure } from './PythagorasFigure'
 import { PythagorasLab } from './PythagorasLab'
@@ -19,6 +21,7 @@ type Props = {
 }
 
 export function LessonPlayer({ lesson }: Props) {
+  const { t } = useI18n()
   const [i, setI] = useState(0)
   const [gateOk, setGateOk] = useState(false)
   const touchY = useRef<number | null>(null)
@@ -109,8 +112,11 @@ export function LessonPlayer({ lesson }: Props) {
           ←
         </Link>
         <div className="chrome-title">{lesson.title}</div>
-        <div className="step-count">
-          {done ? '✓' : `${i + 1}/${lesson.beats.length}`}
+        <div className="chrome-right">
+          <LangSwitch />
+          <div className="step-count">
+            {done ? '✓' : `${i + 1}/${lesson.beats.length}`}
+          </div>
         </div>
       </div>
 
@@ -128,8 +134,8 @@ export function LessonPlayer({ lesson }: Props) {
         {done ? (
           <div className="complete">
             <div className="complete-glyph">◎</div>
-            <h2>Got it</h2>
-            <p className="complete-sub">The two small squares make the big one.</p>
+            <h2>{t.gotIt}</h2>
+            <p className="complete-sub">{t.gotItSub}</p>
             <div className="complete-actions">
               <button
                 type="button"
@@ -139,7 +145,7 @@ export function LessonPlayer({ lesson }: Props) {
                   setGateOk(false)
                 }}
               >
-                Replay
+                {t.replay}
               </button>
               {nextId ? (
                 <Link
@@ -147,7 +153,7 @@ export function LessonPlayer({ lesson }: Props) {
                   to={`/lesson/${nextId}`}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  Next →
+                  {t.next}
                 </Link>
               ) : (
                 <Link
@@ -155,7 +161,7 @@ export function LessonPlayer({ lesson }: Props) {
                   to="/"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  Catalog
+                  {t.catalog}
                 </Link>
               )}
             </div>
@@ -210,7 +216,7 @@ export function LessonPlayer({ lesson }: Props) {
               </div>
 
               <div className={`caption-chip ${gated ? 'pulse' : ''}`}>
-                {gated ? 'Tap Auto-fit to continue' : beat.caption}
+                {gated ? t.gateChip : beat.caption}
               </div>
             </div>
           )
@@ -218,7 +224,7 @@ export function LessonPlayer({ lesson }: Props) {
       </main>
 
       <footer className="hint">
-        {gated ? 'complete the challenge' : 'swipe / ↓'}
+        {gated ? t.challengeHint : t.swipeHint}
       </footer>
     </div>
   )
