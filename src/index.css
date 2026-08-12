@@ -699,7 +699,7 @@ a.primary {
 }
 
 .pythagoras-wrap.eq-hot .sq-c {
-  stroke-width: 4;
+  stroke-width: 1.5;
   filter: drop-shadow(0 0 10px rgba(184, 242, 124, 0.35));
 }
 
