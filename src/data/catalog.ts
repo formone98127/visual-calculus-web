@@ -1,16 +1,21 @@
 import type { Lesson, Topic } from './types'
+import { angleSumLessons } from './angleSum'
 import { pythagorasLessons } from './pythagoras'
 import { lessons as trigLessons } from './trigDerivatives'
 
-export const heroLessonId = 'p-squares'
+export const heroLessonIds = ['p-squares', 'a-angle-sum'] as const
+export const heroLessonId = heroLessonIds[0]
 
 export const topics: Topic[] = [
   {
-    id: 'pythagorean',
+    id: 'try-this',
     title: 'Try this',
-    blurb: 'A hands-on discovery — rearrange tiles to see why a² + b² = c².',
+    blurb: 'Hands-on discovery labs.',
     source: 'Inspired by Short Geometry Labs (Gardella & Delaware)',
-    lessons: pythagorasLessons.filter((l) => l.id === heroLessonId),
+    lessons: [
+      ...pythagorasLessons.filter((l) => l.id === 'p-squares'),
+      ...angleSumLessons,
+    ],
   },
   {
     id: 'practice',
@@ -18,7 +23,7 @@ export const topics: Topic[] = [
     blurb: 'More lessons to swipe through.',
     source: '',
     lessons: [
-      ...pythagorasLessons.filter((l) => l.id !== heroLessonId),
+      ...pythagorasLessons.filter((l) => l.id !== 'p-squares'),
       ...trigLessons,
     ],
   },
@@ -26,6 +31,7 @@ export const topics: Topic[] = [
 
 export const allLessons: Lesson[] = [
   ...pythagorasLessons,
+  ...angleSumLessons,
   ...trigLessons,
 ]
 
@@ -34,7 +40,10 @@ export function getLesson(id: string): Lesson | undefined {
 }
 
 export function nextLessonId(id: string): string | null {
-  const order = [heroLessonId, ...allLessons.map((l) => l.id).filter((x) => x !== heroLessonId)]
+  const rest = allLessons
+    .map((l) => l.id)
+    .filter((x) => !(heroLessonIds as readonly string[]).includes(x))
+  const order = [...heroLessonIds, ...rest]
   const i = order.indexOf(id)
   if (i < 0 || i >= order.length - 1) return null
   return order[i + 1]

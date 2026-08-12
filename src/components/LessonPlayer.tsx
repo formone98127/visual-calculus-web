@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { nextLessonId } from '../data/catalog'
 import type {
+  AngleSumLabProps,
   Lesson,
   PythagorasLabProps,
   PythagorasProps,
@@ -9,6 +10,7 @@ import type {
   WavesProps,
 } from '../data/types'
 import { useI18n } from '../i18n/I18nProvider'
+import { AngleSumLab } from './AngleSumLab'
 import { LangSwitch } from './LangSwitch'
 import { MathBlock } from './MathBlock'
 import { PythagorasFigure } from './PythagorasFigure'
@@ -97,9 +99,23 @@ export function LessonPlayer({ lesson }: Props) {
     vizType !== 'formula' &&
     vizType !== 'none' &&
     vizType !== 'pythagorasLab' &&
-    vizType !== 'pythagoras'
-  const isLabScene = lesson.lab && vizType === 'pythagorasLab'
-  const labProps = (beat?.viz?.props ?? { mode: 'ask' }) as PythagorasLabProps
+    vizType !== 'pythagoras' &&
+    vizType !== 'angleSumLab'
+  const isLabScene =
+    !!lesson.lab &&
+    (vizType === 'pythagorasLab' || vizType === 'angleSumLab')
+  const pythProps = (beat?.viz?.props ?? { mode: 'ask' }) as PythagorasLabProps
+  const angleProps = (beat?.viz?.props ?? { mode: 'ask' }) as AngleSumLabProps
+
+  const onLabInteract = () => {
+    setGateOk(true)
+    window.setTimeout(() => {
+      setI((cur) => Math.min(cur + 1, lesson.beats.length))
+    }, 700)
+  }
+
+  const gotItSub =
+    lesson.id === 'a-angle-sum' ? t.gotItSubAngle : t.gotItSub
 
   return (
     <div
@@ -136,7 +152,7 @@ export function LessonPlayer({ lesson }: Props) {
           <div className="complete">
             <div className="complete-glyph">◎</div>
             <h2>{t.gotIt}</h2>
-            <p className="complete-sub">{t.gotItSub}</p>
+            <p className="complete-sub">{gotItSub}</p>
             <div className="complete-actions">
               <button
                 type="button"
@@ -188,15 +204,14 @@ export function LessonPlayer({ lesson }: Props) {
                 )}
                 {vizType === 'pythagorasLab' && (
                   <PythagorasLab
-                    mode={labProps.mode}
-                    onInteractComplete={() => {
-                      setGateOk(true)
-                      window.setTimeout(() => {
-                        setI((cur) =>
-                          Math.min(cur + 1, lesson.beats.length),
-                        )
-                      }, 700)
-                    }}
+                    mode={pythProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'angleSumLab' && (
+                  <AngleSumLab
+                    mode={angleProps.mode}
+                    onInteractComplete={onLabInteract}
                   />
                 )}
                 {vizType === 'waves' && (

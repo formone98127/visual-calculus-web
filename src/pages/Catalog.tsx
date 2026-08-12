@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { LangSwitch } from '../components/LangSwitch'
-import { heroLessonId, topics } from '../data/catalog'
+import { heroLessonId, heroLessonIds, topics } from '../data/catalog'
 import { useI18n } from '../i18n/I18nProvider'
 
 function TrigPreview() {
@@ -36,8 +36,44 @@ function PythPreview() {
   )
 }
 
+function AnglePreview() {
+  return (
+    <svg viewBox="0 0 200 88" aria-hidden>
+      <line
+        className="p-base"
+        x1="30"
+        y1="72"
+        x2="170"
+        y2="72"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        opacity="0.45"
+      />
+      <path
+        d="M100,72 L40,72 A60,60 0 0 1 70,20 Z"
+        fill="rgba(255,107,122,0.85)"
+      />
+      <path
+        d="M100,72 L70,20 A60,60 0 0 1 130,20 Z"
+        fill="rgba(76,201,240,0.85)"
+      />
+      <path
+        d="M100,72 L130,20 A60,60 0 0 1 160,72 Z"
+        fill="rgba(184,242,124,0.85)"
+      />
+    </svg>
+  )
+}
+
+function previewFor(id: string) {
+  if (id.startsWith('p-')) return <PythPreview />
+  if (id.startsWith('a-angle')) return <AnglePreview />
+  return <TrigPreview />
+}
+
 export function Catalog() {
   const { t, localizeLesson } = useI18n()
+  const heroes = new Set<string>(heroLessonIds)
 
   return (
     <div className="catalog">
@@ -48,20 +84,25 @@ export function Catalog() {
         <p className="brand">{t.brand}</p>
         <h1>{t.headline}</h1>
         <p className="lede">{t.lede}</p>
-        <Link className="hero-cta" to={`/lesson/${heroLessonId}`}>
-          {t.heroCta}
-        </Link>
+        <div className="hero-cta-row">
+          <Link className="hero-cta" to={`/lesson/${heroLessonId}`}>
+            {t.heroCta}
+          </Link>
+          <Link className="hero-cta secondary" to="/lesson/a-angle-sum">
+            {t.heroCtaAngle}
+          </Link>
+        </div>
       </header>
 
       {topics.map((topic) => {
         const title =
-          topic.id === 'pythagorean'
+          topic.id === 'try-this' || topic.id === 'pythagorean'
             ? t.topicTry
             : topic.id === 'practice'
               ? t.topicPractice
               : topic.title
         const blurb =
-          topic.id === 'pythagorean'
+          topic.id === 'try-this' || topic.id === 'pythagorean'
             ? t.topicTryBlurb
             : topic.id === 'practice'
               ? t.topicPracticeBlurb
@@ -79,16 +120,10 @@ export function Catalog() {
                 return (
                   <Link
                     key={lesson.id}
-                    className={`topic-card ${lesson.id === heroLessonId ? 'hero-card' : ''}`}
+                    className={`topic-card ${heroes.has(lesson.id) ? 'hero-card' : ''}`}
                     to={`/lesson/${lesson.id}`}
                   >
-                    <div className="preview">
-                      {lesson.id.startsWith('p-') ? (
-                        <PythPreview />
-                      ) : (
-                        <TrigPreview />
-                      )}
-                    </div>
+                    <div className="preview">{previewFor(lesson.id)}</div>
                     <strong>{L.title}</strong>
                     <em>{L.subtitle}</em>
                   </Link>

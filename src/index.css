@@ -119,14 +119,26 @@ a.primary {
   max-width: 34ch;
 }
 
+.hero-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.35rem;
+}
+
 .hero-cta {
   display: inline-flex;
-  margin-top: 1.35rem;
   padding: 0.75rem 1.25rem;
   border-radius: 999px;
   background: var(--accent);
   color: #1a1400;
   font-weight: 700;
+}
+
+.hero-cta.secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid rgba(255, 209, 102, 0.45);
 }
 
 .topic-card.hero-card {
@@ -900,4 +912,108 @@ a.primary {
 
 .pythag-lab .pythag-eq {
   margin: 0.25rem 0 0;
+}
+
+/* —— Angle-sum lab —— */
+.angle-lab {
+  width: min(520px, 94vw);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.angle-svg {
+  width: 100%;
+  max-height: min(52vh, 440px);
+  overflow: visible;
+}
+
+.angle-tri {
+  fill: rgba(255, 209, 102, 0.14);
+  stroke: none;
+}
+
+.angle-svg .tri-outline {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.25;
+  stroke-linejoin: miter;
+  vector-effect: non-scaling-stroke;
+}
+
+.angle-wedge .wedge-fill {
+  fill-opacity: 0.88;
+  stroke: rgba(11, 16, 32, 0.55);
+  stroke-width: 1.1;
+  vector-effect: non-scaling-stroke;
+  transition:
+    d 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease;
+}
+
+.angle-lab.is-fitted .angle-wedge .wedge-fill {
+  fill-opacity: 0.95;
+}
+
+.wedge-label {
+  font-size: 13px;
+  font-weight: 700;
+  fill: #0b1020;
+  pointer-events: none;
+}
+
+.vert-label {
+  font-size: 13px;
+  font-weight: 600;
+  fill: var(--muted);
+}
+
+.angle-baseline {
+  stroke: rgba(232, 236, 255, 0.35);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.angle-baseline.hot {
+  stroke: var(--accent);
+  stroke-dasharray: none;
+  filter: drop-shadow(0 0 8px rgba(255, 209, 102, 0.35));
+}
+
+.line-caption {
+  font-size: 15px;
+  font-weight: 700;
+  fill: var(--accent);
+}
+
+.angle-eq {
+  margin: 0.15rem 0 0;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(1.25rem, 3.5vw, 1.7rem);
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  align-items: baseline;
+}
+
+.angle-eq .a {
+  color: #ff6b7a;
+}
+.angle-eq .b {
+  color: #4cc9f0;
+}
+.angle-eq .c {
+  color: #b8f27c;
+}
+.angle-eq .op {
+  color: var(--muted);
+  font-weight: 500;
+}
+.angle-eq .sum {
+  color: var(--accent);
 }

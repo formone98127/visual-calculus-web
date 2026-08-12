@@ -22,7 +22,6 @@ export type PythagorasProps = {
   c?: number
 }
 
-/** Modes for the interactive Pythagorean lab (Flagship B). */
 export type PythagorasLabMode =
   | 'ask'
   | 'triangle'
@@ -38,6 +37,20 @@ export type PythagorasLabProps = {
   onInteractComplete?: () => void
 }
 
+export type AngleSumLabMode =
+  | 'ask'
+  | 'acute'
+  | 'right'
+  | 'obtuse'
+  | 'challenge'
+  | 'fitted'
+  | 'generalize'
+
+export type AngleSumLabProps = {
+  mode: AngleSumLabMode
+  onInteractComplete?: () => void
+}
+
 export type WavesProps = {
   mode?: 'sin' | 'cos' | 'both' | 'sinDeriv' | 'cosDeriv' | 'all'
 }
@@ -45,18 +58,24 @@ export type WavesProps = {
 export type Beat = {
   id: string
   caption: string
-  /** Longer question / instruction above the chip */
   prompt?: string
   math?: string
   highlights?: Highlight[]
-  /** Block forward navigation until lab reports interact complete */
   gate?: 'interact'
   viz?: {
-    type: 'unitCircle' | 'pythagoras' | 'pythagorasLab' | 'waves' | 'formula' | 'none'
+    type:
+      | 'unitCircle'
+      | 'pythagoras'
+      | 'pythagorasLab'
+      | 'angleSumLab'
+      | 'waves'
+      | 'formula'
+      | 'none'
     props?:
       | UnitCircleProps
       | PythagorasProps
       | PythagorasLabProps
+      | AngleSumLabProps
       | WavesProps
   }
 }
@@ -65,7 +84,6 @@ export type Lesson = {
   id: string
   title: string
   subtitle: string
-  /** Continuous scene — don't remount viz each beat */
   lab?: boolean
   beats: Beat[]
 }

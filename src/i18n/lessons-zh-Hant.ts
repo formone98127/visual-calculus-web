@@ -55,6 +55,40 @@ export const lessonsZhHant: Record<string, LessonText> = {
       c3: { caption: '同一個法則' },
     },
   },
+  'a-angle-sum': {
+    title: '三個角能排成直線嗎？',
+    subtitle: '撕開三角角——發現 180°',
+    beats: {
+      s0: {
+        caption: '三個角',
+        prompt: '每個三角形都有三個內角。它們加起來是多少？',
+      },
+      s1: {
+        caption: '銳角三角形',
+        prompt: '銳角三角形——每個角都小於 90°。',
+      },
+      s2: {
+        caption: '有一個直角',
+        prompt: '直角三角形——有一個角正好是 90°。',
+      },
+      s3: {
+        caption: '有一個鈍角',
+        prompt: '鈍角三角形——有一個角大於 90°。',
+      },
+      s4: {
+        caption: '撕開三角角',
+        prompt: '三個彩色角，能排成一條直線嗎？',
+      },
+      s5: {
+        caption: '一條直線！',
+        prompt: '外緣形成平角——那就是 180°。',
+      },
+      s6: {
+        caption: '永遠是 180°',
+        prompt: '銳角、直角或鈍角——三個內角永遠合成一個平角。',
+      },
+    },
+  },
   'a-formulas': {
     title: '正弦、餘弦、正切的導數',
     subtitle: '單位圓 → 三個公式',
