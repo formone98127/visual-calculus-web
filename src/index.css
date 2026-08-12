@@ -934,7 +934,7 @@ a.primary {
   transition: opacity 0.55s ease;
 }
 .angle-tri-group.dim {
-  opacity: 0.28;
+  opacity: 0.3;
 }
 
 .angle-tri {
@@ -950,15 +950,21 @@ a.primary {
   vector-effect: non-scaling-stroke;
 }
 
+.wedge-ghost {
+  stroke: none;
+  pointer-events: none;
+}
+
 .angle-wedge .wedge-fill {
-  fill-opacity: 0.9;
+  fill-opacity: 0.92;
   stroke: rgba(11, 16, 32, 0.55);
   stroke-width: 1.1;
   vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
 }
 
-.angle-wedge.on-line .wedge-fill {
-  fill-opacity: 0.95;
+.angle-lab.is-flying .angle-wedge.flying .wedge-fill {
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.35));
 }
 
 .wedge-label {
@@ -977,6 +983,10 @@ a.primary {
 .angle-baseline {
   stroke-width: 2;
   vector-effect: non-scaling-stroke;
+  transition:
+    stroke 0.45s ease,
+    stroke-dasharray 0.45s ease,
+    filter 0.45s ease;
 }
 .angle-baseline.waiting {
   stroke: rgba(232, 236, 255, 0.35);
@@ -992,6 +1002,7 @@ a.primary {
   stroke: rgba(232, 236, 255, 0.35);
   stroke-width: 2;
   vector-effect: non-scaling-stroke;
+  transition: stroke 0.45s ease;
 }
 .angle-cap.hot {
   stroke: var(--accent);
@@ -1003,12 +1014,23 @@ a.primary {
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.05s;
+}
+.straight-ray.show {
+  opacity: 1;
+  filter: drop-shadow(0 0 10px rgba(255, 209, 102, 0.45));
 }
 
 .line-caption {
   font-size: 15px;
   font-weight: 700;
   fill: var(--accent);
+  opacity: 0;
+  transition: opacity 0.45s ease 0.12s;
+}
+.line-caption.show {
+  opacity: 1;
 }
 
 .line-hint {
@@ -1027,6 +1049,17 @@ a.primary {
   justify-content: center;
   gap: 0.35rem;
   align-items: baseline;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  min-height: 1.6em;
+}
+.angle-eq.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .angle-eq .a {
@@ -1044,4 +1077,9 @@ a.primary {
 }
 .angle-eq .sum {
   color: var(--accent);
+}
+
+.angle-lab .auto-fit:disabled {
+  opacity: 0.55;
+  animation: none;
 }
