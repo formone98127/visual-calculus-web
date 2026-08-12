@@ -81,6 +81,21 @@ a.primary {
   max-width: 34ch;
 }
 
+.hero-cta {
+  display: inline-flex;
+  margin-top: 1.35rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #1a1400;
+  font-weight: 700;
+}
+
+.topic-card.hero-card {
+  border-color: rgba(255, 209, 102, 0.55);
+  box-shadow: 0 0 0 1px rgba(255, 209, 102, 0.2);
+}
+
 .topic-block {
   margin-top: 2.75rem;
 }
@@ -266,6 +281,15 @@ a.primary {
   }
 }
 
+.prompt {
+  margin: 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+  max-width: 36ch;
+  justify-self: center;
+}
+
 .caption-chip {
   justify-self: center;
   padding: 0.55rem 1.1rem;
@@ -276,6 +300,27 @@ a.primary {
   font-size: 0.95rem;
   letter-spacing: 0.01em;
   color: var(--ink);
+}
+
+.caption-chip.pulse {
+  border-color: rgba(255, 209, 102, 0.7);
+  color: var(--accent);
+  animation: chip-pulse 1.2s ease infinite;
+}
+
+@keyframes chip-pulse {
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+.stage.gated {
+  cursor: default;
+}
+
+.complete-sub {
+  color: var(--muted);
+  margin: 0.4rem 0 0;
 }
 
 .math-float {
@@ -639,4 +684,93 @@ a.primary {
 .pythagoras-wrap.eq-hot .sq-c {
   stroke-width: 4;
   filter: drop-shadow(0 0 10px rgba(184, 242, 124, 0.35));
+}
+
+/* —— Pythagorean lab —— */
+.pythag-lab {
+  width: min(560px, 94vw);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lab-hook {
+  margin: 0;
+  text-align: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(1.15rem, 3vw, 1.45rem);
+  color: var(--ink);
+  max-width: 22ch;
+}
+
+.lab-svg {
+  width: 100%;
+  max-height: min(52vh, 480px);
+  overflow: visible;
+}
+
+.lab-tile {
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lab-tile rect {
+  stroke: rgba(11, 16, 32, 0.45);
+  stroke-width: 1;
+}
+
+.lab-tile.kind-a rect {
+  fill: rgba(255, 107, 122, 0.85);
+}
+
+.lab-tile.kind-b rect {
+  fill: rgba(76, 201, 240, 0.85);
+}
+
+.sq-c-waiting {
+  stroke-dasharray: 8 6;
+  animation: dash-move 1.2s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(184, 242, 124, 0.35));
+}
+
+@keyframes dash-move {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+.lab-area {
+  font-size: 16px;
+  font-weight: 700;
+  pointer-events: none;
+}
+.lab-area.a {
+  fill: var(--sin);
+}
+.lab-area.b {
+  fill: var(--cos);
+}
+.lab-area.c {
+  fill: var(--op);
+}
+
+.auto-fit {
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1.4rem;
+  background: var(--accent);
+  color: #1a1400;
+  font-weight: 700;
+  font-size: 1.05rem;
+  box-shadow: 0 8px 28px rgba(255, 209, 102, 0.25);
+  animation: chip-pulse 1.4s ease infinite;
+}
+
+.auto-fit:hover {
+  filter: brightness(1.05);
+}
+
+.pythag-lab .pythag-eq {
+  margin: 0.25rem 0 0;
 }

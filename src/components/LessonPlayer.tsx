@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom'
 import { nextLessonId } from '../data/catalog'
 import type {
   Lesson,
+  PythagorasLabProps,
   PythagorasProps,
   UnitCircleProps,
   WavesProps,
 } from '../data/types'
 import { MathBlock } from './MathBlock'
 import { PythagorasFigure } from './PythagorasFigure'
+import { PythagorasLab } from './PythagorasLab'
 import { UnitCircle } from './UnitCircle'
 import { WaveGraph } from './WaveGraph'
 
@@ -18,28 +20,37 @@ type Props = {
 
 export function LessonPlayer({ lesson }: Props) {
   const [i, setI] = useState(0)
+  const [gateOk, setGateOk] = useState(false)
   const touchY = useRef<number | null>(null)
   const wheelLock = useRef(false)
   const done = i >= lesson.beats.length
   const beat = done ? null : lesson.beats[i]
   const nextId = nextLessonId(lesson.id)
   const progress = done ? 1 : (i + 1) / lesson.beats.length
+  const gated = beat?.gate === 'interact' && !gateOk
 
   const go = useCallback(
     (delta: number) => {
       setI((cur) => {
+        const b = lesson.beats[cur]
+        if (delta > 0 && b?.gate === 'interact' && !gateOk) return cur
         const next = cur + delta
         if (next < 0) return 0
         if (next > lesson.beats.length) return lesson.beats.length
         return next
       })
     },
-    [lesson.beats.length],
+    [lesson.beats, gateOk],
   )
 
   useEffect(() => {
     setI(0)
+    setGateOk(false)
   }, [lesson.id])
+
+  useEffect(() => {
+    setGateOk(false)
+  }, [i])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -80,6 +91,8 @@ export function LessonPlayer({ lesson }: Props) {
   const vizType = beat?.viz?.type ?? 'formula'
   const showFloatMath =
     !!beat?.math && vizType !== 'formula' && vizType !== 'none'
+  const isLabScene = lesson.lab && vizType === 'pythagorasLab'
+  const labProps = (beat?.viz?.props ?? { mode: 'ask' }) as PythagorasLabProps
 
   return (
     <div
@@ -102,17 +115,25 @@ export function LessonPlayer({ lesson }: Props) {
         <div className="rail-fill" style={{ width: `${progress * 100}%` }} />
       </div>
 
-      <main className="stage" onClick={() => !done && go(1)}>
+      <main
+        className={`stage ${gated ? 'gated' : ''}`}
+        onClick={() => {
+          if (done || gated) return
+          go(1)
+        }}
+      >
         {done ? (
           <div className="complete">
             <div className="complete-glyph">◎</div>
             <h2>Got it</h2>
+            <p className="complete-sub">The two small squares make the big one.</p>
             <div className="complete-actions">
               <button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation()
                   setI(0)
+                  setGateOk(false)
                 }}
               >
                 Replay
@@ -139,7 +160,12 @@ export function LessonPlayer({ lesson }: Props) {
         ) : (
           beat && (
             <div className="beat-stage">
-              <div className="viz-plane" key={beat.id}>
+              {beat.prompt && <p className="prompt">{beat.prompt}</p>}
+
+              <div
+                className="viz-plane"
+                key={isLabScene ? lesson.id : beat.id}
+              >
                 {vizType === 'unitCircle' && (
                   <UnitCircle
                     {...((beat.viz?.props ?? {}) as UnitCircleProps)}
@@ -148,6 +174,19 @@ export function LessonPlayer({ lesson }: Props) {
                 {vizType === 'pythagoras' && (
                   <PythagorasFigure
                     {...((beat.viz?.props ?? {}) as PythagorasProps)}
+                  />
+                )}
+                {vizType === 'pythagorasLab' && (
+                  <PythagorasLab
+                    mode={labProps.mode}
+                    onInteractComplete={() => {
+                      setGateOk(true)
+                      window.setTimeout(() => {
+                        setI((cur) =>
+                          Math.min(cur + 1, lesson.beats.length),
+                        )
+                      }, 700)
+                    }}
                   />
                 )}
                 {vizType === 'waves' && (
@@ -167,13 +206,17 @@ export function LessonPlayer({ lesson }: Props) {
                 )}
               </div>
 
-              <div className="caption-chip">{beat.caption}</div>
+              <div className={`caption-chip ${gated ? 'pulse' : ''}`}>
+                {gated ? 'Tap Auto-fit to continue' : beat.caption}
+              </div>
             </div>
           )
         )}
       </main>
 
-      <footer className="hint">swipe / ↓</footer>
+      <footer className="hint">
+        {gated ? 'complete the challenge' : 'swipe / ↓'}
+      </footer>
     </div>
   )
 }

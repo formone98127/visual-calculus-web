@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { topics } from '../data/catalog'
+import { heroLessonId, topics } from '../data/catalog'
 
 function TrigPreview() {
   return (
@@ -40,7 +40,12 @@ export function Catalog() {
       <header className="catalog-hero">
         <p className="brand">Visual Math</p>
         <h1>Math you can see.</h1>
-        <p className="lede">Swipe through diagrams. Text stays out of the way.</p>
+        <p className="lede">
+          Start with the tile lab — fit the squares, then swipe the rest.
+        </p>
+        <Link className="hero-cta" to={`/lesson/${heroLessonId}`}>
+          Start Pythagorean lab →
+        </Link>
       </header>
 
       {topics.map((topic) => (
@@ -53,11 +58,15 @@ export function Catalog() {
             {topic.lessons.map((lesson) => (
               <Link
                 key={lesson.id}
-                className="topic-card"
+                className={`topic-card ${lesson.id === heroLessonId ? 'hero-card' : ''}`}
                 to={`/lesson/${lesson.id}`}
               >
                 <div className="preview">
-                  {topic.id === 'pythagorean' ? <PythPreview /> : <TrigPreview />}
+                  {lesson.id.startsWith('p-') ? (
+                    <PythPreview />
+                  ) : (
+                    <TrigPreview />
+                  )}
                 </div>
                 <strong>{lesson.title}</strong>
                 <em>{lesson.subtitle}</em>
