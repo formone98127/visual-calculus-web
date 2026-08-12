@@ -345,6 +345,12 @@ export function PythagorasLab({ mode, onInteractComplete }: PythagorasLabProps) 
                 y2={P_C.y}
               />
             )}
+            {/* Thin yellow outline on top so the triangle reads clearly */}
+            <polygon
+              className="tri-outline"
+              points={poly([P_A, P_B, P_C])}
+              fill="none"
+            />
             <text
               x={mid(P_A, P_B).x}
               y={mid(P_A, P_B).y + 22}

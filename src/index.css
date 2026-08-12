@@ -763,6 +763,15 @@ a.primary {
   stroke: none;
 }
 
+.lab-svg .tri-outline {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-linejoin: miter;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
 .lab-tile {
   transform-box: view-box;
   transform-origin: 0 0;
