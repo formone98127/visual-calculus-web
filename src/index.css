@@ -926,8 +926,15 @@ a.primary {
 
 .angle-svg {
   width: 100%;
-  max-height: min(52vh, 440px);
+  max-height: min(56vh, 480px);
   overflow: visible;
+}
+
+.angle-tri-group {
+  transition: opacity 0.55s ease;
+}
+.angle-tri-group.dim {
+  opacity: 0.28;
 }
 
 .angle-tri {
@@ -944,16 +951,13 @@ a.primary {
 }
 
 .angle-wedge .wedge-fill {
-  fill-opacity: 0.88;
+  fill-opacity: 0.9;
   stroke: rgba(11, 16, 32, 0.55);
   stroke-width: 1.1;
   vector-effect: non-scaling-stroke;
-  transition:
-    d 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.4s ease;
 }
 
-.angle-lab.is-fitted .angle-wedge .wedge-fill {
+.angle-wedge.on-line .wedge-fill {
   fill-opacity: 0.95;
 }
 
@@ -971,22 +975,46 @@ a.primary {
 }
 
 .angle-baseline {
-  stroke: rgba(232, 236, 255, 0.35);
-  stroke-width: 1.5;
-  stroke-dasharray: 6 5;
+  stroke-width: 2;
   vector-effect: non-scaling-stroke;
 }
-
+.angle-baseline.waiting {
+  stroke: rgba(232, 236, 255, 0.35);
+  stroke-dasharray: 7 6;
+}
 .angle-baseline.hot {
   stroke: var(--accent);
   stroke-dasharray: none;
   filter: drop-shadow(0 0 8px rgba(255, 209, 102, 0.35));
 }
 
+.angle-cap {
+  stroke: rgba(232, 236, 255, 0.35);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+.angle-cap.hot {
+  stroke: var(--accent);
+}
+
+.straight-ray {
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
 .line-caption {
   font-size: 15px;
   font-weight: 700;
   fill: var(--accent);
+}
+
+.line-hint {
+  font-size: 13px;
+  fill: var(--muted);
+  font-style: italic;
 }
 
 .angle-eq {

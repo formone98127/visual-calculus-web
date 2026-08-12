@@ -23,6 +23,8 @@ type UiDict = {
   labHookAsk: string
   angleAutoFit: string
   angleHookAsk: string
+  angleStraightLabel: string
+  angleLineHint: string
   missing: string
   backHome: string
   waveSinDeriv: string
@@ -54,6 +56,8 @@ export const ui: Record<Locale, UiDict> = {
     labHookAsk: 'Each square uses one side of the triangle as its side.',
     angleAutoFit: 'Lay corners on the line →',
     angleHookAsk: 'Three corners. One straight line?',
+    angleStraightLabel: 'straight line',
+    angleLineHint: 'straight line waiting…',
     missing: 'Lesson not found.',
     backHome: 'Back to catalog',
     waveSinDeriv: 'slope of red ≈ blue',
@@ -82,6 +86,8 @@ export const ui: Record<Locale, UiDict> = {
     labHookAsk: '每個正方形都以三角形的一邊作為它的邊。',
     angleAutoFit: '把三個角排到直線上 →',
     angleHookAsk: '三個角，能排成一條直線嗎？',
+    angleStraightLabel: '一條直線',
+    angleLineHint: '直線等你排上去…',
     missing: '找不到這一課。',
     backHome: '回到目錄',
     waveSinDeriv: '紅線斜率 ≈ 藍線',

@@ -15,7 +15,8 @@ type Corner = {
   dir1: Pt
 }
 
-const R = 44
+const R_TRI = 38
+const R_LINE = 52
 
 function beep() {
   try {
@@ -59,8 +60,8 @@ function poly(pts: Pt[]) {
   return pts.map((p) => `${p.x},${p.y}`).join(' ')
 }
 
-/** Vertices from exact interior angles (degrees at A, B, C). Fitted into viewBox. */
-function triangleVerts(kind: TriKind) {
+/** Vertices from exact interior angles (degrees at A, B, C). Fitted into a box. */
+function triangleVerts(kind: TriKind, box: { x: number; y: number; w: number; h: number }) {
   const degs: [number, number, number] =
     kind === 'acute'
       ? [50, 60, 70]
@@ -76,7 +77,6 @@ function triangleVerts(kind: TriKind) {
   const radB = (degB * Math.PI) / 180
   const radC = (degC * Math.PI) / 180
   const bLen = (c * Math.sin(radB)) / Math.sin(radC)
-  // Interior at A above the base (math y-up, flip later)
   const C0: Pt = {
     x: A0.x + bLen * Math.cos(radA),
     y: A0.y + bLen * Math.sin(radA),
@@ -91,12 +91,12 @@ function triangleVerts(kind: TriKind) {
   const maxY = Math.max(...ys)
   const w = maxX - minX || 1
   const h = maxY - minY || 1
-  const pad = 36
-  const boxW = 380 - pad * 2
-  const boxH = 210
+  const pad = 28
+  const boxW = box.w - pad * 2
+  const boxH = box.h - pad * 2
   const s = Math.min(boxW / w, boxH / h)
-  const ox = pad + (boxW - w * s) / 2 - minX * s
-  const oy = 28 + (boxH - h * s) / 2 + maxY * s // flip y into SVG
+  const ox = box.x + pad + (boxW - w * s) / 2 - minX * s
+  const oy = box.y + pad + (boxH - h * s) / 2 + maxY * s
 
   const map = (p: Pt): Pt => ({ x: ox + p.x * s, y: oy - p.y * s })
   return { A: map(A0), B: map(B0), C: map(C0), degs }
@@ -120,7 +120,7 @@ function cornerAt(
   }
 }
 
-/** Ordered CCW wedge path (SVG y-down). */
+/** Ordered CCW-in-atan2 (clockwise-on-screen) wedge path. */
 function wedgePath(apex: Pt, d0: Pt, d1: Pt, r: number) {
   let a0 = ang(d0)
   let a1 = ang(d1)
@@ -161,10 +161,12 @@ function midDir(d0: Pt, d1: Pt): Pt {
   return { x: Math.cos(m), y: Math.sin(m) }
 }
 
-/** Lay wedges at one apex on a baseline; outer rays form a straight 180° line. */
-function fitPose(corners: Corner[], apex: Pt) {
-  // Start pointing left (π); add positive radians → through −π/2 (up) toward 0 (right)
-  let angleCursor = Math.PI
+/**
+ * Stack wedges at one apex so outer rays are exactly left + right:
+ * a straight line = 180°.
+ */
+function fitPose(corners: Corner[], apex: Pt, r: number) {
+  let angleCursor = Math.PI // left
   const poses: { apex: Pt; d0: Pt; d1: Pt; label: Pt }[] = []
   for (const c of corners) {
     const rad = (c.deg * Math.PI) / 180
@@ -173,8 +175,12 @@ function fitPose(corners: Corner[], apex: Pt) {
     const d0 = { x: Math.cos(b0), y: Math.sin(b0) }
     const d1 = { x: Math.cos(b1), y: Math.sin(b1) }
     const md = midDir(d0, d1)
-    const label = add(apex, scale(md, R * 0.55))
-    poses.push({ apex, d0, d1, label })
+    poses.push({
+      apex,
+      d0,
+      d1,
+      label: add(apex, scale(md, r * 0.52)),
+    })
     angleCursor = b1
   }
   return poses
@@ -184,7 +190,7 @@ function modeFlags(mode: AngleSumLabMode) {
   return {
     ask: mode === 'ask',
     showTri: mode !== 'ask',
-    showWedges: [
+    showWedgesOnTri: [
       'acute',
       'right',
       'obtuse',
@@ -192,6 +198,15 @@ function modeFlags(mode: AngleSumLabMode) {
       'fitted',
       'generalize',
     ].includes(mode),
+    /** Line assembly visible once we have a triangle. */
+    showLineStage: mode !== 'ask',
+    /** Wedges sit on the line (demo / result). */
+    wedgesOnLine:
+      mode === 'acute' ||
+      mode === 'right' ||
+      mode === 'obtuse' ||
+      mode === 'fitted' ||
+      mode === 'generalize',
     challenge: mode === 'challenge',
     fitted: mode === 'fitted' || mode === 'generalize',
     generalize: mode === 'generalize',
@@ -211,12 +226,18 @@ export function AngleSumLab({ mode, onInteractComplete }: AngleSumLabProps) {
   const doneRef = useRef(false)
 
   const kind = kindForMode(
-    mode === 'challenge' || mode === 'fitted' || mode === 'generalize' || mode === 'ask'
+    mode === 'challenge' ||
+      mode === 'fitted' ||
+      mode === 'generalize' ||
+      mode === 'ask'
       ? 'acute'
       : mode,
   )
 
-  const { A, B, C, degs } = useMemo(() => triangleVerts(kind), [kind])
+  const { A, B, C, degs } = useMemo(
+    () => triangleVerts(kind, { x: 0, y: 8, w: 380, h: 168 }),
+    [kind],
+  )
 
   const corners = useMemo(() => {
     const [dA, dB, dC] = degs
@@ -239,14 +260,17 @@ export function AngleSumLab({ mode, onInteractComplete }: AngleSumLabProps) {
     }
   }, [mode])
 
-  const showFitted = fitted || flags.fitted
+  const lineApex = { x: 190, y: 268 }
+  const showOnLine = fitted || flags.wedgesOnLine
+  const hideTriWedges = showOnLine && (flags.challenge || flags.fitted)
+
   const fitPoses = useMemo(
-    () => fitPose(corners, { x: 190, y: 288 }),
+    () => fitPose(corners, lineApex, R_LINE),
     [corners],
   )
 
   const runAutoFit = () => {
-    if (showFitted) return
+    if (fitted) return
     setFitted(true)
     window.setTimeout(() => {
       beep()
@@ -258,88 +282,152 @@ export function AngleSumLab({ mode, onInteractComplete }: AngleSumLabProps) {
   }
 
   const sum = degs[0] + degs[1] + degs[2]
+  const lineActive = showOnLine
 
   return (
     <div
-      className={`angle-lab ${flags.challenge ? 'is-challenge' : ''} ${showFitted ? 'is-fitted' : ''}`}
+      className={`angle-lab ${flags.challenge ? 'is-challenge' : ''} ${lineActive ? 'is-fitted' : ''}`}
     >
       {flags.ask && <p className="lab-hook">{t.angleHookAsk}</p>}
 
       <svg
         className="angle-svg"
-        viewBox="0 0 380 340"
+        viewBox="0 0 380 360"
         role="img"
-        aria-label="Triangle angle sum lab"
+        aria-label="Triangle angles form a straight line"
       >
-        {(showFitted || flags.challenge) && (
-          <line
-            className={`angle-baseline ${showFitted ? 'hot' : ''}`}
-            x1={40}
-            y1={288}
-            x2={340}
-            y2={288}
-          />
-        )}
-
-        {flags.showTri && !showFitted && (
-          <>
+        {/* —— Triangle —— */}
+        {flags.showTri && (
+          <g className={`angle-tri-group ${hideTriWedges ? 'dim' : ''}`}>
             <polygon className="angle-tri" points={poly([A, B, C])} />
             <polygon
               className="tri-outline"
               points={poly([A, B, C])}
               fill="none"
             />
-          </>
-        )}
-
-        {flags.showWedges &&
-          corners.map((c, i) => {
-            const pose = showFitted
-              ? fitPoses[i]
-              : {
-                  apex: c.home,
-                  d0: c.dir0,
-                  d1: c.dir1,
-                  label: add(c.home, scale(midDir(c.dir0, c.dir1), R * 0.55)),
-                }
-            const d = wedgePath(pose.apex, pose.d0, pose.d1, R)
-            return (
-              <g key={c.id} className={`angle-wedge kind-${c.id}`}>
-                <path d={d} className="wedge-fill" style={{ fill: c.color }} />
-                <text
-                  x={pose.label.x}
-                  y={pose.label.y + 4}
-                  className="wedge-label"
-                  textAnchor="middle"
-                >
-                  {flags.generalize ? c.id : `${c.deg}°`}
-                </text>
-              </g>
-            )
-          })}
-
-        {flags.showTri && !showFitted && (
-          <>
-            <text x={A.x - 14} y={A.y + 20} className="vert-label">
+            {!hideTriWedges &&
+              flags.showWedgesOnTri &&
+              corners.map((c) => {
+                const label = add(
+                  c.home,
+                  scale(midDir(c.dir0, c.dir1), R_TRI * 0.55),
+                )
+                return (
+                  <g key={`t-${c.id}`} className={`angle-wedge kind-${c.id}`}>
+                    <path
+                      d={wedgePath(c.home, c.dir0, c.dir1, R_TRI)}
+                      className="wedge-fill"
+                      style={{ fill: c.color }}
+                    />
+                    <text
+                      x={label.x}
+                      y={label.y + 4}
+                      className="wedge-label"
+                      textAnchor="middle"
+                    >
+                      {`${c.deg}°`}
+                    </text>
+                  </g>
+                )
+              })}
+            <text x={A.x - 12} y={A.y + 18} className="vert-label">
               A
             </text>
-            <text x={B.x + 6} y={B.y + 20} className="vert-label">
+            <text x={B.x + 6} y={B.y + 18} className="vert-label">
               B
             </text>
-            <text x={C.x - 6} y={C.y - 10} className="vert-label">
+            <text x={C.x - 4} y={C.y - 8} className="vert-label">
               C
             </text>
-          </>
+          </g>
         )}
 
-        {showFitted && (
-          <text x={190} y={322} className="line-caption" textAnchor="middle">
-            {flags.generalize ? '180°' : `${sum}°`}
-          </text>
+        {/* —— Straight line = 180° —— */}
+        {flags.showLineStage && (
+          <g className="angle-line-stage">
+            <line
+              className={`angle-baseline ${lineActive ? 'hot' : 'waiting'}`}
+              x1={48}
+              y1={lineApex.y}
+              x2={332}
+              y2={lineApex.y}
+            />
+            {/* End caps mark a straight angle */}
+            <line
+              className={`angle-cap ${lineActive ? 'hot' : ''}`}
+              x1={48}
+              y1={lineApex.y - 10}
+              x2={48}
+              y2={lineApex.y + 10}
+            />
+            <line
+              className={`angle-cap ${lineActive ? 'hot' : ''}`}
+              x1={332}
+              y1={lineApex.y - 10}
+              x2={332}
+              y2={lineApex.y + 10}
+            />
+
+            {lineActive &&
+              fitPoses.map((pose, i) => {
+                const c = corners[i]
+                return (
+                  <g key={`l-${c.id}`} className={`angle-wedge on-line kind-${c.id}`}>
+                    <path
+                      d={wedgePath(pose.apex, pose.d0, pose.d1, R_LINE)}
+                      className="wedge-fill"
+                      style={{ fill: c.color }}
+                    />
+                    <text
+                      x={pose.label.x}
+                      y={pose.label.y + 4}
+                      className="wedge-label"
+                      textAnchor="middle"
+                    >
+                      {flags.generalize ? `∠${c.id}` : `${c.deg}°`}
+                    </text>
+                  </g>
+                )
+              })}
+
+            {/* Outer rays of the half-plane — the straight line itself */}
+            {lineActive && (
+              <>
+                <line
+                  className="straight-ray"
+                  x1={lineApex.x - R_LINE - 8}
+                  y1={lineApex.y}
+                  x2={lineApex.x + R_LINE + 8}
+                  y2={lineApex.y}
+                />
+                <text
+                  x={190}
+                  y={lineApex.y + 36}
+                  className="line-caption"
+                  textAnchor="middle"
+                >
+                  {flags.generalize
+                    ? t.angleStraightLabel
+                    : `${sum}° = ${t.angleStraightLabel}`}
+                </text>
+              </>
+            )}
+
+            {flags.challenge && !lineActive && (
+              <text
+                x={190}
+                y={lineApex.y + 28}
+                className="line-hint"
+                textAnchor="middle"
+              >
+                {t.angleLineHint}
+              </text>
+            )}
+          </g>
         )}
       </svg>
 
-      {flags.challenge && !showFitted && (
+      {flags.challenge && !fitted && (
         <button
           type="button"
           className="auto-fit"
@@ -352,7 +440,7 @@ export function AngleSumLab({ mode, onInteractComplete }: AngleSumLabProps) {
         </button>
       )}
 
-      {showFitted && (flags.challenge || flags.fitted) && (
+      {lineActive && (flags.showLineStage || flags.challenge) && (
         <p className="angle-eq">
           {flags.generalize ? (
             <>
