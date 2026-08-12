@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { LessonPlayer } from '../components/LessonPlayer'
-import { getLesson } from '../data/trigDerivatives'
+import { getLesson } from '../data/catalog'
 
 export function LessonPage() {
   const { id } = useParams()

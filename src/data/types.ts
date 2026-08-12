@@ -8,12 +8,29 @@ export type UnitCircleProps = {
   emphasize?: 'sin' | 'cos' | 'both' | null
 }
 
+export type PythagorasProps = {
+  showTriangle?: boolean
+  showSquareA?: boolean
+  showSquareB?: boolean
+  showSquareC?: boolean
+  showLabels?: boolean
+  showAreas?: boolean
+  highlightEquation?: boolean
+  /** side lengths; default 3-4-5 scaled */
+  a?: number
+  b?: number
+  c?: number
+}
+
 export type Beat = {
   id: string
   caption: string
   math?: string
   highlights?: Highlight[]
-  viz?: { type: 'unitCircle' | 'none'; props?: UnitCircleProps }
+  viz?: {
+    type: 'unitCircle' | 'pythagoras' | 'none'
+    props?: UnitCircleProps | PythagorasProps
+  }
 }
 
 export type Lesson = {
@@ -21,4 +38,12 @@ export type Lesson = {
   title: string
   subtitle: string
   beats: Beat[]
+}
+
+export type Topic = {
+  id: string
+  title: string
+  blurb: string
+  source: string
+  lessons: Lesson[]
 }

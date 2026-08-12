@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { Lesson } from '../data/types'
-import { nextLessonId } from '../data/trigDerivatives'
+import { nextLessonId } from '../data/catalog'
+import type { PythagorasProps, UnitCircleProps } from '../data/types'
 import { MathBlock } from './MathBlock'
+import { PythagorasFigure } from './PythagorasFigure'
 import { UnitCircle } from './UnitCircle'
 
 type Props = {
@@ -129,7 +131,12 @@ export function LessonPlayer({ lesson }: Props) {
                 <MathBlock tex={beat.math} highlights={beat.highlights} />
               )}
               {beat.viz?.type === 'unitCircle' && (
-                <UnitCircle {...(beat.viz.props ?? {})} />
+                <UnitCircle {...((beat.viz.props ?? {}) as UnitCircleProps)} />
+              )}
+              {beat.viz?.type === 'pythagoras' && (
+                <PythagorasFigure
+                  {...((beat.viz.props ?? {}) as PythagorasProps)}
+                />
               )}
             </div>
           )

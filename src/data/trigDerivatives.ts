@@ -232,13 +232,3 @@ export const lessons: Lesson[] = [
     ],
   },
 ]
-
-export function getLesson(id: string): Lesson | undefined {
-  return lessons.find((l) => l.id === id)
-}
-
-export function nextLessonId(id: string): string | null {
-  const i = lessons.findIndex((l) => l.id === id)
-  if (i < 0 || i >= lessons.length - 1) return null
-  return lessons[i + 1].id
-}

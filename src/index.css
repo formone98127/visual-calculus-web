@@ -77,12 +77,36 @@ a.primary {
   margin: 1rem 0 0;
   color: var(--muted);
   font-size: 1.1rem;
-  max-width: 36ch;
+  max-width: 40ch;
+}
+
+.topic-block {
+  margin-top: 2.75rem;
+}
+
+.topic-head h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  color: var(--band-deep);
+}
+
+.topic-head p {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+}
+
+.topic-head .source {
+  display: inline-block;
+  margin-top: 0.45rem;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--band);
 }
 
 .lesson-list {
   list-style: none;
-  margin: 2.5rem 0 0;
+  margin: 1rem 0 0;
   padding: 0;
   border-top: 1px solid var(--line);
 }
@@ -364,6 +388,91 @@ a.primary {
 
 .unit-circle .sin-seg {
   stroke: var(--sin);
+  stroke-width: 3;
+}
+
+/* —— Pythagoras —— */
+.pythagoras-wrap {
+  width: min(420px, 100%);
+  margin: 0.5rem auto 0;
+}
+
+.pythagoras {
+  width: 100%;
+  display: block;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.pythagoras .tri {
+  fill: #f3ecf9;
+  stroke: var(--band-deep);
+  stroke-width: 2.5;
+}
+
+.pythagoras .right-angle {
+  stroke: var(--band);
+  stroke-width: 1.75;
+}
+
+.pythagoras .sq-a {
+  fill: color-mix(in srgb, var(--sin) 22%, white);
+  stroke: var(--sin);
+  stroke-width: 2;
+}
+
+.pythagoras .sq-b {
+  fill: color-mix(in srgb, var(--cos) 22%, white);
+  stroke: var(--cos);
+  stroke-width: 2;
+}
+
+.pythagoras .sq-c {
+  fill: color-mix(in srgb, var(--op) 20%, white);
+  stroke: var(--op);
+  stroke-width: 2;
+}
+
+.pythagoras .side-label {
+  fill: var(--muted);
+  font-size: 11px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.pythagoras .area-label {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.pythagoras .area-label.a {
+  fill: var(--sin);
+}
+
+.pythagoras .area-label.b {
+  fill: var(--cos);
+}
+
+.pythagoras .area-label.c {
+  fill: var(--op);
+}
+
+.pythag-eq {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--op);
+}
+
+.pythagoras-wrap.eq-hot .sq-a,
+.pythagoras-wrap.eq-hot .sq-b {
+  filter: brightness(1.05);
+}
+
+.pythagoras-wrap.eq-hot .sq-c {
   stroke-width: 3;
 }
 
