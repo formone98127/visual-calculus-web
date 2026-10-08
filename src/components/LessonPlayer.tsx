@@ -3,20 +3,76 @@ import { Link } from 'react-router-dom'
 import { nextLessonId } from '../data/catalog'
 import type {
   AngleSumLabProps,
+  ArrayTurnLabProps,
+  BarEqLabProps,
+  BinomLabProps,
+  CongruenceLabProps,
+  CircleAreaLabProps,
+  CompleteSqLabProps,
+  DiffSquaresLabProps,
+  DistributeLabProps,
+  FibonacciLabProps,
+  FractionBarLabProps,
+  HalfHalfLabProps,
+  HowManyLabProps,
+  IndexLawLabProps,
   Lesson,
+  OddSquareLabProps,
   PythagorasLabProps,
   PythagorasProps,
+  SquareTriLabProps,
+  TenBundleLabProps,
   UnitCircleProps,
   WavesProps,
+  ZeroPairLabProps,
 } from '../data/types'
 import { useI18n } from '../i18n/I18nProvider'
 import { AngleSumLab } from './AngleSumLab'
+import { ArrayTurnLab } from './ArrayTurnLab'
+import { BarEqLab } from './BarEqLab'
+import { BinomLab } from './BinomLab'
+import { CircleAreaLab } from './CircleAreaLab'
+import { CompleteSqLab } from './CompleteSqLab'
+import { CongruenceLab } from './CongruenceLab'
+import { DiffSquaresLab } from './DiffSquaresLab'
+import { DistributeLab } from './DistributeLab'
+import { FibonacciLab } from './FibonacciLab'
+import { FractionBarLab } from './FractionBarLab'
+import { HalfHalfLab } from './HalfHalfLab'
+import { HowManyLab } from './HowManyLab'
+import { IndexLawLab } from './IndexLawLab'
 import { LangSwitch } from './LangSwitch'
 import { MathBlock } from './MathBlock'
+import { OddSquareLab } from './OddSquareLab'
 import { PythagorasFigure } from './PythagorasFigure'
 import { PythagorasLab } from './PythagorasLab'
+import { SquareTriLab } from './SquareTriLab'
+import { TenBundleLab } from './TenBundleLab'
 import { UnitCircle } from './UnitCircle'
 import { WaveGraph } from './WaveGraph'
+import { ZeroPairLab } from './ZeroPairLab'
+
+const LAB_VIZ = new Set([
+  'pythagorasLab',
+  'angleSumLab',
+  'circleAreaLab',
+  'squareTriLab',
+  'fibonacciLab',
+  'zeroPairLab',
+  'distributeLab',
+  'fractionBarLab',
+  'tenBundleLab',
+  'arrayTurnLab',
+  'oddSquareLab',
+  'halfHalfLab',
+  'howManyLab',
+  'binomLab',
+  'completeSqLab',
+  'diffSquaresLab',
+  'barEqLab',
+  'congruenceLab',
+  'indexLawLab',
+])
 
 type Props = {
   lesson: Lesson
@@ -98,14 +154,28 @@ export function LessonPlayer({ lesson }: Props) {
     !!beat?.math &&
     vizType !== 'formula' &&
     vizType !== 'none' &&
-    vizType !== 'pythagorasLab' &&
     vizType !== 'pythagoras' &&
-    vizType !== 'angleSumLab'
-  const isLabScene =
-    !!lesson.lab &&
-    (vizType === 'pythagorasLab' || vizType === 'angleSumLab')
+    !LAB_VIZ.has(vizType)
+  const isLabScene = !!lesson.lab && LAB_VIZ.has(vizType)
   const pythProps = (beat?.viz?.props ?? { mode: 'ask' }) as PythagorasLabProps
   const angleProps = (beat?.viz?.props ?? { mode: 'ask' }) as AngleSumLabProps
+  const circleProps = (beat?.viz?.props ?? { mode: 'ask' }) as CircleAreaLabProps
+  const squareTriProps = (beat?.viz?.props ?? { mode: 'ask' }) as SquareTriLabProps
+  const fibProps = (beat?.viz?.props ?? { mode: 'ask' }) as FibonacciLabProps
+  const zeroProps = (beat?.viz?.props ?? { mode: 'ask' }) as ZeroPairLabProps
+  const distProps = (beat?.viz?.props ?? { mode: 'ask' }) as DistributeLabProps
+  const fracProps = (beat?.viz?.props ?? { mode: 'ask' }) as FractionBarLabProps
+  const tenProps = (beat?.viz?.props ?? { mode: 'ask' }) as TenBundleLabProps
+  const arrayProps = (beat?.viz?.props ?? { mode: 'ask' }) as ArrayTurnLabProps
+  const oddProps = (beat?.viz?.props ?? { mode: 'ask' }) as OddSquareLabProps
+  const hhProps = (beat?.viz?.props ?? { mode: 'ask' }) as HalfHalfLabProps
+  const howProps = (beat?.viz?.props ?? { mode: 'ask' }) as HowManyLabProps
+  const binomProps = (beat?.viz?.props ?? { mode: 'ask' }) as BinomLabProps
+  const csProps = (beat?.viz?.props ?? { mode: 'ask' }) as CompleteSqLabProps
+  const diffProps = (beat?.viz?.props ?? { mode: 'ask' }) as DiffSquaresLabProps
+  const barEqProps = (beat?.viz?.props ?? { mode: 'ask' }) as BarEqLabProps
+  const congProps = (beat?.viz?.props ?? { mode: 'ask' }) as CongruenceLabProps
+  const idxProps = (beat?.viz?.props ?? { mode: 'ask' }) as IndexLawLabProps
 
   const onLabInteract = () => {
     setGateOk(true)
@@ -115,7 +185,31 @@ export function LessonPlayer({ lesson }: Props) {
   }
 
   const gotItSub =
-    lesson.id === 'a-angle-sum' ? t.gotItSubAngle : t.gotItSub
+    {
+      'a-angle-sum': t.gotItSubAngle,
+      'circle-area': t.gotItSubCircle,
+      'square-tri': t.gotItSubSquareTri,
+      fibonacci: t.gotItSubFib,
+      'zero-pair': t.gotItSubZero,
+      distribute: t.gotItSubDist,
+      'fraction-bar': t.gotItSubFrac,
+      'ten-bundle': t.gotItSubTen,
+      'array-turn': t.gotItSubArray,
+      'odd-square': t.gotItSubOdd,
+      'half-half': t.gotItSubHH,
+      'how-many': t.gotItSubHow,
+      'binom-area': t.gotItSubBinom,
+      'complete-sq': t.gotItSubCS,
+      'diff-squares': t.gotItSubDiff,
+      'bar-eq': t.gotItSubBarEq,
+      'dse-q8': t.gotItSubCong,
+      'dse-2012-q1': t.gotItSubIndex,
+    }[lesson.id] ?? t.gotItSub
+
+  const gateChip =
+    ({ 'dse-q8': t.gateChipCong, 'dse-2012-q1': t.gateChipIndex }[lesson.id] as
+      | string
+      | undefined) ?? t.gateChip
 
   return (
     <div
@@ -214,6 +308,108 @@ export function LessonPlayer({ lesson }: Props) {
                     onInteractComplete={onLabInteract}
                   />
                 )}
+                {vizType === 'circleAreaLab' && (
+                  <CircleAreaLab
+                    mode={circleProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'squareTriLab' && (
+                  <SquareTriLab
+                    mode={squareTriProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'fibonacciLab' && (
+                  <FibonacciLab
+                    mode={fibProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'zeroPairLab' && (
+                  <ZeroPairLab
+                    mode={zeroProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'distributeLab' && (
+                  <DistributeLab
+                    mode={distProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'fractionBarLab' && (
+                  <FractionBarLab
+                    mode={fracProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'tenBundleLab' && (
+                  <TenBundleLab
+                    mode={tenProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'arrayTurnLab' && (
+                  <ArrayTurnLab
+                    mode={arrayProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'oddSquareLab' && (
+                  <OddSquareLab
+                    mode={oddProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'halfHalfLab' && (
+                  <HalfHalfLab
+                    mode={hhProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'howManyLab' && (
+                  <HowManyLab
+                    mode={howProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'binomLab' && (
+                  <BinomLab
+                    mode={binomProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'completeSqLab' && (
+                  <CompleteSqLab
+                    mode={csProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'diffSquaresLab' && (
+                  <DiffSquaresLab
+                    mode={diffProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'barEqLab' && (
+                  <BarEqLab
+                    mode={barEqProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'congruenceLab' && (
+                  <CongruenceLab
+                    mode={congProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'indexLawLab' && (
+                  <IndexLawLab
+                    mode={idxProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
                 {vizType === 'waves' && (
                   <WaveGraph {...((beat.viz?.props ?? {}) as WavesProps)} />
                 )}
@@ -232,7 +428,7 @@ export function LessonPlayer({ lesson }: Props) {
               </div>
 
               <div className={`caption-chip ${gated ? 'pulse' : ''}`}>
-                {gated ? t.gateChip : beat.caption}
+                {gated ? gateChip : beat.caption}
               </div>
             </div>
           )
