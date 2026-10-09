@@ -5,69 +5,83 @@ export const dse2012Q1Lessons: Lesson[] = [
   {
     id: 'dse-2012-q1',
     title: '2012 DSE Q1: the power tower',
-    subtitle: 'Cube the bracket, then divide — two index laws, one answer',
+    subtitle: 'Name each index law, then the answer follows',
     lab: true,
     beats: [
       {
         id: 'g0',
-        caption: 'One fraction, one power',
-        prompt: '(2x⁴)³ ÷ 2x⁵ = ? Two index laws are hiding in the very first question of Paper 2.',
+        caption: 'The question',
+        prompt:
+          '(2x⁴)³ ÷ 2x⁵ = ? Paper 2 Q1 hides three index laws in one fraction.',
         viz: { type: 'indexLawLab', props: { mode: 'ask' } },
       },
       {
         id: 'g1',
-        caption: 'A power is repeated copying',
+        caption: 'Three formulas we will use',
         prompt:
-          'The 3 counts brackets, not factors. (2x⁴)³ means (2x⁴)(2x⁴)(2x⁴) — the whole bracket, stamped out three times.',
-        viz: { type: 'indexLawLab', props: { mode: 'copies' } },
+          'Write them first: (ab)ⁿ = aⁿbⁿ · (aᵐ)ⁿ = aᵐⁿ · aᵐ÷aⁿ = aᵐ⁻ⁿ. Every step names one.',
+        viz: { type: 'indexLawLab', props: { mode: 'laws' } },
       },
       {
         id: 'g2',
-        caption: 'Cube the 2: 2·2·2 = 8',
+        caption: 'Formula ① — (ab)ⁿ = aⁿbⁿ',
         prompt:
-          'The cube reaches inside the bracket and acts on the 2 as well. 2³ = 8 — not 2×3 = 6.',
-        viz: { type: 'indexLawLab', props: { mode: 'coeffs' } },
+          '(2x⁴)³ means the whole bracket, three times: (2x⁴)(2x⁴)(2x⁴). The outer 3 stamps the product.',
+        viz: { type: 'indexLawLab', props: { mode: 'copies' } },
       },
       {
         id: 'g3',
-        caption: 'x⁴·x⁴·x⁴ = x¹²',
+        caption: 'Formula ① on the 2 → 2³ = 8',
         prompt:
-          'Same base multiplied → add the indices: 4+4+4 = 12. Same as (x⁴)³ = x⁴ˣ³. Numerator done: 8x¹².',
-        viz: { type: 'indexLawLab', props: { mode: 'indices' } },
+          'Same law: (2 · x⁴)³ = 2³ · (x⁴)³. So 2·2·2 = 8 — never 2×3 = 6.',
+        viz: { type: 'indexLawLab', props: { mode: 'coeffs' } },
       },
       {
         id: 'g4',
-        caption: 'Your turn — finish the division',
-        prompt: 'Top: 8x¹². Bottom: 2x⁵. Tap the option that follows both laws.',
+        caption: 'Formula ② — (aᵐ)ⁿ = aᵐⁿ',
+        prompt:
+          '(x⁴)³ = x^(4×3) = x¹². Same base multiplied → add: 4+4+4 = 12. Numerator done: 8x¹².',
+        viz: { type: 'indexLawLab', props: { mode: 'indices' } },
+      },
+      {
+        id: 'g5',
+        caption: 'Your turn — finish with Formula ③',
+        prompt: 'Top 8x¹², bottom 2x⁵. Tap the option that uses aᵐ÷aⁿ = aᵐ⁻ⁿ correctly.',
         gate: 'interact',
         viz: { type: 'indexLawLab', props: { mode: 'challenge' } },
       },
       {
-        id: 'g5',
-        caption: 'Numbers first: 8 ÷ 2 = 4',
-        prompt: 'Coefficients divide like plain numbers. The 2 cancels half of the 8.',
+        id: 'g6',
+        caption: 'Coefficients: 8 ÷ 2 = 4',
+        prompt: 'Numbers divide like ordinary arithmetic. Formula ③ waits for the x-powers.',
         viz: { type: 'indexLawLab', props: { mode: 'divide' } },
       },
       {
-        id: 'g6',
-        caption: 'Indices subtract: 12 − 5 = 7',
-        prompt:
-          'x¹² ÷ x⁵ — dividing same bases cancels factors: five of the twelve x’s pair off and vanish.',
+        id: 'g7',
+        caption: 'Formula ③ — aᵐ÷aⁿ = aᵐ⁻ⁿ',
+        prompt: 'x¹² ÷ x⁵ = x¹²⁻⁵ = x⁷. Five of the twelve x-factors cancel.',
         viz: { type: 'indexLawLab', props: { mode: 'subtract' } },
       },
       {
-        id: 'g7',
+        id: 'g8',
         caption: '4x⁷ — option C',
         prompt:
-          'Two laws, top to bottom: cube the bracket (2³, 4×3), then divide like bases (8÷2, 12−5).',
+          'Chain: ① (ab)ⁿ → ② (aᵐ)ⁿ → ③ aᵐ÷aⁿ. Result 4x⁷. That is C.',
         viz: { type: 'indexLawLab', props: { mode: 'final' } },
       },
       {
-        id: 'g8',
-        caption: 'Why A, B and D fall',
+        id: 'g9',
+        caption: 'Why A, B, D fall',
         prompt:
-          'B multiplied the 2 by 3 (got 6x¹²). D cubed the index (4³ = 64). A mixed both traps. Every step: one law at a time.',
+          'B used 2×3 instead of 2³. D used 4³ instead of 4×3. A mixed both traps. One law per step.',
         viz: { type: 'indexLawLab', props: { mode: 'check' } },
+      },
+      {
+        id: 'g10',
+        caption: 'Step-by-step solution guide',
+        prompt:
+          'Full thinking path: spot the outer power → name each formula → land on C.',
+        viz: { type: 'indexLawLab', props: { mode: 'guide' } },
       },
     ],
   },

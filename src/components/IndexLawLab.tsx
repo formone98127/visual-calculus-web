@@ -109,6 +109,32 @@ function Card({ x, y, w = 96, h = 58, op = 1 }: { x: number; y: number; w?: numb
   )
 }
 
+/** Floating formula badge — shown whenever a law is in play. */
+function FormulaBadge({
+  label,
+  formula,
+  u,
+  y = 18,
+}: {
+  label: string
+  formula: string
+  u: number
+  y?: number
+}) {
+  const op = clamp01(u / 0.35)
+  return (
+    <g opacity={op} transform={`translate(0, ${lerp(-8, 0, op)})`}>
+      <rect x={48} y={y} width={334} height={36} rx={18} fill="rgba(255, 209, 102, 0.1)" stroke={GOLD} strokeWidth={1.4} />
+      <text x={70} y={y + 23} fontSize={12} fill={GOLD} fontFamily="'Fraunces', Georgia, serif" fontWeight={700}>
+        {label}
+      </text>
+      <text x={215} y={y + 24} textAnchor="middle" fontSize={15} fill={INK} fontFamily="'Fraunces', Georgia, serif" fontWeight={600}>
+        {formula}
+      </text>
+    </g>
+  )
+}
+
 const CARD_Y = 92
 const CARD_XS = [40, 167, 294]
 const CARD_CX = CARD_XS.map((x) => x + 48)
@@ -161,9 +187,82 @@ const TRAPS: { id: string; val: Part[]; l1: Part[]; l2key: 'indexTrapB' | 'index
   },
 ]
 
+type GuideStep = {
+  n: string
+  lawKey: 'indexGuideLaw1' | 'indexGuideLaw2' | 'indexGuideLaw3' | 'indexGuideLaw0' | 'indexGuideLaw4'
+  line: Part[]
+}
+
+const GUIDE_STEPS: GuideStep[] = [
+  {
+    n: '0',
+    lawKey: 'indexGuideLaw0',
+    line: [
+      { t: '(' },
+      { t: '2x', it: true },
+      { t: '4', sup: true },
+      { t: ')' },
+      { t: '3', sup: true, fill: GOLD },
+      { t: ' ÷ 2x' },
+      { t: '5', sup: true },
+    ],
+  },
+  {
+    n: '1',
+    lawKey: 'indexGuideLaw1',
+    line: [
+      { t: '(2x' },
+      { t: '4', sup: true },
+      { t: ')' },
+      { t: '3', sup: true },
+      { t: ' = 2' },
+      { t: '3', sup: true, fill: GOLD },
+      { t: '(x' },
+      { t: '4', sup: true },
+      { t: ')' },
+      { t: '3', sup: true },
+    ],
+  },
+  {
+    n: '2',
+    lawKey: 'indexGuideLaw2',
+    line: [
+      { t: '2' },
+      { t: '3', sup: true },
+      { t: '(x' },
+      { t: '4', sup: true },
+      { t: ')' },
+      { t: '3', sup: true },
+      { t: ' = 8x' },
+      { t: '12', sup: true, fill: BLUE },
+    ],
+  },
+  {
+    n: '3',
+    lawKey: 'indexGuideLaw3',
+    line: [
+      { t: '8x' },
+      { t: '12', sup: true },
+      { t: ' ÷ 2x' },
+      { t: '5', sup: true },
+      { t: ' = 4x' },
+      { t: '7', sup: true, fill: OK },
+    ],
+  },
+  {
+    n: '4',
+    lawKey: 'indexGuideLaw4',
+    line: [
+      { t: '4x' },
+      { t: '7', sup: true, fill: OK },
+      { t: '  →  C  ✓', fill: OK },
+    ],
+  },
+]
+
 export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
   const { t } = useI18n()
-  const u = useFly(mode)
+  const u = useFly(mode, mode === 'guide' ? 1400 : 950)
   const [wrongId, setWrongId] = useState<string | null>(null)
   const [solved, setSolved] = useState(false)
 
@@ -189,6 +288,7 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
 
   const flags = {
     ask: mode === 'ask',
+    laws: mode === 'laws',
     copies: mode === 'copies',
     coeffs: mode === 'coeffs',
     indices: mode === 'indices',
@@ -197,11 +297,11 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
     subtract: mode === 'subtract',
     final: mode === 'final',
     check: mode === 'check',
+    guide: mode === 'guide',
   }
 
   /* ---- shared scenes ---- */
 
-  // three bracket cards; `stamp` animates copies flying out of card 0
   const stamp = (active: boolean) => {
     const u1 = active ? clamp01((u - 0.12) / 0.55) : 1
     const u2 = active ? clamp01((u - 0.38) / 0.55) : 1
@@ -220,13 +320,16 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
           )
         })}
         <Tex x={CARD_XS[0] + 48} y={CARD_Y + 38} size={24} parts={[{ t: '2' }, { t: 'x', it: true }, { t: '4', sup: true }]} />
-        <text x={151.5} y={130} textAnchor="middle" fontSize={22} fill={MUTED} opacity={u1}>×</text>
-        <text x={278.5} y={130} textAnchor="middle" fontSize={22} fill={MUTED} opacity={u2}>×</text>
+        <text x={151.5} y={130} textAnchor="middle" fontSize={22} fill={MUTED} opacity={u1}>
+          ×
+        </text>
+        <text x={278.5} y={130} textAnchor="middle" fontSize={22} fill={MUTED} opacity={u2}>
+          ×
+        </text>
       </g>
     )
   }
 
-  // cards with the coefficient / index side of each factor emphasised
   const cardsFocus = (focus: 'coef' | 'index') => {
     const coefOp = focus === 'coef' ? 1 : 0.22
     const idxOp = focus === 'index' ? 1 : 0.22
@@ -236,10 +339,28 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
           <g key={k}>
             <Card x={CARD_XS[k]} y={CARD_Y} />
             {focus === 'index' && <circle cx={cx + 18} cy={121} r={19} fill={BLUE} opacity={0.14} />}
-            <text x={cx - 16} y={130} textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize={24} fontWeight={600} fill={focus === 'coef' ? GOLD : INK} opacity={coefOp}>
+            <text
+              x={cx - 16}
+              y={130}
+              textAnchor="middle"
+              fontFamily="'Fraunces', Georgia, serif"
+              fontSize={24}
+              fontWeight={600}
+              fill={focus === 'coef' ? GOLD : INK}
+              opacity={coefOp}
+            >
               2
             </text>
-            <text x={cx + 18} y={130} textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize={24} fontWeight={600} fill={INK} opacity={idxOp}>
+            <text
+              x={cx + 18}
+              y={130}
+              textAnchor="middle"
+              fontFamily="'Fraunces', Georgia, serif"
+              fontSize={24}
+              fontWeight={600}
+              fill={INK}
+              opacity={idxOp}
+            >
               x⁴
             </text>
           </g>
@@ -248,7 +369,6 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
     )
   }
 
-  // the four answer chips; interactive only while `live`
   const chips = (live: boolean, forceSolved = false) =>
     OPTIONS.map((o) => {
       const isC = o.id === 'C'
@@ -294,9 +414,15 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
       )
     })
 
+  const lawCards = [
+    { id: '①', formula: '(ab)ⁿ = aⁿ · bⁿ', color: GOLD },
+    { id: '②', formula: '(aᵐ)ⁿ = aᵐⁿ', color: BLUE },
+    { id: '③', formula: 'aᵐ ÷ aⁿ = aᵐ⁻ⁿ', color: OK },
+  ]
+
   return (
     <div className={`idx-lab ${solved ? 'is-solved' : ''}`}>
-      <svg className="vm-svg" viewBox="0 0 430 330" role="img" aria-label="Index laws: cube the bracket, then divide">
+      <svg className="vm-svg" viewBox="0 0 430 330" role="img" aria-label="Index laws: formula first, then the answer">
         {flags.ask && (
           <g>
             <Tex x={215} y={120} size={40} parts={BRACKET3} opacity={clamp01(u / 0.3)} />
@@ -308,60 +434,132 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
           </g>
         )}
 
+        {flags.laws && (
+          <g>
+            {lawCards.map((law, i) => {
+              const ui = clamp01((u - i * 0.18) / 0.45)
+              const y = 58 + i * 78 + (1 - ui) * 20
+              return (
+                <g key={law.id} opacity={ui}>
+                  <rect x={36} y={y} width={358} height={64} rx={16} fill="rgba(255,255,255,0.05)" stroke={law.color} strokeWidth={1.6} />
+                  <circle cx={72} cy={y + 32} r={18} fill={law.color} fillOpacity={0.18} stroke={law.color} strokeWidth={1.5} />
+                  <text x={72} y={y + 38} textAnchor="middle" fontSize={16} fill={law.color} fontFamily="'Fraunces', Georgia, serif" fontWeight={700}>
+                    {law.id}
+                  </text>
+                  <text x={215} y={y + 40} textAnchor="middle" fontSize={22} fill={INK} fontFamily="'Fraunces', Georgia, serif" fontWeight={600}>
+                    {law.formula}
+                  </text>
+                </g>
+              )
+            })}
+          </g>
+        )}
+
         {flags.copies && (
           <g>
-            <Tex x={215} y={52} size={26} parts={[...BRACKET3, { t: ' =' }]} />
-            {stamp(true)}
+            <FormulaBadge label={t.indexLawTag1} formula="(ab)ⁿ = aⁿ · bⁿ" u={u} />
+            <Tex x={215} y={72} size={24} parts={[...BRACKET3, { t: ' =' }]} />
+            <g transform="translate(0, 16)">{stamp(true)}</g>
           </g>
         )}
 
         {flags.coeffs && (
           <g>
-            {cardsFocus('coef')}
+            <FormulaBadge label={t.indexLawTag1} formula="(ab)ⁿ → 2³ = 8" u={u} />
+            <g transform="translate(0, 16)">{cardsFocus('coef')}</g>
             {[0, 1, 2].map((k) => {
               const ui = clamp01((u - 0.15 - k * 0.14) / 0.55)
               const x = lerp(CARD_CX[k] - 16, 215, ui)
-              const y = lerp(121, 216, ui) - Math.sin(ui * Math.PI) * 12
+              const y = lerp(137, 232, ui) - Math.sin(ui * Math.PI) * 12
               return <circle key={k} cx={x} cy={y} r={13} fill={GOLD} opacity={0.85 * (1 - ui * 0.95)} />
             })}
-            <circle cx={215} cy={216} r={22} fill={GOLD} fillOpacity={0.12} stroke={GOLD} strokeWidth={2} opacity={clamp01((u - 0.5) / 0.3)} />
-            <text x={215} y={225} textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize={27} fontWeight={700} fill={GOLD} opacity={clamp01((u - 0.75) / 0.25)}>
+            <circle cx={215} cy={232} r={22} fill={GOLD} fillOpacity={0.12} stroke={GOLD} strokeWidth={2} opacity={clamp01((u - 0.5) / 0.3)} />
+            <text
+              x={215}
+              y={241}
+              textAnchor="middle"
+              fontFamily="'Fraunces', Georgia, serif"
+              fontSize={27}
+              fontWeight={700}
+              fill={GOLD}
+              opacity={clamp01((u - 0.75) / 0.25)}
+            >
               8
             </text>
-            <text x={318} y={224} textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize={20} fontWeight={600} fill={RED} opacity={0.75 * clamp01((u - 0.3) / 0.2) * (1 - clamp01((u - 0.6) / 0.25))}>
+            <text
+              x={318}
+              y={240}
+              textAnchor="middle"
+              fontFamily="'Fraunces', Georgia, serif"
+              fontSize={20}
+              fontWeight={600}
+              fill={RED}
+              opacity={0.75 * clamp01((u - 0.3) / 0.2) * (1 - clamp01((u - 0.6) / 0.25))}
+            >
               6
             </text>
-            <line x1={306} y1={217} x2={330} y2={217} stroke={RED} strokeWidth={2} opacity={0.75 * clamp01((u - 0.3) / 0.2) * (1 - clamp01((u - 0.6) / 0.25))} />
+            <line
+              x1={306}
+              y1={233}
+              x2={330}
+              y2={233}
+              stroke={RED}
+              strokeWidth={2}
+              opacity={0.75 * clamp01((u - 0.3) / 0.2) * (1 - clamp01((u - 0.6) / 0.25))}
+            />
           </g>
         )}
 
         {flags.indices && (
           <g>
-            <Tex x={215} y={52} size={22} parts={[{ t: 'x', it: true }, { t: '4', sup: true }, { t: ' · x', it: true }, { t: '4', sup: true }, { t: ' · x', it: true }, { t: '4', sup: true }]} />
-            {cardsFocus('index')}
+            <FormulaBadge label={t.indexLawTag2} formula="(aᵐ)ⁿ = aᵐⁿ" u={u} />
+            <Tex
+              x={215}
+              y={72}
+              size={20}
+              parts={[
+                { t: 'x', it: true },
+                { t: '4', sup: true },
+                { t: ' · x', it: true },
+                { t: '4', sup: true },
+                { t: ' · x', it: true },
+                { t: '4', sup: true },
+              ]}
+            />
+            <g transform="translate(0, 16)">{cardsFocus('index')}</g>
             {Array.from({ length: 12 }, (_, gi) => {
               const k = Math.floor(gi / 4)
               const j = gi % 4
               const ui = clamp01((u - 0.12 - gi * 0.04) / 0.5)
               const sx = CARD_CX[k] + (j - 1.5) * 16
-              const sy = 172
+              const sy = 188
               const tx = 215 + (gi - 5.5) * 22
-              const ty = 228
+              const ty = 244
               const x = lerp(sx, tx, ui)
               const y = lerp(sy, ty, ui) - Math.sin(ui * Math.PI) * 10
               return <circle key={gi} cx={x} cy={y} r={5.5} fill={BLUE} opacity={0.35 + 0.65 * ui} />
             })}
-            <text x={215} y={284} textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize={21} fontWeight={600} fill={BLUE} opacity={clamp01((u - 0.8) / 0.2)}>
-              4 + 4 + 4 = 12
+            <text
+              x={215}
+              y={300}
+              textAnchor="middle"
+              fontFamily="'Fraunces', Georgia, serif"
+              fontSize={21}
+              fontWeight={600}
+              fill={BLUE}
+              opacity={clamp01((u - 0.8) / 0.2)}
+            >
+              4 × 3 = 12
             </text>
           </g>
         )}
 
         {flags.challenge && (
           <g opacity={clamp01(u / 0.35)}>
-            <Tex x={215} y={96} size={36} parts={NUM_8X12} />
-            <Frac x={215} y={120} w={124} u={clamp01((u - 0.1) / 0.5)} />
-            <Tex x={215} y={164} size={36} parts={DEN_2X5} />
+            <FormulaBadge label={t.indexLawTag3} formula="aᵐ ÷ aⁿ = aᵐ⁻ⁿ" u={1} y={10} />
+            <Tex x={215} y={88} size={32} parts={NUM_8X12} />
+            <Frac x={215} y={110} w={124} u={clamp01((u - 0.1) / 0.5)} />
+            <Tex x={215} y={150} size={32} parts={DEN_2X5} />
             {chips(true)}
             {solved ? (
               <Tex
@@ -395,19 +593,27 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
 
         {flags.divide && (
           <g>
-            <circle cx={188} cy={61} r={16} fill={GOLD} opacity={0.16} />
-            <text x={188} y={70} textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize={32} fontWeight={600} fill={GOLD}>
+            <FormulaBadge label={t.indexLawTagNum} formula="8 ÷ 2 = 4" u={u} />
+            <circle cx={188} cy={78} r={16} fill={GOLD} opacity={0.16} />
+            <text x={188} y={87} textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize={32} fontWeight={600} fill={GOLD}>
               8
             </text>
-            <Tex x={238} y={70} size={32} parts={[{ t: 'x', it: true }, { t: '12', sup: true, fill: BLUE }]} />
-            <Frac x={215} y={94} w={120} u={1} />
-            <circle cx={196} cy={127} r={15} fill={RED} opacity={0.15} />
-            <text x={196} y={136} textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize={32} fontWeight={600} fill={INK}>
+            <Tex x={238} y={87} size={32} parts={[{ t: 'x', it: true }, { t: '12', sup: true, fill: BLUE }]} />
+            <Frac x={215} y={111} w={120} u={1} />
+            <circle cx={196} cy={144} r={15} fill={RED} opacity={0.15} />
+            <text x={196} y={153} textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize={32} fontWeight={600} fill={INK}>
               2
             </text>
-            <Tex x={242} y={136} size={32} parts={[{ t: 'x', it: true }, { t: '5', sup: true, fill: BLUE }]} />
-            <path d="M 196 148 Q 202 178 210 188" fill="none" stroke={GOLD} strokeWidth={2} strokeDasharray="5 4" opacity={0.8 * clamp01(u / 0.3)} />
-            <polygon points="210,188 203.5,183 202.5,190.5" fill={GOLD} opacity={0.8 * clamp01(u / 0.3)} />
+            <Tex x={242} y={153} size={32} parts={[{ t: 'x', it: true }, { t: '5', sup: true, fill: BLUE }]} />
+            <path
+              d="M 196 165 Q 202 195 210 205"
+              fill="none"
+              stroke={GOLD}
+              strokeWidth={2}
+              strokeDasharray="5 4"
+              opacity={0.8 * clamp01(u / 0.3)}
+            />
+            <polygon points="210,205 203.5,200 202.5,207.5" fill={GOLD} opacity={0.8 * clamp01(u / 0.3)} />
             {Array.from({ length: 8 }, (_, i) => {
               const pair = Math.floor(i / 2)
               const mi = clamp01((u - 0.5 - pair * 0.08) / 0.25)
@@ -415,13 +621,13 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
               const bx = 215 + (2 * pair - 3) * 30
               const x = lerp(x0, bx + (i % 2 === 0 ? -7 : 7), mi)
               const appear = clamp01((u - 0.12 - i * 0.045) / 0.2)
-              return <circle key={i} cx={x} cy={204} r={9 * appear} fill={GOLD} opacity={appear} />
+              return <circle key={i} cx={x} cy={220} r={9 * appear} fill={GOLD} opacity={appear} />
             })}
             {[0, 1, 2, 3].map((k) => (
               <rect
                 key={k}
                 x={215 + (2 * k - 3) * 30 - 22}
-                y={185}
+                y={201}
                 width={44}
                 height={38}
                 rx={10}
@@ -432,7 +638,15 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
                 opacity={clamp01((u - 0.5 - k * 0.08) / 0.2)}
               />
             ))}
-            <text x={215} y={254} textAnchor="middle" fontSize={17} fill={MUTED} fontFamily="'Fraunces', Georgia, serif" opacity={clamp01((u - 0.3) / 0.3)}>
+            <text
+              x={215}
+              y={270}
+              textAnchor="middle"
+              fontSize={17}
+              fill={MUTED}
+              fontFamily="'Fraunces', Georgia, serif"
+              opacity={clamp01((u - 0.3) / 0.3)}
+            >
               {t.indexGroups}
             </text>
           </g>
@@ -440,19 +654,20 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
 
         {flags.subtract && (
           <g>
-            <Tex x={215} y={70} size={32} parts={[{ t: 'x', it: true }, { t: '12', sup: true, fill: BLUE }]} />
-            <Frac x={215} y={94} w={120} u={1} />
-            <Tex x={215} y={136} size={32} parts={[{ t: 'x', it: true }, { t: '5', sup: true, fill: RED }]} />
+            <FormulaBadge label={t.indexLawTag3} formula="aᵐ ÷ aⁿ = aᵐ⁻ⁿ" u={u} />
+            <Tex x={215} y={86} size={32} parts={[{ t: 'x', it: true }, { t: '12', sup: true, fill: BLUE }]} />
+            <Frac x={215} y={110} w={120} u={1} />
+            <Tex x={215} y={152} size={32} parts={[{ t: 'x', it: true }, { t: '5', sup: true, fill: RED }]} />
             {Array.from({ length: 12 }, (_, i) => {
               const gone = i >= 7
               if (gone) {
                 const bi = clamp01((u - 0.1 - (i - 7) * 0.09) / 0.5)
-                const y = lerp(192, 238, bi)
+                const y = lerp(208, 254, bi)
                 const xop = clamp01(bi / 0.35) * (1 - clamp01((bi - 0.55) / 0.4))
                 return (
                   <g key={i}>
                     <circle cx={215 + (i - 5.5) * 24} cy={y} r={8} fill={BLUE} opacity={1 - bi} />
-                    <text x={215 + (i - 5.5) * 24} y={244} textAnchor="middle" fontSize={16} fill={RED} opacity={xop}>
+                    <text x={215 + (i - 5.5) * 24} y={260} textAnchor="middle" fontSize={16} fill={RED} opacity={xop}>
                       ✕
                     </text>
                   </g>
@@ -460,9 +675,18 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
               }
               const si = clamp01((u - 0.55) / 0.35)
               const x = lerp(215 + (i - 5.5) * 24, 215 + (i - 3) * 24, si)
-              return <circle key={i} cx={x} cy={192} r={8} fill={BLUE} />
+              return <circle key={i} cx={x} cy={208} r={8} fill={BLUE} />
             })}
-            <text x={215} y={290} textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize={21} fontWeight={600} fill={BLUE} opacity={clamp01((u - 0.8) / 0.2)}>
+            <text
+              x={215}
+              y={300}
+              textAnchor="middle"
+              fontFamily="'Fraunces', Georgia, serif"
+              fontSize={21}
+              fontWeight={600}
+              fill={BLUE}
+              opacity={clamp01((u - 0.8) / 0.2)}
+            >
               12 − 5 = 7
             </text>
           </g>
@@ -470,10 +694,11 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
 
         {flags.final && (
           <g>
-            <circle cx={215} cy={132} r={50} fill="none" stroke={GOLD} strokeWidth={1.5} opacity={0.35 * clamp01(u / 0.6)} />
+            <FormulaBadge label={t.indexLawTagAll} formula="① → ② → ③" u={u} />
+            <circle cx={215} cy={148} r={50} fill="none" stroke={GOLD} strokeWidth={1.5} opacity={0.35 * clamp01(u / 0.6)} />
             <text
               x={lerp(110, 180, clamp01(u / 0.6))}
-              y={150}
+              y={166}
               textAnchor="middle"
               fontFamily="'Fraunces', Georgia, serif"
               fontSize={60}
@@ -484,7 +709,7 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
             </text>
             <text
               x={lerp(320, 252, clamp01(u / 0.6))}
-              y={150}
+              y={166}
               textAnchor="middle"
               fontFamily="'Fraunces', Georgia, serif"
               fontSize={60}
@@ -502,7 +727,7 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
             {TRAPS.map((trap, i) => {
               const ci = clamp01((u - i * 0.14) / 0.5)
               const x = [10, 152, 294][i]
-              const y = 66 + (1 - ci) * 26
+              const y = 50 + (1 - ci) * 26
               return (
                 <g key={trap.id} opacity={ci}>
                   <Card x={x} y={y} w={126} h={150} />
@@ -520,7 +745,7 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
             })}
             <Tex
               x={215}
-              y={268}
+              y={250}
               size={19}
               parts={[
                 { t: '8', fill: GOLD },
@@ -538,8 +763,40 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
             />
           </g>
         )}
+
+        {flags.guide && (
+          <g>
+            <text x={215} y={28} textAnchor="middle" fontSize={13} fill={GOLD} fontFamily="'Fraunces', Georgia, serif" fontWeight={700} opacity={clamp01(u / 0.2)}>
+              {t.indexGuideTitle}
+            </text>
+            {GUIDE_STEPS.map((step, i) => {
+              const ui = clamp01((u - i * 0.14) / 0.4)
+              const y = 48 + i * 52 + (1 - ui) * 16
+              return (
+                <g key={step.n} opacity={ui}>
+                  <rect x={18} y={y} width={394} height={46} rx={12} fill="rgba(255,255,255,0.04)" stroke="rgba(242,245,255,0.18)" strokeWidth={1.2} />
+                  <circle cx={42} cy={y + 23} r={12} fill={i === 4 ? OK : GOLD} fillOpacity={0.2} stroke={i === 4 ? OK : GOLD} strokeWidth={1.3} />
+                  <text x={42} y={y + 27} textAnchor="middle" fontSize={12} fill={i === 4 ? OK : GOLD} fontFamily="'Fraunces', Georgia, serif" fontWeight={700}>
+                    {step.n === '0' ? 'Q' : step.n}
+                  </text>
+                  <text x={64} y={y + 18} fontSize={11} fill={MUTED} fontFamily="'Fraunces', Georgia, serif">
+                    {t[step.lawKey]}
+                  </text>
+                  <Tex x={64} y={y + 38} size={15} parts={step.line} anchor="start" />
+                </g>
+              )
+            })}
+          </g>
+        )}
       </svg>
 
+      {flags.laws && (
+        <p className="vm-eq show">
+          <span className="a">① ② ③</span>
+          <span className="op">·</span>
+          <span className="sum">{t.indexLawsReady}</span>
+        </p>
+      )}
       {flags.copies && (
         <p className="vm-eq show">
           <span className="a">(2x⁴)³</span>
@@ -556,7 +813,7 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
       )}
       {flags.indices && (
         <p className="vm-eq show">
-          <span className="a">x⁴·x⁴·x⁴</span>
+          <span className="a">(x⁴)³</span>
           <span className="op">=</span>
           <span className="sum">x¹²</span>
         </p>
@@ -588,6 +845,13 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
           <span className="a">A·B·D ✗</span>
           <span className="op">·</span>
           <span className="sum">C ✓</span>
+        </p>
+      )}
+      {flags.guide && (
+        <p className="vm-eq show">
+          <span className="a">{t.indexGuideThink}</span>
+          <span className="op">→</span>
+          <span className="sum">4x⁷ = C</span>
         </p>
       )}
     </div>

@@ -9,6 +9,13 @@ import { diffSquaresLessons } from './diffSquares'
 import { distributeLessons } from './distribute'
 import { dseQ8Lessons } from './dseQ8'
 import { dse2012Q1Lessons } from './dse2012q1'
+import { dse2012Q2Lessons } from './dse2012q2'
+import { dse2012Q3Lessons } from './dse2012q3'
+import { dse2012Q4Lessons } from './dse2012q4'
+import { dse2012Q5Lessons } from './dse2012q5'
+import { dse2012Q6Lessons } from './dse2012q6'
+import { dse2012Q7Lessons } from './dse2012q7'
+import { dse2012P1Q18Lessons } from './dse2012p1q18'
 import { fibonacciLessons } from './fibonacci'
 import { fractionBarLessons } from './fractionBar'
 import { halfHalfLessons } from './halfHalf'
@@ -91,9 +98,9 @@ export const topics: Topic[] = [
   {
     id: 'exam',
     title: 'Exam proof, beat by beat',
-    blurb: 'Real DSE questions — congruent triangles, index laws, one visible step at a time.',
-    source: '2012-DSE-MATH-CP 2 · Q1 · 2022-DSE-MATH-CP · Paper 1 · Q8',
-    lessons: [...dseQ8Lessons, ...dse2012Q1Lessons],
+    blurb: 'Real DSE questions — congruent triangles, index laws, difference of squares, polynomial identity, factor theorem, simultaneous equations, parabola signs, or-inequalities, a 3-D pyramid cut open — one visible step at a time.',
+    source: '2012-DSE-MATH-CP 2 · Q1 · Q2 · Q3 · Q4 · Q5 · Q6 · Q7 · 2012-DSE-MATH-CP 1 · Q18 · 2022-DSE-MATH-CP 1 · Q8',
+    lessons: [...dseQ8Lessons, ...dse2012Q1Lessons, ...dse2012Q2Lessons, ...dse2012Q3Lessons, ...dse2012Q4Lessons, ...dse2012Q5Lessons, ...dse2012Q6Lessons, ...dse2012Q7Lessons, ...dse2012P1Q18Lessons],
   },
   {
     id: 'practice',
@@ -127,6 +134,13 @@ export const allLessons: Lesson[] = [
   ...barEqLessons,
   ...dseQ8Lessons,
   ...dse2012Q1Lessons,
+  ...dse2012Q2Lessons,
+  ...dse2012Q3Lessons,
+  ...dse2012Q4Lessons,
+  ...dse2012Q5Lessons,
+  ...dse2012Q6Lessons,
+  ...dse2012Q7Lessons,
+  ...dse2012P1Q18Lessons,
   ...trigLessons,
 ]
 

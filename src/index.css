@@ -1950,7 +1950,7 @@ a.primary {
 }
 .idx-lab .vm-svg {
   width: 100%;
-  max-height: min(56vh, 480px);
+  max-height: min(62vh, 520px);
 }
 .idx-chip {
   cursor: pointer;

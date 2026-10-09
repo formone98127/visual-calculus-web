@@ -9,6 +9,7 @@ import type {
   CongruenceLabProps,
   CircleAreaLabProps,
   CompleteSqLabProps,
+  CubicFacLabProps,
   DiffSquaresLabProps,
   DistributeLabProps,
   FibonacciLabProps,
@@ -16,8 +17,14 @@ import type {
   HalfHalfLabProps,
   HowManyLabProps,
   IndexLawLabProps,
+  IneqOrLabProps,
   Lesson,
+  PyramidLabProps,
   OddSquareLabProps,
+  PolyIdLabProps,
+  SimEqLabProps,
+  ParabolaSignLabProps,
+  SumDiffLabProps,
   PythagorasLabProps,
   PythagorasProps,
   SquareTriLabProps,
@@ -34,6 +41,11 @@ import { BinomLab } from './BinomLab'
 import { CircleAreaLab } from './CircleAreaLab'
 import { CompleteSqLab } from './CompleteSqLab'
 import { CongruenceLab } from './CongruenceLab'
+import { CubicFacLab } from './CubicFacLab'
+import { SimEqLab } from './SimEqLab'
+import { ParabolaSignLab } from './ParabolaSignLab'
+import { IneqOrLab } from './IneqOrLab'
+import { PyramidLab } from './PyramidLab'
 import { DiffSquaresLab } from './DiffSquaresLab'
 import { DistributeLab } from './DistributeLab'
 import { FibonacciLab } from './FibonacciLab'
@@ -44,9 +56,11 @@ import { IndexLawLab } from './IndexLawLab'
 import { LangSwitch } from './LangSwitch'
 import { MathBlock } from './MathBlock'
 import { OddSquareLab } from './OddSquareLab'
+import { PolyIdLab } from './PolyIdLab'
 import { PythagorasFigure } from './PythagorasFigure'
 import { PythagorasLab } from './PythagorasLab'
 import { SquareTriLab } from './SquareTriLab'
+import { SumDiffLab } from './SumDiffLab'
 import { TenBundleLab } from './TenBundleLab'
 import { UnitCircle } from './UnitCircle'
 import { WaveGraph } from './WaveGraph'
@@ -72,6 +86,13 @@ const LAB_VIZ = new Set([
   'barEqLab',
   'congruenceLab',
   'indexLawLab',
+  'sumDiffLab',
+  'polyIdLab',
+  'cubicFacLab',
+  'simEqLab',
+  'parabolaSignLab',
+  'ineqOrLab',
+  'pyramidLab',
 ])
 
 type Props = {
@@ -176,6 +197,13 @@ export function LessonPlayer({ lesson }: Props) {
   const barEqProps = (beat?.viz?.props ?? { mode: 'ask' }) as BarEqLabProps
   const congProps = (beat?.viz?.props ?? { mode: 'ask' }) as CongruenceLabProps
   const idxProps = (beat?.viz?.props ?? { mode: 'ask' }) as IndexLawLabProps
+  const sdProps = (beat?.viz?.props ?? { mode: 'ask' }) as SumDiffLabProps
+  const piProps = (beat?.viz?.props ?? { mode: 'ask' }) as PolyIdLabProps
+  const cfProps = (beat?.viz?.props ?? { mode: 'ask' }) as CubicFacLabProps
+  const seProps = (beat?.viz?.props ?? { mode: 'ask' }) as SimEqLabProps
+  const psProps = (beat?.viz?.props ?? { mode: 'ask' }) as ParabolaSignLabProps
+  const ioProps = (beat?.viz?.props ?? { mode: 'ask' }) as IneqOrLabProps
+  const pdProps = (beat?.viz?.props ?? { mode: 'ask' }) as PyramidLabProps
 
   const onLabInteract = () => {
     setGateOk(true)
@@ -204,10 +232,17 @@ export function LessonPlayer({ lesson }: Props) {
       'bar-eq': t.gotItSubBarEq,
       'dse-q8': t.gotItSubCong,
       'dse-2012-q1': t.gotItSubIndex,
+      'dse-2012-q2': t.gotItSubD2,
+      'dse-2012-q3': t.gotItSubD3,
+      'dse-2012-q4': t.gotItSubD4,
+      'dse-2012-q5': t.gotItSubD5,
+      'dse-2012-q6': t.gotItSubD6,
+      'dse-2012-q7': t.gotItSubD7,
+      'dse-2012-p1-q18': t.gotItSubD18,
     }[lesson.id] ?? t.gotItSub
 
   const gateChip =
-    ({ 'dse-q8': t.gateChipCong, 'dse-2012-q1': t.gateChipIndex }[lesson.id] as
+    ({ 'dse-q8': t.gateChipCong, 'dse-2012-q1': t.gateChipIndex, 'dse-2012-q2': t.gateChipD2, 'dse-2012-q3': t.gateChipD3, 'dse-2012-q4': t.gateChipD4, 'dse-2012-q5': t.gateChipD5, 'dse-2012-q6': t.gateChipD6, 'dse-2012-q7': t.gateChipD7, 'dse-2012-p1-q18': t.gateChipD18 }[lesson.id] as
       | string
       | undefined) ?? t.gateChip
 
@@ -407,6 +442,48 @@ export function LessonPlayer({ lesson }: Props) {
                 {vizType === 'indexLawLab' && (
                   <IndexLawLab
                     mode={idxProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'sumDiffLab' && (
+                  <SumDiffLab
+                    mode={sdProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'polyIdLab' && (
+                  <PolyIdLab
+                    mode={piProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'cubicFacLab' && (
+                  <CubicFacLab
+                    mode={cfProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'simEqLab' && (
+                  <SimEqLab
+                    mode={seProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'parabolaSignLab' && (
+                  <ParabolaSignLab
+                    mode={psProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'ineqOrLab' && (
+                  <IneqOrLab
+                    mode={ioProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'pyramidLab' && (
+                  <PyramidLab
+                    mode={pdProps.mode}
                     onInteractComplete={onLabInteract}
                   />
                 )}

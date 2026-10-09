@@ -263,6 +263,7 @@ export type CongruenceLabProps = {
 
 export type IndexLawLabMode =
   | 'ask'
+  | 'laws'
   | 'copies'
   | 'coeffs'
   | 'indices'
@@ -271,9 +272,148 @@ export type IndexLawLabMode =
   | 'subtract'
   | 'final'
   | 'check'
+  | 'guide'
 
 export type IndexLawLabProps = {
   mode: IndexLawLabMode
+  onInteractComplete?: () => void
+}
+
+export type SumDiffLabMode =
+  | 'ask'
+  | 'laws'
+  | 'name'
+  | 'sum'
+  | 'diff'
+  | 'gate'
+  | 'multiply'
+  | 'shortcut'
+  | 'expand'
+  | 'check'
+  | 'guide'
+
+export type SumDiffLabProps = {
+  mode: SumDiffLabMode
+  onInteractComplete?: () => void
+}
+
+export type PolyIdLabMode =
+  | 'ask'
+  | 'laws'
+  | 'name'
+  | 'xcoef'
+  | 'const'
+  | 'gate'
+  | 'answer'
+  | 'shortcut'
+  | 'verify'
+  | 'check'
+  | 'guide'
+
+export type PolyIdLabProps = {
+  mode: PolyIdLabMode
+  onInteractComplete?: () => void
+}
+
+export type CubicFacLabMode =
+  | 'ask'
+  | 'laws'
+  | 'name'
+  | 'sub'
+  | 'calc'
+  | 'gate'
+  | 'answer'
+  | 'synth'
+  | 'verify'
+  | 'check'
+  | 'guide'
+
+export type CubicFacLabProps = {
+  mode: CubicFacLabMode
+  onInteractComplete?: () => void
+}
+
+export type SimEqLabMode =
+  | 'ask'
+  | 'why'
+  | 'split1'
+  | 'split2'
+  | 'elim'
+  | 'elim2'
+  | 'gate'
+  | 'answer'
+  | 'verify1'
+  | 'verify2'
+  | 'graph'
+  | 'trapA'
+  | 'trapC'
+  | 'trapD'
+  | 'guide'
+
+export type SimEqLabProps = {
+  mode: SimEqLabMode
+  onInteractComplete?: () => void
+}
+
+export type ParabolaSignLabMode =
+  | 'ask'
+  | 'why'
+  | 'readA'
+  | 'readB'
+  | 'flip'
+  | 'gate'
+  | 'answer'
+  | 'verify'
+  | 'guide'
+
+export type ParabolaSignLabProps = {
+  mode: ParabolaSignLabMode
+  onInteractComplete?: () => void
+}
+
+export type IneqOrLabMode =
+  | 'ask'
+  | 'why'
+  | 'solve1'
+  | 'solve2'
+  | 'flip'
+  | 'union'
+  | 'gate'
+  | 'answer'
+  | 'verify'
+  | 'guide'
+
+export type IneqOrLabProps = {
+  mode: IneqOrLabMode
+  onInteractComplete?: () => void
+}
+
+export type PyramidLabMode =
+  | 'figure'
+  | 'question'
+  | 'face'
+  | 'pq'
+  | 'pb'
+  | 'ask'
+  | 'what'
+  | 'why'
+  | 'va'
+  | 'tri'
+  | 'ap'
+  | 'build'
+  | 'vo'
+  | 'ph'
+  | 'hh'
+  | 'alpha'
+  | 'beta'
+  | 'gate'
+  | 'compare'
+  | 'answer'
+  | 'verify'
+  | 'guide'
+
+export type PyramidLabProps = {
+  mode: PyramidLabMode
   onInteractComplete?: () => void
 }
 
@@ -311,6 +451,13 @@ export type Beat = {
       | 'barEqLab'
       | 'congruenceLab'
       | 'indexLawLab'
+      | 'sumDiffLab'
+      | 'polyIdLab'
+      | 'cubicFacLab'
+      | 'simEqLab'
+      | 'parabolaSignLab'
+      | 'ineqOrLab'
+      | 'pyramidLab'
       | 'waves'
       | 'formula'
       | 'none'
@@ -336,6 +483,13 @@ export type Beat = {
       | BarEqLabProps
       | CongruenceLabProps
       | IndexLawLabProps
+      | SumDiffLabProps
+      | PolyIdLabProps
+      | CubicFacLabProps
+      | SimEqLabProps
+      | ParabolaSignLabProps
+      | IneqOrLabProps
+      | PyramidLabProps
       | WavesProps
   }
 }

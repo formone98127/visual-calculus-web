@@ -39,6 +39,13 @@ type UiDict = {
   gotItSubBarEq: string
   gotItSubCong: string
   gotItSubIndex: string
+  gotItSubD2: string
+  gotItSubD3: string
+  gotItSubD4: string
+  gotItSubD5: string
+  gotItSubD6: string
+  gotItSubD7: string
+  gotItSubD18: string
   replay: string
   next: string
   catalog: string
@@ -47,6 +54,13 @@ type UiDict = {
   gateChip: string
   gateChipCong: string
   gateChipIndex: string
+  gateChipD2: string
+  gateChipD3: string
+  gateChipD4: string
+  gateChipD5: string
+  gateChipD6: string
+  gateChipD7: string
+  gateChipD18: string
   autoFit: string
   labHookAsk: string
   angleAutoFit: string
@@ -94,6 +108,142 @@ type UiDict = {
   indexTrapB: string
   indexTrapD: string
   indexTrapA: string
+  indexLawTag1: string
+  indexLawTag2: string
+  indexLawTag3: string
+  indexLawTagNum: string
+  indexLawTagAll: string
+  indexLawsReady: string
+  indexGuideTitle: string
+  indexGuideThink: string
+  indexGuideLaw0: string
+  indexGuideLaw1: string
+  indexGuideLaw2: string
+  indexGuideLaw3: string
+  indexGuideLaw4: string
+  d2Ready: string
+  d2Flip: string
+  d2OneLine: string
+  d2CheckNote: string
+  d2ExpandTag: string
+  d2ExpandNote: string
+  d2WhyA: string
+  d2WhyB: string
+  d2WhyC: string
+  d2TrapA: string
+  d2TrapB: string
+  d2TrapC: string
+  d2GuideThink: string
+  d2GuideLaw0: string
+  d2GuideLaw1: string
+  d2GuideLaw2: string
+  d2GuideLaw3: string
+  d2GuideLaw4: string
+  d3ForAllX: string
+  d3Ready: string
+  d3XNote: string
+  d3ConstNote: string
+  d3SubTag: string
+  d3SubX: string
+  d3ExpandTag: string
+  d3BalNote: string
+  d3WhyA: string
+  d3WhyB: string
+  d3WhyD: string
+  d3TrapA: string
+  d3TrapB: string
+  d3TrapD: string
+  d3GuideThink: string
+  d3GuideLaw0: string
+  d3GuideLaw1: string
+  d3GuideLaw2: string
+  d3GuideLaw3: string
+  d3GuideLaw4: string
+  d4FactorEq: string
+  d4Law1: string
+  d4Law2: string
+  d4ToolsNote: string
+  d4PowerNote: string
+  d4SynTag: string
+  d4SynNote: string
+  d4RemNote: string
+  d4WhyA: string
+  d4WhyC: string
+  d4WhyD: string
+  d4TrapA: string
+  d4TrapC: string
+  d4TrapD: string
+  d4GuideThink: string
+  d4GuideLaw0: string
+  d4GuideLaw1: string
+  d4GuideLaw2: string
+  d4GuideLaw3: string
+  d4GuideLaw4: string
+  d5ChainEq: string
+  d5WhyBadge: string
+  d5WhyOne: string
+  d5WhyTwo: string
+  d5WhyTag: string
+  d5ElimTag: string
+  d5SubTag: string
+  d5SubNote: string
+  d5VerNote: string
+  d5GraphNote: string
+  d5WhyA: string
+  d5WhyC: string
+  d5WhyD: string
+  d5TrapA: string
+  d5TrapC: string
+  d5TrapD: string
+  d5GuideThink: string
+  d5GuideLaw0: string
+  d5GuideLaw1: string
+  d5GuideLaw2: string
+  d5GuideLaw3: string
+  d5GuideLaw4: string
+  d6AskBadge: string
+  d6WhyBadge: string
+  d6WhyOne: string
+  d6WhyTwo: string
+  d6WhyA: string
+  d6WhyB: string
+  d6WhyC: string
+  d6GuideLaw0: string
+  d6GuideLaw1: string
+  d6GuideLaw2: string
+  d6GuideLaw3: string
+  d6GuideLaw4: string
+  d7AskBadge: string
+  d7WhyBadge: string
+  d7WhyOne: string
+  d7WhyTwo: string
+  d7WhyA: string
+  d7WhyB: string
+  d7WhyD: string
+  d7GuideLaw0: string
+  d7GuideLaw1: string
+  d7GuideLaw2: string
+  d7GuideLaw3: string
+  d7GuideLaw4: string
+  d18AskBadge: string
+  d18AskPulse: string
+  d18WhatSub: string
+  d18WhyBadge: string
+  d18QTextA: string
+  d18QTextB: string
+  d18FaceSub: string
+  d18PqSub: string
+  d18PbSub: string
+  d18WhyText: string
+  d18GatePulse: string
+  d18WhyB: string
+  d18WhyC: string
+  d18WhyD: string
+  d18GuideLaw0: string
+  d18GuideLaw1: string
+  d18GuideLaw2: string
+  d18GuideLaw3: string
+  d18GuideLaw4: string
   missing: string
   backHome: string
   waveSinDeriv: string
@@ -145,7 +295,14 @@ export const ui: Record<Locale, UiDict> = {
     gotItSubBarEq: 'Peel the 2, split 9 into three — each x is 3.',
     gotItSubCong:
       'Two Z-shapes prove the triangles congruent; AC = AD halves the vertex angle — 63°.',
-    gotItSubIndex: 'Cube the bracket (2³, 4×3), then divide like bases (8÷2, 12−5) — 4x⁷.',
+    gotItSubIndex: 'Name ① (ab)ⁿ, ② (aᵐ)ⁿ, ③ aᵐ÷aⁿ — then 4x⁷ is C.',
+    gotItSubD2: 'Formula ① with a+b = 8x and a−b = 2y gives 16xy — option D.',
+    gotItSubD3: 'Match x-terms (q = −2), match constants (p = 6) — option C. Or sub x = −2 in one line.',
+    gotItSubD4: 'Factor theorem: f(−3) = 0 → −3 − 3k = 0 → k = −1. Option B.',
+    gotItSubD5: 'Elimination: 2×① − ② → 5n = −5 → n = −1. Option B.',
+    gotItSubD6: 'Two clues: opens down → a < 0; vertex at x = −b > 0 → b < 0. Option D.',
+    gotItSubD7: 'Solve both: x < −3 and x < 4. or merges them — the wider x < 4 wins. Option C.',
+    gotItSubD18: 'Sine rule finds AP ≈ 23.3; heights scale down VA to PH ≈ 20.96; two perpendiculars give α ≈ 58.6° — and BH > HH′ makes α > β.',
     replay: 'Replay',
     next: 'Next →',
     catalog: 'Catalog',
@@ -153,7 +310,14 @@ export const ui: Record<Locale, UiDict> = {
     challengeHint: 'complete the challenge',
     gateChip: 'Tap Auto-fit to continue',
     gateChipCong: 'Tap two equal angles to continue',
-    gateChipIndex: 'Tap the answer that follows both laws',
+    gateChipIndex: 'Tap the answer that follows Formula ③',
+    gateChipD2: 'Tap the answer Formula ① gives',
+    gateChipD3: 'Tap the value of p',
+    gateChipD4: 'Tap the value of k',
+    gateChipD5: 'Tap the value of n',
+    gateChipD6: 'Tap the true pair',
+    gateChipD7: 'Tap the solution',
+    gateChipD18: 'Tap the greater one',
     autoFit: 'Move tiles into the big square →',
     labHookAsk: 'Each square uses one side of the triangle as its side.',
     angleAutoFit: 'Lay corners on the line →',
@@ -201,6 +365,142 @@ export const ui: Record<Locale, UiDict> = {
     indexTrapB: '2³ became 2×3',
     indexTrapD: '4×3 became 4³',
     indexTrapA: 'no law gives it',
+    indexLawTag1: 'Formula ①',
+    indexLawTag2: 'Formula ②',
+    indexLawTag3: 'Formula ③',
+    indexLawTagNum: 'Numbers',
+    indexLawTagAll: 'All three',
+    indexLawsReady: 'ready to use',
+    indexGuideTitle: 'Step-by-step solution guide',
+    indexGuideThink: 'spot → name → apply',
+    indexGuideLaw0: 'Read the question — outer power first',
+    indexGuideLaw1: 'Formula ①  (ab)ⁿ = aⁿ · bⁿ',
+    indexGuideLaw2: 'Formula ②  (aᵐ)ⁿ = aᵐⁿ   +  2³ = 8',
+    indexGuideLaw3: 'Formula ③  aᵐ ÷ aⁿ = aᵐ⁻ⁿ   +  8÷2',
+    indexGuideLaw4: 'Answer',
+    d2Ready: 'two formulas, ready to use',
+    d2Flip: 'y − (−y) = y + y — the minus flips it',
+    d2OneLine: 'one line',
+    d2CheckNote: 'same answer — use it to check',
+    d2ExpandTag: 'check by expanding',
+    d2ExpandNote: 'only the cross terms survive',
+    d2WhyA: 'the brackets differ (±y) — nothing cancels to 0',
+    d2WhyB: 'Formula ① is a product, not a square — and (2y)² = 4y²',
+    d2WhyC: 'a − b = 2y, not y — the y doubles',
+    d2TrapA: 'nothing cancels',
+    d2TrapB: '(2y)² mistyped as 2y²',
+    d2TrapC: 'y − (−y) = 2y, not y',
+    d2GuideThink: 'formula → name → substitute',
+    d2GuideLaw0: 'Read the question — square minus square',
+    d2GuideLaw1: 'Formula ①  a² − b² = (a+b)(a−b)',
+    d2GuideLaw2: 'a + b = 8x   (+y, −y cancel)',
+    d2GuideLaw3: 'a − b = 2y   (y − (−y) = 2y)',
+    d2GuideLaw4: 'Answer',
+    d3ForAllX: 'holds for every single x',
+    d3Ready: 'expand, then match term by term',
+    d3XNote: 'the x-terms must match too',
+    d3ConstNote: 'constants must match — substitute q',
+    d3SubTag: 'shortcut: substitute',
+    d3SubX: 'pick x = −2 — it kills (x+2)',
+    d3ExpandTag: 'verify by substituting',
+    d3BalNote: 'both sides 10 — identity confirmed',
+    d3WhyA: '−4 = 2q — the + 10 is missing',
+    d3WhyB: '−2 is q — the question asks for p',
+    d3WhyD: '10 is the given constant — p = 2q + 10',
+    d3TrapA: '2q, no + 10',
+    d3TrapB: "that's q, not p",
+    d3TrapD: 'q never solved',
+    d3GuideThink: 'expand → match x → match const',
+    d3GuideLaw0: 'Read the question — identity, find p',
+    d3GuideLaw1: 'Formula ①  (x+m)(x+n) = x²+(m+n)x+mn',
+    d3GuideLaw2: 'x-terms: q + 2 = 0',
+    d3GuideLaw3: 'constants: p = 2q + 10',
+    d3GuideLaw4: 'shortcut  sub x = −2: 4+p = 10',
+    d4FactorEq: 'divides it ⟺ f(−3) = 0',
+    d4Law1: 'factor theorem: f(a) = 0 ⟺ (x−a) is a factor',
+    d4Law2: 'x + 3 = x − (−3) → sub x = −3',
+    d4ToolsNote: 'sub the root, set it to 0',
+    d4PowerNote: 'powers first: (−3)³ = −27, (−3)² = +36',
+    d4SynTag: 'shortcut: synthetic division',
+    d4SynNote: 'bring down · multiply by −3 · add',
+    d4RemNote: 'f(−3) = −3 + 3 = 0 — confirmed',
+    d4WhyA: '(−3)² = +36 — the sign slipped',
+    d4WhyC: '−3k = 3 → k = −1, not +1',
+    d4WhyD: '(−3)³ = −27, not +27',
+    d4TrapA: 'sign slip on (−3)²',
+    d4TrapC: 'moved −3k wrong',
+    d4TrapD: 'sign slip on (−3)³',
+    d4GuideThink: 'sub −3 → merge → solve',
+    d4GuideLaw0: 'read: (x+3) divides x³+4x²+kx−12, find k',
+    d4GuideLaw1: 'Formula ①  f(−3) = 0 (factor theorem)',
+    d4GuideLaw2: 'substitute: −27+36−3k−12 = 0',
+    d4GuideLaw3: 'merge: −3 − 3k = 0 → k = −1',
+    d4GuideLaw4: 'shortcut  synthetic division: remainder 0',
+    d5ChainEq: 'a chain of = means two equations',
+    d5WhyBadge: '1 equation = a line · 2 = a point',
+    d5WhyOne: 'one equation → endless answers',
+    d5WhyTwo: 'two equations → one point',
+    d5WhyTag: 'simultaneous = find the crossing',
+    d5ElimTag: 'elimination',
+    d5SubTag: 'plan B: substitution',
+    d5SubNote: 'different road, same destination: 5n = −5',
+    d5VerNote: 'both check out — m = 3, n = −1',
+    d5GraphNote: 'the crossing point IS the answer',
+    d5WhyA: 'n = m − 7 — the ×2 slipped',
+    d5WhyC: 'that is m — the question asks n',
+    d5WhyD: '7 + 6 − 2 number soup — never checks out',
+    d5TrapA: 'dropped the ×2',
+    d5TrapC: 'answered m, not n',
+    d5TrapD: 'number soup, no check',
+    d5GuideThink: 'split → kill m → solve',
+    d5GuideLaw0: 'read: m+2n+6 = 2m−n = 7, find n',
+    d5GuideLaw1: 'Formula ① split: m+2n=1 · 2m−n=7',
+    d5GuideLaw2: 'Formula ② eliminate: 2×① − ② → 5n = −5',
+    d5GuideLaw3: 'solve: n = −1, then m = 3',
+    d5GuideLaw4: 'check both ✓ · graph crossing (−1, 3)',
+    d6AskBadge: 'two constants, two picture clues',
+    d6WhyBadge: 'a = opening · b = slide',
+    d6WhyOne: 'a: opens up or down',
+    d6WhyTwo: 'b: vertex sits at x = −b',
+    d6WhyA: 'a > 0? it opens down',
+    d6WhyB: 'b < 0 ✓ — but a is flipped',
+    d6WhyC: 'the vertex is x = −b, not b',
+    d6GuideLaw0: 'read: y = a(x+b)² — signs of a, b?',
+    d6GuideLaw1: 'clue 1 · opening: down → a < 0',
+    d6GuideLaw2: 'clue 2 · vertex: x = −b > 0',
+    d6GuideLaw3: 'combine: b < 0 → option D',
+    d6GuideLaw4: 'check: a = −1, b = −2 matches ✓',
+    d7AskBadge: 'two inequalities joined by or',
+    d7WhyBadge: 'and = overlap · or = everything',
+    d7WhyOne: 'and: both must hold',
+    d7WhyTwo: 'or: either one counts',
+    d7WhyA: 'that is only ① — or takes both',
+    d7WhyB: '① gives x < −3, not x > −3',
+    d7WhyD: '÷(−2) flips the sign — x < 4',
+    d7GuideLaw0: 'read: two branches joined by or',
+    d7GuideLaw1: '① subtract 15, ÷ 4',
+    d7GuideLaw2: '② subtract 9, then ÷ (−2) — flip',
+    d7GuideLaw3: 'or → union: the wider wins',
+    d7GuideLaw4: 'check x = 0: ① ✗ · ② ✓',
+    d18AskBadge: 'right pyramid · ∠VAB = 72° · base 20 cm',
+    d18AskPulse: 'off comes the corner VPBCQ',
+    d18WhatSub: '(a) find AP (2 marks) · (b) which is greater, α or β? (6 marks)',
+    d18QTextA: 'VABCD is a right pyramid with a square base of\nside 20 cm, and ∠VAB = 72°.\nP and Q lie on VA and VD respectively,\nwith PQ ∥ BC and ∠PBA = 60°.',
+    d18QTextB: '(a) Find AP. (2 marks)\n(b) α is the angle between plane PBCQ and the\nbase ABCD. (i) Find α. (ii) β is the angle between\nPB and the base — which is greater? (6 marks)',
+    d18FaceSub: '∠VAB — the angle on face VAB',
+    d18PqSub: 'P on VA · Q on VD · PQ ∥ BC',
+    d18PbSub: '∠PBA = 60° — PB against BA',
+    d18WhyBadge: 'V sits right above the centre O',
+    d18WhyText: 'VO ⊥ base',
+    d18GatePulse: 'α or β ?',
+    d18WhyB: 'BH is the hypotenuse — bigger denominator, smaller tan',
+    d18WhyC: 'BH ≠ HH′ — the two tan ratios differ',
+    d18WhyD: 'strictly greater — BH > HH′ here',
+    d18GuideLaw0: 'read: right pyramid · square base 20 cm',
+    d18GuideLaw1: '(a) △ABP → sine rule',
+    d18GuideLaw2: 'heights scale along the edge VA',
+    d18GuideLaw3: '(b)(i) two perpendiculars give tan α',
+    d18GuideLaw4: '(b)(ii) hypotenuse BH > HH′',
     missing: 'Lesson not found.',
     backHome: 'Back to catalog',
     waveSinDeriv: 'slope of red ≈ blue',
@@ -245,7 +545,14 @@ export const ui: Record<Locale, UiDict> = {
     gotItSubDiff: '大正方形減去小正方形，滑成 (a−b) 乘 (a+b)。',
     gotItSubBarEq: '拿掉 2，把 9 分成三份——每個 x 都是 3。',
     gotItSubCong: '兩個 Z 形證出全等；AC = AD 把頂角對半分——63°。',
-    gotItSubIndex: '先展開冪（2³、4×3），再同底相除（8÷2、12−5）——4x⁷。',
+    gotItSubIndex: '先寫出① (ab)ⁿ、② (aᵐ)ⁿ、③ aᵐ÷aⁿ——答案就是 4x⁷ = C。',
+    gotItSubD2: '公式 ① 代入 a+b = 8x、a−b = 2y——得出 16xy，選項 D。',
+    gotItSubD3: '比 x 項（q = −2）、比常數（p = 6）——選項 C。或代 x = −2 一行搞定。',
+    gotItSubD4: '因式定理：f(−3) = 0 → −3 − 3k = 0 → k = −1。選項 B。',
+    gotItSubD5: '消去法：2×① − ② → 5n = −5 → n = −1。選項 B。',
+    gotItSubD6: '兩條線索：開口向下 → a < 0；頂點 x = −b > 0 → b < 0。選項 D。',
+    gotItSubD7: '兩條都解：x < −3 同 x < 4。or 合併——闊嘅勝出 → x < 4。選項 C。',
+    gotItSubD18: '△ABP 用正弦定律搵 AP ≈ 23.3；高度沿 VA 線性縮到 PH ≈ 20.96；兩條垂直線起出 α ≈ 58.6°——BH > HH′，所以 α > β。',
     replay: '再玩一次',
     next: '下一課 →',
     catalog: '目錄',
@@ -253,7 +560,14 @@ export const ui: Record<Locale, UiDict> = {
     challengeHint: '完成挑戰後繼續',
     gateChip: '點「自動拼入」後繼續',
     gateChipCong: '點兩個相等的角以繼續',
-    gateChipIndex: '點出跟足兩條指數定律的答案',
+    gateChipIndex: '點出跟足公式 ③ 的答案',
+    gateChipD2: '點出公式 ① 算出的答案',
+    gateChipD3: '點出 p 的值',
+    gateChipD4: '點出 k 的值',
+    gateChipD5: '點出 n 的值',
+    gateChipD6: '揀出正確組合',
+    gateChipD7: '點出正確解',
+    gateChipD18: '邊個大？撳啱佢',
     autoFit: '把磁磚移入大正方形 →',
     labHookAsk: '每個正方形都以三角形的一邊作為它的邊。',
     angleAutoFit: '把三個角排到直線上 →',
@@ -301,6 +615,142 @@ export const ui: Record<Locale, UiDict> = {
     indexTrapB: '2³ 當成了 2×3',
     indexTrapD: '4×3 當成了 4³',
     indexTrapA: '沒有定律可得出',
+    indexLawTag1: '公式 ①',
+    indexLawTag2: '公式 ②',
+    indexLawTag3: '公式 ③',
+    indexLawTagNum: '係數',
+    indexLawTagAll: '三條齊',
+    indexLawsReady: '寫好再用',
+    indexGuideTitle: '一步一步解題指南',
+    indexGuideThink: '看見 → 寫公式 → 代入',
+    indexGuideLaw0: '讀題——先處理括號外的冪',
+    indexGuideLaw1: '公式 ①  (ab)ⁿ = aⁿ · bⁿ',
+    indexGuideLaw2: '公式 ②  (aᵐ)ⁿ = aᵐⁿ   +  2³ = 8',
+    indexGuideLaw3: '公式 ③  aᵐ ÷ aⁿ = aᵐ⁻ⁿ   +  8÷2',
+    indexGuideLaw4: '答案',
+    d2Ready: '兩條公式，寫好再用',
+    d2Flip: 'y − (−y) = y + y——減號把它翻正',
+    d2OneLine: '一行搞定',
+    d2CheckNote: '同一答案——用來驗算最快',
+    d2ExpandTag: '展開驗證',
+    d2ExpandNote: '只有交叉項留下來',
+    d2WhyA: '兩式有 ±y 之別——不會抵銷成 0',
+    d2WhyB: '公式 ① 是乘積不是平方——且 (2y)² = 4y²',
+    d2WhyC: 'a − b = 2y，不是 y——y 要加倍',
+    d2TrapA: '沒有東西可抵銷',
+    d2TrapB: '(2y)² 被當成了 2y²',
+    d2TrapC: 'y − (−y) = 2y，不是 y',
+    d2GuideThink: '寫公式 → 命名 → 代入',
+    d2GuideLaw0: '讀題——平方減平方，套公式',
+    d2GuideLaw1: '公式 ①  a² − b² = (a+b)(a−b)',
+    d2GuideLaw2: 'a + b = 8x   (+y、−y 抵銷)',
+    d2GuideLaw3: 'a − b = 2y   (y − (−y) = 2y)',
+    d2GuideLaw4: '答案',
+    d3ForAllX: '對所有 x 都成立',
+    d3Ready: '先展開，再逐項對比',
+    d3XNote: 'x 項都要相等',
+    d3ConstNote: '常數也要相等——代入 q',
+    d3SubTag: '捷徑：代入',
+    d3SubX: '揀 x = −2——整走 (x+2)',
+    d3ExpandTag: '代入驗證',
+    d3BalNote: '兩邊都是 10——恆等式成立',
+    d3WhyA: '−4 = 2q——漏加了 + 10',
+    d3WhyB: '−2 是 q——題目問的是 p',
+    d3WhyD: '10 是題目給的常數——p = 2q + 10',
+    d3TrapA: '2q，沒加 + 10',
+    d3TrapB: '這是 q，不是 p',
+    d3TrapD: '從沒解出 q',
+    d3GuideThink: '展開 → 比 x → 比常數',
+    d3GuideLaw0: '讀題——恆等式，求 p',
+    d3GuideLaw1: '公式 ①  (x+m)(x+n) = x²+(m+n)x+mn',
+    d3GuideLaw2: 'x 項：q + 2 = 0',
+    d3GuideLaw3: '常數：p = 2q + 10',
+    d3GuideLaw4: '捷徑  代 x = −2：4+p = 10',
+    d4FactorEq: '整除 ⟺ f(−3) = 0',
+    d4Law1: '因式定理：f(a) = 0 ⟺ (x−a) 係因式',
+    d4Law2: 'x + 3 = x − (−3) → 代 x = −3',
+    d4ToolsNote: '代個根落去，令佢等於 0',
+    d4PowerNote: '次方先搞掂：(−3)³ = −27，(−3)² = +36',
+    d4SynTag: '捷徑：綜合除法',
+    d4SynNote: '搬低 · 乘 −3 · 加返',
+    d4RemNote: 'f(−3) = −3 + 3 = 0——確認',
+    d4WhyA: '(−3)² = +36——符號滑咗手',
+    d4WhyC: '−3k = 3 → k = −1，唔係 +1',
+    d4WhyD: '(−3)³ = −27，唔係 +27',
+    d4TrapA: '(−3)² 符號錯',
+    d4TrapC: '移項漏負號',
+    d4TrapD: '(−3)³ 符號錯',
+    d4GuideThink: '代 −3 → 合併 → 解 k',
+    d4GuideLaw0: '讀題：(x+3) 整除 x³+4x²+kx−12，求 k',
+    d4GuideLaw1: '公式 ① 因式定理：f(−3) = 0',
+    d4GuideLaw2: '代入：−27+36−3k−12 = 0',
+    d4GuideLaw3: '合併：−3 − 3k = 0 → k = −1',
+    d4GuideLaw4: '捷徑  綜合除法：餘數 0',
+    d5ChainEq: '連等式 = 兩條方程',
+    d5WhyBadge: '一條式 = 一條線 · 兩條 = 一點',
+    d5WhyOne: '一條式 → 無限個解',
+    d5WhyTwo: '兩條式 → 一個交點',
+    d5WhyTag: '聯立 = 搵交點',
+    d5ElimTag: '消去法',
+    d5SubTag: '計劃 B：代入',
+    d5SubNote: '不同路，同一目的地：5n = −5',
+    d5VerNote: '兩條都過——m = 3，n = −1',
+    d5GraphNote: '交點就係答案',
+    d5WhyA: 'n = m − 7——漏咗 ×2',
+    d5WhyC: '呢個係 m——題目問 n',
+    d5WhyD: '7 + 6 − 2 亂溝數——代唔返',
+    d5TrapA: '漏咗 ×2',
+    d5TrapC: '答咗 m 唔係 n',
+    d5TrapD: '亂溝數，冇驗證',
+    d5GuideThink: '拆 → 消 m → 解',
+    d5GuideLaw0: '讀題：m+2n+6 = 2m−n = 7，求 n',
+    d5GuideLaw1: '公式 ① 拆開：m+2n=1 · 2m−n=7',
+    d5GuideLaw2: '公式 ② 消去：2×① − ② → 5n = −5',
+    d5GuideLaw3: '求解：n = −1，m = 3',
+    d5GuideLaw4: '兩條驗證 ✓ · 圖像交點 (−1, 3)',
+    d6AskBadge: '兩個常數 · 兩條線索',
+    d6WhyBadge: 'a 管開口 · b 管左右',
+    d6WhyOne: 'a：開口向上或向下',
+    d6WhyTwo: 'b：頂點喺 x = −b',
+    d6WhyA: 'a > 0？開口係向下',
+    d6WhyB: 'b 啱——但 a 掉轉咗',
+    d6WhyC: '頂點係 x = −b，唔係 b',
+    d6GuideLaw0: '讀題：y = a(x+b)²，問 a、b 正負',
+    d6GuideLaw1: '線索 ①：開口向下 → a < 0',
+    d6GuideLaw2: '線索 ②：頂點 x = −b > 0',
+    d6GuideLaw3: '合併：b < 0 → 選項 D',
+    d6GuideLaw4: '驗證：代 a = −1、b = −2 ✓',
+    d7AskBadge: '兩條不等式 · or 連住',
+    d7WhyBadge: 'and 計重疊 · or 全收',
+    d7WhyOne: 'and：兩條都要啱',
+    d7WhyTwo: 'or：一條啱就算',
+    d7WhyA: '淨係解咗 ①——or 兩條都要',
+    d7WhyB: '① 係 x < −3，唔係 x > −3',
+    d7WhyD: '÷(−2) 要掉轉不等號——x < 4',
+    d7GuideLaw0: '讀題：兩條式用 or 連住',
+    d7GuideLaw1: '① 減 15，再 ÷ 4',
+    d7GuideLaw2: '② 減 9，再 ÷ (−2)——掉轉',
+    d7GuideLaw3: 'or → 合併：闊嗰條勝出',
+    d7GuideLaw4: '驗證 x = 0：① ✗ · ② ✓',
+    d18AskBadge: '直立角錐 · ∠VAB = 72° · 底邊 20 cm',
+    d18AskPulse: '切走 VPBCQ 呢一角',
+    d18WhatSub: '(a) 搵 AP（2 分）· (b) 比較 α 同 β，邊個大？（6 分）',
+    d18QTextA: 'VABCD 係直立角錐，正方底每邊 20 cm，\n∠VAB = 72°。\nP、Q 分別喺 VA、VD 上面，\nPQ ∥ BC，∠PBA = 60°。',
+    d18QTextB: '(a) 搵 AP。（2 分）\n(b) α 係平面 PBCQ 同底面 ABCD 嘅夾角：\n(i) 搵 α；(ii) β 係 PB 同底面嘅夾角——\nα 同 β 邊個大？試解釋。（6 分）',
+    d18FaceSub: '∠VAB——面 VAB 上面嘅角',
+    d18PqSub: 'P 喺 VA 上 · Q 喺 VD 上 · PQ ∥ BC',
+    d18PbSub: '∠PBA = 60°——PB 同 BA 嘅角',
+    d18WhyBadge: '直立角錐 → V 啱啱喺正中心 O 上方',
+    d18WhyText: 'VO ⊥ 底面',
+    d18GatePulse: 'α 定 β 大？',
+    d18WhyB: 'BH 係斜邊——分母大咗，tan 反而細',
+    d18WhyC: 'BH ≠ HH′——兩個 tan 唔同',
+    d18WhyD: '係嚴格大於——呢度 BH > HH′',
+    d18GuideLaw0: '讀題：直立角錐 · 正方底 20 cm',
+    d18GuideLaw1: '(a) △ABP → 正弦定律',
+    d18GuideLaw2: '高度沿邊 VA 線性縮放',
+    d18GuideLaw3: '(b)(i) 兩條垂直線起 tan α',
+    d18GuideLaw4: '(b)(ii) 斜邊 BH > HH′',
     missing: '找不到這一課。',
     backHome: '回到目錄',
     waveSinDeriv: '紅線斜率 ≈ 藍線',
