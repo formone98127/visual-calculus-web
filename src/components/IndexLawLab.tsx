@@ -170,13 +170,13 @@ const TRAPS: { id: string; val: Part[]; l1: Part[]; l2key: 'indexTrapB' | 'index
   {
     id: 'B',
     val: OPTIONS[1].val,
-    l1: [{ t: '(2x⁴)³ → ' }, { t: '6', fill: RED }, { t: 'x', it: true }, { t: '12', sup: true }],
+    l1: [{ t: '(2x' }, { t: '4', sup: true }, { t: ')³ → ' }, { t: '6', fill: RED }, { t: 'x', it: true }, { t: '12', sup: true }],
     l2key: 'indexTrapB',
   },
   {
     id: 'D',
     val: OPTIONS[3].val,
-    l1: [{ t: '(x⁴)³ → ' }, { t: 'x', it: true }, { t: '64', sup: true, fill: RED }],
+    l1: [{ t: '(x' }, { t: '4', sup: true }, { t: ')³ → ' }, { t: 'x', it: true }, { t: '64', sup: true, fill: RED }],
     l2key: 'indexTrapD',
   },
   {
@@ -361,7 +361,7 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
               fill={INK}
               opacity={idxOp}
             >
-              x⁴
+              x<tspan dy={-10.8} fontSize={14.9}>4</tspan>
             </text>
           </g>
         ))}
@@ -799,9 +799,9 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
       )}
       {flags.copies && (
         <p className="vm-eq show">
-          <span className="a">(2x⁴)³</span>
+          <span className="a">(2x<sup>4</sup>)³</span>
           <span className="op">=</span>
-          <span className="b">(2x⁴)(2x⁴)(2x⁴)</span>
+          <span className="b">(2x<sup>4</sup>)(2x<sup>4</sup>)(2x<sup>4</sup>)</span>
         </p>
       )}
       {flags.coeffs && (
@@ -813,7 +813,7 @@ export function IndexLawLab({ mode, onInteractComplete }: IndexLawLabProps) {
       )}
       {flags.indices && (
         <p className="vm-eq show">
-          <span className="a">(x⁴)³</span>
+          <span className="a">(x<sup>4</sup>)³</span>
           <span className="op">=</span>
           <span className="sum">x¹²</span>
         </p>

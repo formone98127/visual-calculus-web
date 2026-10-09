@@ -417,6 +417,37 @@ export type PyramidLabProps = {
   onInteractComplete?: () => void
 }
 
+export type CargoLabMode =
+  | 'figure'
+  | 'question'
+  | 's1'
+  | 's2'
+  | 's3'
+  | 'ask'
+  | 'why'
+  | 'div'
+  | 'bval'
+  | 'aval'
+  | 'yr4'
+  | 'sum'
+  | 'sumf'
+  | 'partb'
+  | 'claim'
+  | 'cmp'
+  | 'cmpmin'
+  | 'by'
+  | 'total'
+  | 'gate'
+  | 'cross'
+  | 'answer'
+  | 'verify'
+  | 'guide'
+
+export type CargoLabProps = {
+  mode: CargoLabMode
+  onInteractComplete?: () => void
+}
+
 export type WavesProps = {
   mode?: 'sin' | 'cos' | 'both' | 'sinDeriv' | 'cosDeriv' | 'all'
 }
@@ -458,6 +489,7 @@ export type Beat = {
       | 'parabolaSignLab'
       | 'ineqOrLab'
       | 'pyramidLab'
+      | 'cargoLab'
       | 'waves'
       | 'formula'
       | 'none'
@@ -490,6 +522,7 @@ export type Beat = {
       | ParabolaSignLabProps
       | IneqOrLabProps
       | PyramidLabProps
+      | CargoLabProps
       | WavesProps
   }
 }

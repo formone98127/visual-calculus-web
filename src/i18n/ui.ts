@@ -244,6 +244,34 @@ type UiDict = {
   d18GuideLaw2: string
   d18GuideLaw3: string
   d18GuideLaw4: string
+  gotItSubD19: string
+  gateChipD19: string
+  d19QTextA: string
+  d19QTextB: string
+  d19AskText: string
+  d19S1Badge: string
+  d19S1Sub: string
+  d19S2Sub: string
+  d19S3Sub: string
+  d19WhyBadge: string
+  d19WhyText: string
+  d19SumSub: string
+  d19SumfSub: string
+  d19PartbBadge: string
+  d19CmpSub: string
+  d19AgreeText: string
+  d19BySub: string
+  d19GatePulse: string
+  d19WhyA: string
+  d19WhyB: string
+  d19WhyD: string
+  d19CrossSub: string
+  d19VerifyTop: string
+  d19GuideLaw0: string
+  d19GuideLaw1: string
+  d19GuideLaw2: string
+  d19GuideLaw3: string
+  d19GuideLaw4: string
   missing: string
   backHome: string
   waveSinDeriv: string
@@ -501,6 +529,34 @@ export const ui: Record<Locale, UiDict> = {
     d18GuideLaw2: 'heights scale along the edge VA',
     d18GuideLaw3: '(b)(i) two perpendiculars give tan α',
     d18GuideLaw4: '(b)(ii) hypotenuse BH > HH′',
+    gotItSubD19: 'Divide the two given years: b² = 1.21 → b = 1.1, a = 210 000; both totals are GP sums, the ratio 1.1ᵐ⁺⁸/2 stays above 1, and the 20 000 000 line is crossed in year 14.',
+    gateChipD19: 'Tap the crossing year',
+    d19QTextA: 'In a city, the air cargo terminal X of an airport handles\ngoods of weight A(n) tonnes in the nth year since the start\nof its operation, where n is a positive integer. It is given\nthat A(n) = ab²ⁿ, where a and b are positive constants. It is\nfound that the weights of the goods handled by X in the 1st\nyear and the 2nd year since the start of its operation are\n254 100 tonnes and 307 461 tonnes respectively.',
+    d19QTextB: '(a) (i) Find a and b. Hence find the weight in the 4th year.\n(ii) Express the total weight of the first n years.\n(b) Y starts 4 years after X; B(m) = 2abᵐ. (i) The manager\nclaims Y < X in every year — agree? (ii) When the total\nexceeds 20 000 000 t, install new facilities — which year?',
+    d19AskText: '(a) (i) find a and b — hence the 4th-year weight\n(ii) the total weight of the first n years — 6 marks\n(b) (i) after Y starts, is Y < X in every year?\n(ii) total > 20 000 000 — in which year? — 7 marks',
+    d19S1Badge: 'A(n) = ab²ⁿ tonnes in year n',
+    d19S1Sub: 'terminal X — one bar per year',
+    d19S2Sub: 'the exponent 2n — each year the weight ×b²',
+    d19S3Sub: 'the two given years — A(1) · A(2)',
+    d19WhyBadge: 'A(n+1) / A(n) = b² — constant',
+    d19WhyText: 'geometric progression — GP',
+    d19SumSub: 'first term A(1) = 254 100 · ratio b² = 1.21 · n terms',
+    d19SumfSub: 'the total collapses into one formula',
+    d19PartbBadge: 'B(m) = 2abᵐ = 420 000 × 1.1ᵐ',
+    d19CmpSub: 'same year, two terminals — one ratio',
+    d19AgreeText: 'agree — Y < X in every year',
+    d19BySub: 'Y’s own running total — same trick, ratio 1.1',
+    d19GatePulse: 'which year ?',
+    d19WhyA: 'too early — T(12) = 15 991 557, far below the line',
+    d19WhyB: 'not yet — T(13) = 19 484 712 < 20 000 000',
+    d19WhyD: 'too late — the line was crossed in year 14',
+    d19CrossSub: 'the line sits between years 13 and 14',
+    d19VerifyTop: 'the jump T(14) − T(13) = 4 117 780 t — ×1.21 growth',
+    d19GuideLaw0: 'read: A(n) = ab²ⁿ · two given years',
+    d19GuideLaw1: '(a)(i) divide: b² = 1.21 → b = 1.1',
+    d19GuideLaw2: '(a) A(4) ≈ 450 153.65 · GP sum S(n)',
+    d19GuideLaw3: '(b)(i) ratio 1.1ᵐ⁺⁸/2 ≥ 1.1⁹/2 > 1',
+    d19GuideLaw4: '(b)(ii) T(14) > 20 000 000 → n = 14',
     missing: 'Lesson not found.',
     backHome: 'Back to catalog',
     waveSinDeriv: 'slope of red ≈ blue',
@@ -751,6 +807,34 @@ export const ui: Record<Locale, UiDict> = {
     d18GuideLaw2: '高度沿邊 VA 線性縮放',
     d18GuideLaw3: '(b)(i) 兩條垂直線起 tan α',
     d18GuideLaw4: '(b)(ii) 斜邊 BH > HH′',
+    gotItSubD19: '兩年相除：b² = 1.21 → b = 1.1，a = 210 000；兩條總數都係 GP 和，比率 1.1ᵐ⁺⁸/2 永遠大過 1，20 000 000 呢條線喺第 14 年跨過。',
+    gateChipD19: '㩒一㩒跨線嗰年',
+    d19QTextA: '某城市一個機場嘅空運貨站 X，自開始營運起\n喺第 n 年處理嘅貨物重量係 A(n) 噸，當中 n 係正整數。\n已知 A(n) = ab²ⁿ，a 同 b 係正常數。\n據知 X 喺營運第 1 年同第 2 年處理嘅\n貨物重量分別係 254 100 噸同 307 461 噸。',
+    d19QTextB: '(a) (i) 搵 a 同 b，再搵第 4 年嘅重量。\n(ii) 用 n 表示首 n 年嘅總重量。\n(b) Y 喺 X 營運 4 年後開站，B(m) = 2abᵐ：\n(i) 經理話 Y 開站後每年 Y < X——同意嗎？\n(ii) 總量超過 20 000 000 噸要裝新設施——第幾年？',
+    d19AskText: '(a) (i) 搵 a 同 b——再搵第 4 年重量\n(ii) 首 n 年嘅總重量（6 分）\n(b) (i) Y 開站之後，每年 Y < X，同意嗎？\n(ii) 總量超過 20 000 000——第幾年？（7 分）',
+    d19S1Badge: 'A(n) = ab²ⁿ 噸（第 n 年）',
+    d19S1Sub: '貨站 X——一年一枝',
+    d19S2Sub: '指數係 2n——每過一年重量 ×b²',
+    d19S3Sub: '兩個已知年——A(1) · A(2)',
+    d19WhyBadge: 'A(n+1) / A(n) = b²——常數',
+    d19WhyText: '等比數列（GP）',
+    d19SumSub: '首項 A(1) = 254 100 · 公比 b² = 1.21 · n 項',
+    d19SumfSub: '成條數收縮做一條式',
+    d19PartbBadge: 'B(m) = 2abᵐ = 420 000 × 1.1ᵐ',
+    d19CmpSub: '同一年，兩個站——一個比率',
+    d19AgreeText: '同意——每年 Y < X',
+    d19BySub: 'Y 自己嘅累積總量——同一招，公比 1.1',
+    d19GatePulse: '第幾年？',
+    d19WhyA: '太早——T(12) = 15 991 557，離條線好遠',
+    d19WhyB: '仲未夠——T(13) = 19 484 712 < 20 000 000',
+    d19WhyD: '太遲——第 14 年已經過咗條線',
+    d19CrossSub: '條線啱啱喺第 13 同第 14 年之間',
+    d19VerifyTop: '跳升 T(14) − T(13) = 4 117 780 噸——×1.21 增長',
+    d19GuideLaw0: '讀題：A(n) = ab²ⁿ · 兩個已知年',
+    d19GuideLaw1: '(a)(i) 相除：b² = 1.21 → b = 1.1',
+    d19GuideLaw2: '(a) A(4) ≈ 450 153.65 · GP 和 S(n)',
+    d19GuideLaw3: '(b)(i) 比率 1.1ᵐ⁺⁸/2 ≥ 1.1⁹/2 > 1',
+    d19GuideLaw4: '(b)(ii) T(14) > 20 000 000 → 第 14 年',
     missing: '找不到這一課。',
     backHome: '回到目錄',
     waveSinDeriv: '紅線斜率 ≈ 藍線',

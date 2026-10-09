@@ -1685,6 +1685,11 @@ a.primary {
 .vm-eq .sum {
   color: var(--accent);
 }
+.vm-eq sup {
+  /* Fraunces/Georgia lack U+2074/U+2076 — real <sup> beats fallback glyphs that render full-size on the baseline */
+  font-size: 0.62em;
+  line-height: 0;
+}
 
 .ten-one {
   fill: rgba(255, 107, 122, 0.95);

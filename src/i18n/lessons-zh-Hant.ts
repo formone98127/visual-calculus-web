@@ -881,4 +881,82 @@ export const lessonsZhHant: Record<string, LessonText> = {
       },
     },
   },
+  'dse-2012-p1-q19': {
+    title: '2012 DSE 卷一 Q19：空運貨站',
+    subtitle: 'ab²ⁿ 模型 → 兩年相除 → GP 和 → 20 000 000 噸喺第幾年跨過',
+    beats: {
+      p0: {
+        caption: '題目——先睇 X 嘅貨量逐年條圖',
+      },
+      p1: {
+        caption: '題目原文——一句一句讀清楚',
+      },
+      p2: {
+        caption: '句 1——貨站 X 第 n 年處理 A(n) 噸',
+      },
+      p3: {
+        caption: '句 2——模型 ab²ⁿ：每過一年 ×b²',
+      },
+      p4: {
+        caption: '句 3——第 1 年 254 100 噸 · 第 2 年 307 461 噸',
+      },
+      p5: {
+        caption: '問咩——(a) a、b、第 4 年、總量 · (b) 判斷、第幾年',
+      },
+      p6: {
+        caption: '點解係 GP——A(n+1) / A(n) = b² 常數',
+      },
+      p7: {
+        caption: '(a)(i) 相除——b² 就咁彈出嚟',
+      },
+      p8: {
+        caption: 'b² = 1.21 → b = 1.1',
+      },
+      p9: {
+        caption: '代返入去——a = 210 000',
+      },
+      p10: {
+        caption: '跟住——第 4 年',
+      },
+      p11: {
+        caption: '(a)(ii) 總量係一條 GP 數列',
+      },
+      p12: {
+        caption: 'GP 求和公式 → S(n)',
+      },
+      p13: {
+        caption: '(b) Y 遲 4 年開站',
+      },
+      p14: {
+        caption: '(b)(i) 經理——每年 Y < X？',
+      },
+      p15: {
+        caption: '逐年比較——一個比率',
+      },
+      p16: {
+        caption: '最細嗰個情況已經贏',
+      },
+      p17: {
+        caption: '(b)(ii) Y 自己嘅總量——另一條 GP',
+      },
+      p18: {
+        caption: '總量對住 20 000 000 呢條線',
+      },
+      p19: {
+        caption: '到你——第幾年？',
+      },
+      p20: {
+        caption: '條線兩邊都睇一眼',
+      },
+      p21: {
+        caption: '(a)(b) 一齊睇——a · b · S(n) · 同意 · n = 14',
+      },
+      p22: {
+        caption: '驗證——條線啱啱喺 T(13) 同 T(14) 之間',
+      },
+      p23: {
+        caption: '解題指南',
+      },
+    },
+  },
 }

@@ -6,6 +6,7 @@ import type {
   ArrayTurnLabProps,
   BarEqLabProps,
   BinomLabProps,
+  CargoLabProps,
   CongruenceLabProps,
   CircleAreaLabProps,
   CompleteSqLabProps,
@@ -46,6 +47,7 @@ import { SimEqLab } from './SimEqLab'
 import { ParabolaSignLab } from './ParabolaSignLab'
 import { IneqOrLab } from './IneqOrLab'
 import { PyramidLab } from './PyramidLab'
+import { CargoLab } from './CargoLab'
 import { DiffSquaresLab } from './DiffSquaresLab'
 import { DistributeLab } from './DistributeLab'
 import { FibonacciLab } from './FibonacciLab'
@@ -93,6 +95,7 @@ const LAB_VIZ = new Set([
   'parabolaSignLab',
   'ineqOrLab',
   'pyramidLab',
+  'cargoLab',
 ])
 
 type Props = {
@@ -204,6 +207,7 @@ export function LessonPlayer({ lesson }: Props) {
   const psProps = (beat?.viz?.props ?? { mode: 'ask' }) as ParabolaSignLabProps
   const ioProps = (beat?.viz?.props ?? { mode: 'ask' }) as IneqOrLabProps
   const pdProps = (beat?.viz?.props ?? { mode: 'ask' }) as PyramidLabProps
+  const cgProps = (beat?.viz?.props ?? { mode: 'ask' }) as CargoLabProps
 
   const onLabInteract = () => {
     setGateOk(true)
@@ -239,10 +243,11 @@ export function LessonPlayer({ lesson }: Props) {
       'dse-2012-q6': t.gotItSubD6,
       'dse-2012-q7': t.gotItSubD7,
       'dse-2012-p1-q18': t.gotItSubD18,
+      'dse-2012-p1-q19': t.gotItSubD19,
     }[lesson.id] ?? t.gotItSub
 
   const gateChip =
-    ({ 'dse-q8': t.gateChipCong, 'dse-2012-q1': t.gateChipIndex, 'dse-2012-q2': t.gateChipD2, 'dse-2012-q3': t.gateChipD3, 'dse-2012-q4': t.gateChipD4, 'dse-2012-q5': t.gateChipD5, 'dse-2012-q6': t.gateChipD6, 'dse-2012-q7': t.gateChipD7, 'dse-2012-p1-q18': t.gateChipD18 }[lesson.id] as
+    ({ 'dse-q8': t.gateChipCong, 'dse-2012-q1': t.gateChipIndex, 'dse-2012-q2': t.gateChipD2, 'dse-2012-q3': t.gateChipD3, 'dse-2012-q4': t.gateChipD4, 'dse-2012-q5': t.gateChipD5, 'dse-2012-q6': t.gateChipD6, 'dse-2012-q7': t.gateChipD7, 'dse-2012-p1-q18': t.gateChipD18, 'dse-2012-p1-q19': t.gateChipD19 }[lesson.id] as
       | string
       | undefined) ?? t.gateChip
 
@@ -484,6 +489,12 @@ export function LessonPlayer({ lesson }: Props) {
                 {vizType === 'pyramidLab' && (
                   <PyramidLab
                     mode={pdProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'cargoLab' && (
+                  <CargoLab
+                    mode={cgProps.mode}
                     onInteractComplete={onLabInteract}
                   />
                 )}
