@@ -445,7 +445,7 @@ export function PyramidLab({ mode, onInteractComplete }: PyramidLabProps) {
         {/* ─── p0 · the figure first ─── */}
         {flags.figure && <PyramidFig u={clamp01(u / 0.9)} />}
 
-        {/* ─── p1 · the question, word for word ─── */}
+        {/* ─── p1 · the question, in our own words ─── */}
         {flags.question && (
           <g>
             {t.d18QTextA.split('\n').map((ln, i) => (

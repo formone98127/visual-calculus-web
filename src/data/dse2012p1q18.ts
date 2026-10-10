@@ -15,7 +15,7 @@ export const dse2012P1Q18Lessons: Lesson[] = [
       },
       {
         id: 'p1',
-        caption: 'The question, word for word',
+        caption: 'The question, in our own words',
         viz: { type: 'pyramidLab', props: { mode: 'question' } },
       },
       {

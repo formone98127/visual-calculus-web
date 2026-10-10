@@ -817,7 +817,7 @@ export const lessonsZhHant: Record<string, LessonText> = {
         caption: '題目——先睇圖',
       },
       p1: {
-        caption: '題目原文——一句一句讀清楚',
+        caption: '題目——用自己嘅話講一次',
       },
       p2: {
         caption: '句 1——「直立角錐」：V 啱啱喺正中心 O 上方',
