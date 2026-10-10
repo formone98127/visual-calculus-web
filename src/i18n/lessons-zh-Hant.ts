@@ -820,19 +820,19 @@ export const lessonsZhHant: Record<string, LessonText> = {
         caption: '題目——用自己嘅話講一次',
       },
       p2: {
-        caption: '句 1——「直立角錐」：V 啱啱喺正中心 O 上方',
+        caption: '元素 1——成件嘢：直立角錐，V 啱啱喺正中心 O 上方',
       },
       p3: {
-        caption: '句 2——∠VAB = 72° 喺面 VAB 上面',
+        caption: '元素 2——面角：∠VAB = 72° 喺面 VAB 上面',
       },
       p4: {
-        caption: '句 3——P 喺 VA 上、Q 喺 VD 上，PQ ∥ BC',
+        caption: '元素 3——切面位置：P 喺 VA、Q 喺 VD，PQ ∥ BC',
       },
       p5: {
-        caption: '句 4——∠PBA = 60°',
+        caption: '元素 3——切面深度：∠PBA = 60° 定住 P',
       },
       p6: {
-        caption: '句 5——切走 VPBCQ 呢一塊',
+        caption: '元素 4——切走：VPBCQ 呢一塊',
       },
       p7: {
         caption: '問咩——(a) 搵 AP　(b) 比較 α 同 β',
