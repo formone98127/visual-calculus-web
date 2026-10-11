@@ -15,22 +15,22 @@ export const dse2012P1Q19Lessons: Lesson[] = [
       },
       {
         id: 'p1',
-        caption: 'The question, word for word',
+        caption: 'The question, in our own words',
         viz: { type: 'cargoLab', props: { mode: 'question' } },
       },
       {
         id: 'p2',
-        caption: 'Sentence 1 · terminal X handles A(n) tonnes in year n',
+        caption: 'Element 1 · the object — terminal X, A(n) t in year n',
         viz: { type: 'cargoLab', props: { mode: 's1' } },
       },
       {
         id: 'p3',
-        caption: 'Sentence 2 · the model ab²ⁿ — each year ×b²',
+        caption: 'Element 2 · the model — A(n) = ab²ⁿ · each year ×b²',
         viz: { type: 'cargoLab', props: { mode: 's2' } },
       },
       {
         id: 'p4',
-        caption: 'Sentence 3 · year 1: 254 100 t · year 2: 307 461 t',
+        caption: 'Element 3 · the data — yr 1: 254 100 t · yr 2: 307 461 t',
         viz: { type: 'cargoLab', props: { mode: 's3' } },
       },
       {

@@ -451,7 +451,7 @@ export function CargoLab({ mode, onInteractComplete }: CargoLabProps) {
         {/* ─── p0 · the figure first ─── */}
         {flags.figure && <XFig u={clamp01(u / 0.9)} />}
 
-        {/* ─── p1 · the question, word for word ─── */}
+        {/* ─── p1 · the question, in our own words ─── */}
         {flags.question && (
           <g>
             {t.d19QTextA.split('\n').map((ln, i) => (
@@ -467,7 +467,7 @@ export function CargoLab({ mode, onInteractComplete }: CargoLabProps) {
           </g>
         )}
 
-        {/* ─── sentence 1 · terminal X, year n ─── */}
+        {/* ─── element 1 · terminal X, year n ─── */}
         {flags.s1 && (
           <g>
             <FormulaBadge label="X" formula={t.d19S1Badge} u={u} color={BLUE} />
@@ -480,7 +480,7 @@ export function CargoLab({ mode, onInteractComplete }: CargoLabProps) {
           </g>
         )}
 
-        {/* ─── sentence 2 · each year ×b² ─── */}
+        {/* ─── element 2 · each year ×b² ─── */}
         {flags.s2 &&
           (() => {
             const hops = clamp01((u - 0.25) / 0.45)

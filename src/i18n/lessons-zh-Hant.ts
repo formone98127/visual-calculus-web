@@ -889,16 +889,16 @@ export const lessonsZhHant: Record<string, LessonText> = {
         caption: '題目——先睇 X 嘅貨量逐年條圖',
       },
       p1: {
-        caption: '題目原文——一句一句讀清楚',
+        caption: '題目——用自己嘅話講一次',
       },
       p2: {
-        caption: '句 1——貨站 X 第 n 年處理 A(n) 噸',
+        caption: '元素 1——對象：貨站 X，第 n 年處理 A(n) 噸',
       },
       p3: {
-        caption: '句 2——模型 ab²ⁿ：每過一年 ×b²',
+        caption: '元素 2——模型：A(n) = ab²ⁿ，每過一年 ×b²',
       },
       p4: {
-        caption: '句 3——第 1 年 254 100 噸 · 第 2 年 307 461 噸',
+        caption: '元素 3——數據：第 1 年 254 100 噸 · 第 2 年 307 461 噸',
       },
       p5: {
         caption: '問咩——(a) a、b、第 4 年、總量 · (b) 判斷、第幾年',
