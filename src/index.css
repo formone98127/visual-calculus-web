@@ -33,6 +33,7 @@ body,
 
 body {
   min-height: 100vh;
+  overscroll-behavior-y: none;
   background:
     radial-gradient(900px 500px at 15% -10%, #1b2a55 0%, transparent 55%),
     radial-gradient(700px 420px at 90% 10%, #2a1830 0%, transparent 50%),
@@ -245,6 +246,7 @@ a.primary {
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   touch-action: pan-x;
+  overscroll-behavior: none;
   user-select: none;
 }
 
@@ -387,6 +389,7 @@ a.primary {
   left: 50%;
   bottom: 0.35rem;
   transform: translateX(-50%);
+  max-width: min(94vw, 100%);
   z-index: 3;
   padding: 0.4rem 0.95rem;
   border-radius: 12px;
@@ -394,6 +397,11 @@ a.primary {
   border: 1px solid var(--line);
   backdrop-filter: blur(8px);
   pointer-events: none;
+}
+
+.math-float > * {
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .math-float .math-block {
@@ -1661,6 +1669,7 @@ a.primary {
 }
 .vm-svg {
   width: 100%;
+  max-width: 100%;
   max-height: min(56vh, 480px);
   overflow: visible;
 }
@@ -2176,16 +2185,16 @@ a.primary {
   }
 
   .chrome-title {
-    font-size: 0.78rem;
+    font-size: 0.875rem;
   }
 
   .lang-switch button {
     padding: 0.6rem 0.7rem;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 
   .step-count {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     padding: 0.4rem 0.15rem;
   }
 
