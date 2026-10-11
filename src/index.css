@@ -314,6 +314,19 @@ a.primary {
   align-items: center;
 }
 
+/* beats without a prompt must not shift viz/caption up a row */
+.beat-stage > .prompt {
+  grid-row: 1;
+}
+
+.beat-stage > .viz-plane {
+  grid-row: 2;
+}
+
+.beat-stage > .caption-chip {
+  grid-row: 3;
+}
+
 .viz-plane {
   position: relative;
   display: grid;
