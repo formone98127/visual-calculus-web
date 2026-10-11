@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { CargoLabProps } from '../data/types'
 import { useI18n } from '../i18n/I18nProvider'
 import { beep, clamp01, easeOutCubic, lerp } from './labMotion'
+import { McqCards, QuestionCard, useNarrow } from './NarrowBlocks'
 
 const GOLD = '#ffd166'
 const BLUE = '#4cc9f0'
@@ -348,6 +349,7 @@ const ANSWER = 'C'
 export function CargoLab({ mode, onInteractComplete }: CargoLabProps) {
   const { t, locale } = useI18n()
   const zh = locale === 'zh-Hant'
+  const narrow = useNarrow()
   const u = useFly(mode, mode === 'guide' ? 1400 : 950)
   const [wrongId, setWrongId] = useState<string | null>(null)
   const [solved, setSolved] = useState(false)
@@ -447,12 +449,13 @@ export function CargoLab({ mode, onInteractComplete }: CargoLabProps) {
 
   return (
     <div className={`idx-lab ${solved ? 'is-solved' : ''}`}>
+      {!(narrow && (flags.gate || flags.question)) && (
       <svg className="vm-svg" viewBox="0 0 430 330" role="img" aria-label="air cargo terminals X and Y: exponential model A(n) = ab²ⁿ, divide the two given years to get b = 1.1 and a = 210 000, GP sum S(n), then the combined total crosses 20 000 000 tonnes in year 14">
         {/* ─── p0 · the figure first ─── */}
         {flags.figure && <XFig u={clamp01(u / 0.9)} />}
 
-        {/* ─── p1 · the question, in our own words ─── */}
-        {flags.question && (
+        {/* ─── p1 · the question, in our own words (HTML block at phone width) ─── */}
+        {flags.question && !narrow && (
           <g>
             {t.d19QTextA.split('\n').map((ln, i) => (
               <text key={`qa${i}`} x={30} y={64 + i * 30} fontSize={13.5} fill={INK} fontFamily="'Fraunces', Georgia, serif" opacity={clamp01((u - 0.05 * i) / 0.22)}>
@@ -908,18 +911,19 @@ export function CargoLab({ mode, onInteractComplete }: CargoLabProps) {
                 {t.d19GatePulse}
               </text>
             </g>
-            {chips(true)}
-            {solved ? (
-              <Tex x={215} y={314} size={16} parts={[{ t: 'T(14) > 20 000 000 → ', fill: INK }, { t: 'n = 14', fill: OK }, { t: '  ✓', fill: OK }]} />
-            ) : wrongId ? (
-              <text x={215} y={314} textAnchor="middle" fontSize={14} fill={RED} fontFamily="'Fraunces', Georgia, serif">
-                {wrongId === 'A' ? t.d19WhyA : wrongId === 'B' ? t.d19WhyB : t.d19WhyD}
-              </text>
-            ) : (
-              <text x={215} y={314} textAnchor="middle" fontSize={15} fill={MUTED} fontFamily="'Fraunces', Georgia, serif">
-                {t.indexHint}
-              </text>
-            )}
+            {!narrow && chips(true)}
+            {!narrow &&
+              (solved ? (
+                <Tex x={215} y={314} size={16} parts={[{ t: 'T(14) > 20 000 000 → ', fill: INK }, { t: 'n = 14', fill: OK }, { t: '  ✓', fill: OK }]} />
+              ) : wrongId ? (
+                <text x={215} y={314} textAnchor="middle" fontSize={14} fill={RED} fontFamily="'Fraunces', Georgia, serif">
+                  {wrongId === 'A' ? t.d19WhyA : wrongId === 'B' ? t.d19WhyB : t.d19WhyD}
+                </text>
+              ) : (
+                <text x={215} y={314} textAnchor="middle" fontSize={15} fill={MUTED} fontFamily="'Fraunces', Georgia, serif">
+                  {t.indexHint}
+                </text>
+              ))}
           </g>
         )}
 
@@ -1020,6 +1024,30 @@ export function CargoLab({ mode, onInteractComplete }: CargoLabProps) {
             )
           })}
       </svg>
+      )}
+      {narrow && flags.gate && <p className="mcq-pulse">{t.d19GatePulse}</p>}
+      {narrow && flags.question && <QuestionCard a={t.d19QTextA} b={t.d19QTextB} />}
+      {narrow && flags.gate && (
+        <McqCards
+          options={OPTIONS}
+          answer={ANSWER}
+          solved={solved}
+          wrongId={wrongId}
+          onPick={pick}
+          tone={solved ? 'ok' : wrongId ? 'bad' : 'muted'}
+          feedback={
+            solved
+              ? 'T(14) > 20 000 000 → n = 14 ✓'
+              : wrongId
+                ? wrongId === 'A'
+                  ? t.d19WhyA
+                  : wrongId === 'B'
+                    ? t.d19WhyB
+                    : t.d19WhyD
+                : t.indexHint
+          }
+        />
+      )}
     </div>
   )
 }
