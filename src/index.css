@@ -333,7 +333,7 @@ a.primary {
   place-items: center;
   min-height: min(54vh, 520px);
   z-index: 1;
-  animation: fade-up 0.38s ease;
+  animation: fade-up 0.76s ease;
 }
 
 @keyframes fade-up {

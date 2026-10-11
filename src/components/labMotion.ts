@@ -52,7 +52,7 @@ export function useAutoFly(
     setLanded(false)
     setFly(0)
     const start = performance.now()
-    const dur = 820
+    const dur = 1640
     const tick = (now: number) => {
       const u = easeOutCubic(clamp01((now - start) / dur))
       setFly(u)

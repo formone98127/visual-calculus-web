@@ -257,7 +257,7 @@ const GUIDE_STEPS: GuideStep[] = [
 
 export function PolyIdLab({ mode, onInteractComplete }: PolyIdLabProps) {
   const { t } = useI18n()
-  const u = useFly(mode, mode === 'guide' ? 1400 : 950)
+  const u = useFly(mode, mode === 'guide' ? 2800 : 1900)
   const [wrongId, setWrongId] = useState<string | null>(null)
   const [solved, setSolved] = useState(false)
 
