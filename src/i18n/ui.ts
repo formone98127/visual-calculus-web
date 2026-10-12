@@ -227,7 +227,8 @@ type UiDict = {
   d7GuideLaw4: string
   d18AskBadge: string
   d18AskPulse: string
-  d18WhatSub: string
+  d18WhatSubA: string
+  d18WhatSubB: string
   d18QTextA: string
   d18QTextB: string
   d18FaceSub: string
@@ -511,7 +512,8 @@ export const ui: Record<Locale, UiDict> = {
     d7GuideLaw4: 'check x = 0: ① ✗ · ② ✓',
     d18AskBadge: 'right pyramid · ∠VAB = 72° · base 20 cm',
     d18AskPulse: 'off comes the corner VPBCQ',
-    d18WhatSub: '(a) find AP (2 marks) · (b) which is greater, α or β? (6 marks)',
+    d18WhatSubA: '(a) find AP (2 marks)',
+    d18WhatSubB: '(b) which is greater, α or β? (6 marks)',
     d18QTextA: 'The set-up: a right pyramid stands on a square\nbase ABCD of side 20 cm, face angle ∠VAB = 72°.\nP sits part-way up VA, Q the same height up VD —\nPQ ∥ BC, and ∠PBA = 60°.',
     d18QTextB: 'The corner VPBCQ is sliced off to make a model.\n(a) Find AP.\n(b) α is how far the cut face leans off the base;\nβ is how far PB leans off it — which leans more?',
     d18FaceSub: '∠VAB — the angle on face VAB',
@@ -788,7 +790,8 @@ export const ui: Record<Locale, UiDict> = {
     d7GuideLaw4: '驗證 x = 0：① ✗ · ② ✓',
     d18AskBadge: '直立角錐 · ∠VAB = 72° · 底邊 20 cm',
     d18AskPulse: '切走 VPBCQ 呢一角',
-    d18WhatSub: '(a) 搵 AP（2 分）· (b) 比較 α 同 β，邊個大？（6 分）',
+    d18WhatSubA: '(a) 搵 AP（2 分）',
+    d18WhatSubB: '(b) 比較 α 同 β，邊個大？（6 分）',
     d18QTextA: '設定：一件直立角錐企喺正方底 ABCD 上面，\n底邊 20 cm，面角 ∠VAB = 72°。\nP 喺 VA 上面、Q 喺 VD 上面，兩點同一高度——\nPQ ∥ BC，而且 ∠PBA = 60°。',
     d18QTextB: '個角 VPBCQ 被切走，整成一件模型。\n(a) 搵 AP。\n(b) α 量度切面斜離底面幾多；\nβ 量度 PB 斜離底面幾多——邊個斜得多？',
     d18FaceSub: '∠VAB——面 VAB 上面嘅角',

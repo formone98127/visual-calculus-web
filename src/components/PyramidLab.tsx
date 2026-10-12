@@ -185,10 +185,16 @@ function PyramidFig({ u, showO, showCut, showCon }: { u: number; showO?: boolean
 }
 
 /* ---- the question ---- */
-const ASK_PULSE: Part[] = [
+const ASK_A: Part[] = [
+  { t: '(a)   ', fill: MUTED },
   { t: 'AP', it: true, fill: GOLD },
-  { t: ' = ?   ·   ', fill: GOLD },
+  { t: ' = ?', fill: GOLD },
+]
+const ASK_B: Part[] = [
+  { t: '(b)   ', fill: MUTED },
   { t: 'α', it: true, fill: GOLD },
+  { t: '  vs  ', fill: GOLD },
+  { t: 'β', it: true, fill: GOLD },
   { t: ' = ?', fill: GOLD },
 ]
 
@@ -344,7 +350,8 @@ export function PyramidLab({ mode, onInteractComplete }: PyramidLabProps) {
     pq: mode === 'pq',
     pb: mode === 'pb',
     ask: mode === 'ask',
-    what: mode === 'what',
+    whatA: mode === 'whatA',
+    whatB: mode === 'whatB',
     why: mode === 'why',
     va: mode === 'va',
     tri: mode === 'tri',
@@ -505,14 +512,14 @@ export function PyramidLab({ mode, onInteractComplete }: PyramidLabProps) {
           </g>
         )}
 
-        {/* ─── p1 · what is asked ─── */}
-        {flags.what && (
+        {/* ─── p1 · what is asked — (a) and (b) on separate beats ─── */}
+        {(flags.whatA || flags.whatB) && (
           <g>
             <g className="idx-pulse" opacity={clamp01(u / 0.35)}>
-              <Tex x={215} y={158} size={30} parts={ASK_PULSE} />
+              <Tex x={215} y={158} size={30} parts={flags.whatA ? ASK_A : ASK_B} />
             </g>
             <text x={215} y={212} textAnchor="middle" fontSize={13.5} fill={MUTED} fontFamily="'Fraunces', Georgia, serif" opacity={clamp01((u - 0.35) / 0.3)}>
-              {t.d18WhatSub}
+              {flags.whatA ? t.d18WhatSubA : t.d18WhatSubB}
             </text>
           </g>
         )}

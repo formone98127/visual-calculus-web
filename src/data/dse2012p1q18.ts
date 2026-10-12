@@ -44,9 +44,14 @@ export const dse2012P1Q18Lessons: Lesson[] = [
         viz: { type: 'pyramidLab', props: { mode: 'ask' } },
       },
       {
-        id: 'p7',
-        caption: 'What is asked — (a) AP · (b) α vs β',
-        viz: { type: 'pyramidLab', props: { mode: 'what' } },
+        id: 'p7a',
+        caption: 'What is asked — (a) find AP',
+        viz: { type: 'pyramidLab', props: { mode: 'whatA' } },
+      },
+      {
+        id: 'p7b',
+        caption: 'What is asked — (b) which is greater, α or β?',
+        viz: { type: 'pyramidLab', props: { mode: 'whatB' } },
       },
       {
         id: 'p8',

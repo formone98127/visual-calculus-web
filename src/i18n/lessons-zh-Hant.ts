@@ -834,8 +834,11 @@ export const lessonsZhHant: Record<string, LessonText> = {
       p6: {
         caption: '已知條件 4——切走：VPBCQ 呢一塊',
       },
-      p7: {
-        caption: '問咩——(a) 搵 AP　(b) 比較 α 同 β',
+      p7a: {
+        caption: '問咩——(a) 搵 AP',
+      },
+      p7b: {
+        caption: '問咩——(b) 比較 α 同 β，邊個大？',
       },
       p8: {
         caption: '面三角形 VAB——先搵 VA',
