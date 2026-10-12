@@ -137,6 +137,9 @@ function PyramidFig({ u, showO, showCut, showCon }: { u: number; showO?: boolean
         <line x1={PV.x} y1={PV.y} x2={PA.x} y2={PA.y} stroke={LINE} strokeWidth={1.6} />
         <line x1={PV.x} y1={PV.y} x2={PB.x} y2={PB.y} stroke={LINE} strokeWidth={1.6} />
         <line x1={PV.x} y1={PV.y} x2={PC.x} y2={PC.y} stroke={LINE} strokeWidth={1.6} />
+        <text x={170} y={266} textAnchor="middle" fontSize={12} fill={MUTED} fontFamily="'Fraunces', Georgia, serif">
+          20 cm
+        </text>
         <Lbl x={210} y={45} t="V" fill={INK} />
         <Lbl x={66} y={242} t="A" fill={INK} />
         <Lbl x={274} y={254} t="B" fill={INK} />
