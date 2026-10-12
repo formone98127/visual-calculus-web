@@ -3,6 +3,9 @@
 > 本檔案記錄 **2012 DSE 卷二 Q5（聯立方程）** 的展示方式——目前最滿意的課堂設計標準。
 > 參考實作：`src/components/SimEqLab.tsx` + `src/data/dse2012q5.ts`
 > 之後所有新課堂照呢個 style 做。
+>
+> **⭐ 題目類課堂（DSE questions）一律跟下面新增嘅「展示模式 v2」章節**（2026-10-12 起），
+> 範本：`PyramidLab.tsx` + `dse2012p1q18.ts`。Q5 章節仍然適用於非題目類實驗課。
 
 ---
 
@@ -114,3 +117,81 @@ answer / verify / graph / guide → 無 badge
 - **SVG 會摺埋連續空格**——想喺畫面入面留空隙（例如 `A x < −3␣␣␣␣B x > −3`），要用不斷行空格 `\u00A0`，普通空格幾多個都會變返一個。
 - **Headless 截圖前 park 滑鼠**——Selenium 撳完 `.stage` 後虛擬滑鼠停喺 stage 中心，可能掂住 chip 顯示 hover 樣（假象）。shoot 腳本每次 `shoot()` 前用 `ActionChains.move_to_element_with_offset(body, 5, 5)` park 去角落。
 - **兩條 ray 疊同一條數線**：想兩段都見到——實線畫先、虛線畫後（虛線騎喺實線上面）。 Q7 union 頁：金實線（x < 4）畫先，藍虛線（x < −3）畫後，−3 以左見到藍虛線騎金、−3 至 4 淨金——聯集一目了然。
+
+---
+
+# ⭐ 展示模式 v2 — 題目類課堂標準（2026-10-12，所有題目跟隨）
+
+> 由 Q18/Q19 收斂出嚟嘅完整標準。範本：`src/components/PyramidLab.tsx` + `src/data/dse2012p1q18.ts`（23 beats）。
+> **每一課新題目由第一頁到最後一頁都照跟，唔使再問。**
+
+## 1. 版權紅線
+
+- **永遠唔可以逐字展示 HKEAA 試題原文。** 題目 slide 用自己嘅話描述同一個設定——事實、數字、角度全部不變，只換句子結構。
+- 標題保留事實性出處（例如「2012 DSE Paper 1 Q18」）。
+- i18n 字串放 `ui.ts` 嘅 `dXXQTextA/B`（en + zh-Hant 兩個 block 都要改）。
+- zh 版本語氣用口語廣東話（「設定：一件直立角錐企喺正方底…」），en 用平實英文。
+
+## 2. 審題 = 已知條件制（唔係句子制）
+
+- 讀題頁按**幾何元素**拆，唔按題目句子行：固體 → 面角 → 切面位置 → 切面深度 → 切走 → 問咩。
+- 一個條件可以佔多過一頁：「已知條件 3——切面位置」同「已知條件 3——切面深度」兩頁共用同一個編號。
+- zh 用「已知條件 N」、en 用「Given N」（**唔好用 元素/Element**，用戶 2026-10-12 改名）。
+- (a)/(b) 問項必須**各自一頁**（2026-10-12 用戶回饋），唔好合併同一版。
+
+## 3. 標準 beat 流水（Q18 = 23 beats）
+
+```
+p0  題目——先睇圖（淨圖，乜都唔加）
+p1  題目——用自己嘅話講一次（手機: HTML QuestionCard / 桌面: SVG 文字）
+p2-p6  已知條件 1-N（一條件一拍，唔跟句子）
+p7a 問咩——(a)（大字 pulse + 分數）
+p7b 問咩——(b)
+p8+ 解題步驟（一步一頁：先搵乜 → 用乜定律 → 答案頁）
+…   互動閘門（gate: 'interact'）→ 比較 → 答案 → 驗證 → 指南
+```
+
+## 4. 階段 Badge（LessonPlayer `splitBeatTag()` 自動解析）
+
+- 每個 beat caption 用「階段詞——內容」格式；LessonPlayer 抽頭個詞做**頂部彩色 pill**（`.beat-stage` row 1），caption chip 淨低內容。
+- 顏色表（`BEAT_TAGS` in `LessonPlayer.tsx`）：
+
+| 階段詞 | 顏色 | class |
+|---|---|---|
+| 題目 / The question | 青 `--cos` | `tag-q` |
+| 已知條件 N / Given N | 金 `--accent` | `tag-el` |
+| 問咩 / What is asked / 到你 / Your turn | 粉 `#ff8fa0` | `tag-ask` |
+| 點解(係 GP) / 驗證 / Why / Check | 綠 `--op` | `tag-why` |
+
+- 新階段詞：加入 `BEAT_TAGS` regex 就得，唔使加 i18n。
+- 無階段詞嘅 beat（如 `b² = 1.21 → b = 1.1`）照舊成句喺底，唔好亂加 badge。
+
+## 5. 版面規則（防疊位）
+
+- **唔可以有任何兩塊嘢佔同一位置**（2026-10-12 用戶回饋，例 Given 1）。加新元素前先檢查 svg viewBox 內 y 18–55 嘅 badge 帶有冇嘢撞。
+- `.beat-stage` 三行已釘死（`.prompt`/`.viz-plane`/`.caption-chip` 各歸 row 1/2/3）——新元素入 row 1 前要想清楚。
+- svg 內 FormulaBadge（y=18）只准喺**圖表由 y≥88 先開始**嘅 beat 用；金字塔/高圖型唔准用（會撞頂點）。
+- badge 文字同 caption chip 文字**不准重複**——揀一處講。
+
+## 6. 手機（≤520px）— 一等公民
+
+- 題目 slide：`QuestionCard` HTML（16px、pre-line、24rem 置中、數字組 NBSP 黏住）——`useNarrow()` hook 控制，桌面照用 SVG。
+- MCQ 閘門：`McqCards` 全寬堆疊卡（≥48px 高、solved/wrong/dim 樣）+ `mcq-feedback` 行；空 SVG 唔好 render。
+- 答案邏輯永遠留喺 lab 入面，`McqCards` 純展示。
+- Header：title ellipsis、back 44×44、lang pills ≥44px、字 ≥14px；footer `env(safe-area-inset-bottom)`。
+- 禁 `viewport-fit=cover`（in-app browser 會畫入 status bar）；`.player` 有 `overscroll-behavior: none`。
+- 驗證 template：`C:\Users\Administrator\math\verify_mobile.py`（390×844 + 1280、gate 行為、零溢出）。
+
+## 7. 動畫節奏（2026-10-12 減半）
+
+- `useFly`: **1900ms**（guide **2800ms**）· `useAutoFly`: **1640ms** · beat 入場 `fade-up`: **0.76s**
+- 回饋類唔減速：答錯 shake、solved pulse、gate chip 閃爍。
+
+## 8. 新題目檢查表（喺 Q5 表之上加呢啲）
+
+1. 題目文字：own words 寫 `dXXQTextA/B`（en+zh），數字照抄原卷
+2. 審題 beats 用「已知條件 N——…」/「Given N · …」caption
+3. (a)/(b) 問項分頁（`pXa`/`pXb` id，zh pack 同步加 key）
+4. 行完第 6 節手機檢查（QuestionCard / McqCards / 無疊位）
+5. 動畫用第 7 節時長
+6. `npm run build` + `verify_mobile.py` 全綠先算完成
