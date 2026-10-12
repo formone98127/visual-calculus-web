@@ -102,6 +102,28 @@ type Props = {
   lesson: Lesson
 }
 
+/** leading phase word → badge colour class (題目 / 元素 N / 問咩 / 點解 / 驗證 / 到你) */
+const BEAT_TAGS: [RegExp, string][] = [
+  [/^(題目|The question)/, 'tag-q'],
+  [/^(已知條件|Given|元素|Element)\s*(\d+)?/, 'tag-el'],
+  [/^(問咩|What is asked)/, 'tag-ask'],
+  [/^(點解係 GP|點解|Why GP|Why)/, 'tag-why'],
+  [/^(驗證|Check)/, 'tag-why'],
+  [/^(到你|Your turn)/, 'tag-ask'],
+]
+
+/** split "元素 3——切面深度：…" into badge 「元素 3」 + rest; null when no phase word */
+function splitBeatTag(caption: string): { tag: string; cls: string; rest: string } | null {
+  for (const [re, cls] of BEAT_TAGS) {
+    const m = caption.match(re)
+    if (!m) continue
+    const rest = caption.slice(m[0].length).replace(/^[\s,，、:：.·—-]+/, '')
+    if (!rest) return null
+    return { tag: m[0].trim(), cls, rest }
+  }
+  return null
+}
+
 export function LessonPlayer({ lesson }: Props) {
   const { t } = useI18n()
   const [i, setI] = useState(0)
@@ -174,6 +196,7 @@ export function LessonPlayer({ lesson }: Props) {
   }
 
   const vizType = beat?.viz?.type ?? 'formula'
+  const tagInfo = beat ? splitBeatTag(beat.caption) : null
   const showFloatMath =
     !!beat?.math &&
     vizType !== 'formula' &&
@@ -320,7 +343,11 @@ export function LessonPlayer({ lesson }: Props) {
         ) : (
           beat && (
             <div className="beat-stage">
-              {beat.prompt && <p className="prompt">{beat.prompt}</p>}
+              {beat.prompt ? (
+                <p className="prompt">{beat.prompt}</p>
+              ) : (
+                tagInfo && <div className={`beat-tag ${tagInfo.cls}`}>{tagInfo.tag}</div>
+              )}
 
               <div
                 className="viz-plane"
@@ -516,7 +543,7 @@ export function LessonPlayer({ lesson }: Props) {
               </div>
 
               <div className={`caption-chip ${gated ? 'pulse' : ''}`}>
-                {gated ? gateChip : beat.caption}
+                {gated ? gateChip : tagInfo && !beat.prompt ? tagInfo.rest : beat.caption}
               </div>
             </div>
           )

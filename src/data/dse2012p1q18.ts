@@ -20,27 +20,27 @@ export const dse2012P1Q18Lessons: Lesson[] = [
       },
       {
         id: 'p2',
-        caption: 'Element 1 · the solid — "right pyramid": V right above O',
+        caption: 'Given 1 · the solid — "right pyramid": V right above O',
         viz: { type: 'pyramidLab', props: { mode: 'why' } },
       },
       {
         id: 'p3',
-        caption: 'Element 2 · the face angle — ∠VAB = 72° on face VAB',
+        caption: 'Given 2 · the face angle — ∠VAB = 72° on face VAB',
         viz: { type: 'pyramidLab', props: { mode: 'face' } },
       },
       {
         id: 'p4',
-        caption: 'Element 3 · the cut, where — P on VA, Q on VD, PQ ∥ BC',
+        caption: 'Given 3 · the cut, where — P on VA, Q on VD, PQ ∥ BC',
         viz: { type: 'pyramidLab', props: { mode: 'pq' } },
       },
       {
         id: 'p5',
-        caption: 'Element 3 · the cut, how deep — ∠PBA = 60° pins P',
+        caption: 'Given 3 · the cut, how deep — ∠PBA = 60° pins P',
         viz: { type: 'pyramidLab', props: { mode: 'pb' } },
       },
       {
         id: 'p6',
-        caption: 'Element 4 · the slice — corner VPBCQ comes off',
+        caption: 'Given 4 · the slice — corner VPBCQ comes off',
         viz: { type: 'pyramidLab', props: { mode: 'ask' } },
       },
       {

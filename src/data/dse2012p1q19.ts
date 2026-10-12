@@ -20,17 +20,17 @@ export const dse2012P1Q19Lessons: Lesson[] = [
       },
       {
         id: 'p2',
-        caption: 'Element 1 · the object — terminal X, A(n) t in year n',
+        caption: 'Given 1 · the object — terminal X, A(n) t in year n',
         viz: { type: 'cargoLab', props: { mode: 's1' } },
       },
       {
         id: 'p3',
-        caption: 'Element 2 · the model — A(n) = ab²ⁿ · each year ×b²',
+        caption: 'Given 2 · the model — A(n) = ab²ⁿ · each year ×b²',
         viz: { type: 'cargoLab', props: { mode: 's2' } },
       },
       {
         id: 'p4',
-        caption: 'Element 3 · the data — yr 1: 254 100 t · yr 2: 307 461 t',
+        caption: 'Given 3 · the data — yr 1: 254 100 t · yr 2: 307 461 t',
         viz: { type: 'cargoLab', props: { mode: 's3' } },
       },
       {

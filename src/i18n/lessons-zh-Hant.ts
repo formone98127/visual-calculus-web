@@ -820,19 +820,19 @@ export const lessonsZhHant: Record<string, LessonText> = {
         caption: '題目——用自己嘅話講一次',
       },
       p2: {
-        caption: '元素 1——成件嘢：直立角錐，V 啱啱喺正中心 O 上方',
+        caption: '已知條件 1——成件嘢：直立角錐，V 啱啱喺正中心 O 上方',
       },
       p3: {
-        caption: '元素 2——面角：∠VAB = 72° 喺面 VAB 上面',
+        caption: '已知條件 2——面角：∠VAB = 72° 喺面 VAB 上面',
       },
       p4: {
-        caption: '元素 3——切面位置：P 喺 VA、Q 喺 VD，PQ ∥ BC',
+        caption: '已知條件 3——切面位置：P 喺 VA、Q 喺 VD，PQ ∥ BC',
       },
       p5: {
-        caption: '元素 3——切面深度：∠PBA = 60° 定住 P',
+        caption: '已知條件 3——切面深度：∠PBA = 60° 定住 P',
       },
       p6: {
-        caption: '元素 4——切走：VPBCQ 呢一塊',
+        caption: '已知條件 4——切走：VPBCQ 呢一塊',
       },
       p7: {
         caption: '問咩——(a) 搵 AP　(b) 比較 α 同 β',
@@ -892,13 +892,13 @@ export const lessonsZhHant: Record<string, LessonText> = {
         caption: '題目——用自己嘅話講一次',
       },
       p2: {
-        caption: '元素 1——對象：貨站 X，第 n 年處理 A(n) 噸',
+        caption: '已知條件 1——對象：貨站 X，第 n 年處理 A(n) 噸',
       },
       p3: {
-        caption: '元素 2——模型：A(n) = ab²ⁿ，每過一年 ×b²',
+        caption: '已知條件 2——模型：A(n) = ab²ⁿ，每過一年 ×b²',
       },
       p4: {
-        caption: '元素 3——數據：第 1 年 254 100 噸 · 第 2 年 307 461 噸',
+        caption: '已知條件 3——數據：第 1 年 254 100 噸 · 第 2 年 307 461 噸',
       },
       p5: {
         caption: '問咩——(a) a、b、第 4 年、總量 · (b) 判斷、第幾年',

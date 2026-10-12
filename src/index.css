@@ -360,6 +360,43 @@ a.primary {
   background: rgba(11, 16, 32, 0.55);
 }
 
+/* phase badge (題目 / 已知條件 N / 問咩 …) — row 1 of the beat grid */
+.beat-tag {
+  justify-self: center;
+  z-index: 2;
+  padding: 0.28rem 0.95rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  border: 1px solid var(--line);
+  background: rgba(11, 16, 32, 0.6);
+}
+
+.beat-tag.tag-q {
+  color: var(--cos);
+  border-color: rgba(76, 201, 240, 0.55);
+  background: rgba(76, 201, 240, 0.1);
+}
+
+.beat-tag.tag-el {
+  color: var(--accent);
+  border-color: rgba(255, 209, 102, 0.55);
+  background: rgba(255, 209, 102, 0.1);
+}
+
+.beat-tag.tag-ask {
+  color: #ff8fa0;
+  border-color: rgba(255, 107, 122, 0.55);
+  background: rgba(255, 107, 122, 0.1);
+}
+
+.beat-tag.tag-why {
+  color: var(--op);
+  border-color: rgba(184, 242, 124, 0.5);
+  background: rgba(184, 242, 124, 0.1);
+}
+
 .caption-chip {
   justify-self: center;
   z-index: 2;
