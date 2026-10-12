@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { PyramidLabProps } from '../data/types'
 import { useI18n } from '../i18n/I18nProvider'
-import { beep, clamp01, easeOutCubic, lerp } from './labMotion'
+import { beep, clamp01, easeOutCubic } from './labMotion'
 import { McqCards, QuestionCard, useNarrow } from './NarrowBlocks'
 
 const GOLD = '#ffd166'
@@ -93,39 +93,6 @@ function Card({ x, y, w = 96, h = 58, op = 1 }: { x: number; y: number; w?: numb
       strokeWidth={1.6}
       opacity={op}
     />
-  )
-}
-
-/** Floating formula badge — the formula always leads the scene. */
-function FormulaBadge({
-  label,
-  formula,
-  u,
-  y = 18,
-  color = GOLD,
-  fx = 215,
-  size = 15,
-}: {
-  label: string
-  formula: string
-  u: number
-  y?: number
-  color?: string
-  /** formula centre x — push right when the label is wide */
-  fx?: number
-  size?: number
-}) {
-  const op = clamp01(u / 0.35)
-  return (
-    <g opacity={op} transform={`translate(0, ${lerp(-8, 0, op)})`}>
-      <rect x={48} y={y} width={334} height={36} rx={18} fill="rgba(255, 209, 102, 0.1)" stroke={color} strokeWidth={1.4} />
-      <text x={70} y={y + 23} fontSize={12} fill={color} fontFamily="'Fraunces', Georgia, serif" fontWeight={700}>
-        {label}
-      </text>
-      <text x={fx} y={y + 24} textAnchor="middle" fontSize={size} fill={INK} fontFamily="'Fraunces', Georgia, serif" fontWeight={600}>
-        {formula}
-      </text>
-    </g>
   )
 }
 
@@ -553,7 +520,6 @@ export function PyramidLab({ mode, onInteractComplete }: PyramidLabProps) {
         {/* ─── p1 · the key fact: VO ⊥ base ─── */}
         {flags.why && (
           <g>
-            <FormulaBadge label="WHY" formula={t.d18WhyBadge} u={u} color={BLUE} fx={246} size={13.5} />
             <PyramidFig u={clamp01((u - 0.1) / 0.9)} showO />
             <text x={215} y={308} textAnchor="middle" fontSize={16} fill={GOLD} fontFamily="'Fraunces', Georgia, serif" fontWeight={700} opacity={clamp01((u - 0.6) / 0.25)}>
               {t.d18WhyText}

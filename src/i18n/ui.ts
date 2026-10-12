@@ -228,7 +228,6 @@ type UiDict = {
   d18AskBadge: string
   d18AskPulse: string
   d18WhatSub: string
-  d18WhyBadge: string
   d18QTextA: string
   d18QTextB: string
   d18FaceSub: string
@@ -518,7 +517,6 @@ export const ui: Record<Locale, UiDict> = {
     d18FaceSub: '∠VAB — the angle on face VAB',
     d18PqSub: 'P on VA · Q on VD · PQ ∥ BC',
     d18PbSub: '∠PBA = 60° — PB against BA',
-    d18WhyBadge: 'V sits right above the centre O',
     d18WhyText: 'VO ⊥ base',
     d18GatePulse: 'α or β ?',
     d18WhyB: 'BH is the hypotenuse — bigger denominator, smaller tan',
@@ -796,7 +794,6 @@ export const ui: Record<Locale, UiDict> = {
     d18FaceSub: '∠VAB——面 VAB 上面嘅角',
     d18PqSub: 'P 喺 VA 上 · Q 喺 VD 上 · PQ ∥ BC',
     d18PbSub: '∠PBA = 60°——PB 同 BA 嘅角',
-    d18WhyBadge: '直立角錐 → V 啱啱喺正中心 O 上方',
     d18WhyText: 'VO ⊥ 底面',
     d18GatePulse: 'α 定 β 大？',
     d18WhyB: 'BH 係斜邊——分母大咗，tan 反而細',
