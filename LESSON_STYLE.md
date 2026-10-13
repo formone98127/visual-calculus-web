@@ -194,4 +194,39 @@ p8+ 解題步驟（一步一頁：先搵乜 → 用乜定律 → 答案頁）
 3. (a)/(b) 問項分頁（`pXa`/`pXb` id，zh pack 同步加 key）
 4. 行完第 6 節手機檢查（QuestionCard / McqCards / 無疊位）
 5. 動畫用第 7 節時長
-6. `npm run build` + `verify_mobile.py` 全綠先算完成
+6. `npm run build` + `verify_mobile.py` 全綠先算完成——完整量產流程見第 9、10 節（資訊審計 + PDF→live SOP）
+
+## 9. 交貨前資訊審計（必做——2026-10-12「20 cm 漏咗」教訓）
+
+建完課未算完成，**要交審計表先算交貨**：
+
+1. 由原卷逐句列出所有資訊：每個長度／角度／座標／條件（平行、垂直、相切、比例）／每個問項連分值。
+2. 逐項核對三個位：① own-words 題目文字有冇 ② 圖上有冇可見標記（尺寸、角度弧、直角、tick）③ 有冇專屬審題 beat。
+4. 三樣齊先打勾；漏咗即補（實例：Q18 圖上補 20 cm、Q17 補已知條件 3/4——直線 L 同 A、B 交點）。
+5. 交貨訊息附審計表：`| 原卷資訊 | 課堂文字 | 課堂圖 |`。
+
+特別規則：
+- 原卷冇圖 → 自己畫 setup 圖（座標題用 world→px 比例畫，唔好手繪）。
+- 圖上尺寸標註可以超越原卷（Q18 原卷圖冇 20 cm，我哋都標——用戶明確要求）。
+- 審題 beats 用「已知條件 N——內容」；一個元素兩面（例：切面位置／切面深度）共用同一個 N。
+- **唔識嘅題目唔準作**——來源頁唔喺度就開口要，憑記憶作題 = 一定漏資訊。
+
+## 10. 新題目量產 SOP（PDF → live，大量處理用）
+
+用戶俾 PDF 路徑 + 頁碼（例：`C:\Users\Administrator\Documents\DSE_Maths\2012p1.pdf` page 18）之後，照住行：
+
+1. **抽頁**：
+   `python -c "import fitz; doc=fitz.open(r'<pdf>'); doc[17].get_pixmap(dpi=200).save(r'..\math\p1_pg18.png')"`
+   （fitz 係 0-index：PDF 第 N 頁 = `doc[N-1]`；200dpi；存入 `math\`）
+2. **讀原卷** → 寫低全題資訊清單（第 9 節用）。
+3. **自己先解晒，未 build 唔准開工**：兩 part 都要解；用**第二個方法或代數值**驗證（例 Q17：代 k=6 驗中點；兩法答案一致先算過）。冇 100% 把握唔准入課堂。
+4. **照第 3 節 beat 流水起課**：figure → own words → 已知條件 1-N → 問咩(a) → 問咩(b) → 解題（一個操作一頁）→ 閘門 → 秒殺法 → 答案 → 驗證 → 指南。
+5. **元件**：抄 `src/components/CircleLineLab.tsx`（最新模板：sup/sub Tex、world→px helpers、2×2 chips、narrow HTML blocks 齊備）。
+   - 檔名：`src/components/<Topic>Lab.tsx` + `src/data/dse<year>p1q<num>.ts`
+   - 座標幾何：設 `OX/OY/S` world→px helpers，**先筆算晒所有關鍵點喺 viewBox 0-430/0-330 內**先寫 JSX。
+   - SVG 內數學式用 Part 常數（語言中立）；文字先入 i18n，`qXX*` keys：`QTextA/B · WhatSubA/B · GatePulse · WhyB/C/D · GuideLaw0-4 · gateChip · gotItSub`——en + zh 兩個 block 都要加。
+   - 動畫時長跟第 7 節；MCQ 選項長（座標對）用 2×2 chips（CHIP_W=202），手機照 `McqCards`。
+6. **接線 6 處**（漏一處都 build 唔起）：
+   `types.ts`（Mode + Props + viz type/props union）→ `LessonPlayer.tsx`（LAB_VIZ + import + props cast + render branch + gotItSub map + gateChip map）→ `catalog.ts`（import + topic lessons + `source:` 字串 + allLessons）→ `ui.ts`（interface + en + zh）→ `lessons-zh-Hant.ts`（zh pack beats 只有 caption）。
+7. **驗證**：`npm run build` → selenium 390×844 每個新 beat 截圖（gate 行為必測：擋前進、答錯留低、答啱 auto-advance）→ 桌面無 HTML 卡 → Q18 `verify_mobile.py` regression 綠 → 自我執法 v2 規則 5（無重複 pulse／無疊位）。
+8. **第 9 節審計表** → `git push`（push = deploy）→ 回報連審計表 + 截圖要點。
