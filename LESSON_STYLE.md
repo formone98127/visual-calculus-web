@@ -161,7 +161,7 @@ p8+ 解題步驟（一步一頁：先搵乜 → 用乜定律 → 答案頁）
 | 題目 / The question | 青 `--cos` | `tag-q` |
 | 已知條件 N / Given N | 金 `--accent` | `tag-el` |
 | 問咩 / What is asked / 到你 / Your turn | 粉 `#ff8fa0` | `tag-ask` |
-| 點解(係 GP) / 驗證 / Why / Check | 綠 `--op` | `tag-why` |
+| 點解(係 GP) / 驗證 / 秒殺法 / Why / Check / The slick way | 綠 `--op` | `tag-why` |
 
 - 新階段詞：加入 `BEAT_TAGS` regex 就得，唔使加 i18n。
 - 無階段詞嘅 beat（如 `b² = 1.21 → b = 1.1`）照舊成句喺底，唔好亂加 badge。

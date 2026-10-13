@@ -418,6 +418,28 @@ export type PyramidLabProps = {
   onInteractComplete?: () => void
 }
 
+export type CircleLineLabMode =
+  | 'figure'
+  | 'question'
+  | 'givenC'
+  | 'givenTan'
+  | 'whatA'
+  | 'whatB'
+  | 'whyEq'
+  | 'sub'
+  | 'roots'
+  | 'midx'
+  | 'gate'
+  | 'slick'
+  | 'answer'
+  | 'verify'
+  | 'guide'
+
+export type CircleLineLabProps = {
+  mode: CircleLineLabMode
+  onInteractComplete?: () => void
+}
+
 export type CargoLabMode =
   | 'figure'
   | 'question'
@@ -491,6 +513,7 @@ export type Beat = {
       | 'ineqOrLab'
       | 'pyramidLab'
       | 'cargoLab'
+      | 'circleLineLab'
       | 'waves'
       | 'formula'
       | 'none'
@@ -524,6 +547,7 @@ export type Beat = {
       | IneqOrLabProps
       | PyramidLabProps
       | CargoLabProps
+      | CircleLineLabProps
       | WavesProps
   }
 }

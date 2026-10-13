@@ -809,6 +809,57 @@ export const lessonsZhHant: Record<string, LessonText> = {
       },
     },
   },
+  'dse-2012-p1-q17': {
+    title: '2012 DSE 卷一 Q17：圓與切線',
+    subtitle: '切線 → r → 方程；代入直線 → 二次方程 → 用 k 表示中點',
+    beats: {
+      p0: {
+        caption: '題目——圓同切線',
+      },
+      p1: {
+        caption: '題目——用自己嘅話講一次',
+      },
+      p2: {
+        caption: '已知條件 1——圓心：C 喺 (6, 10)',
+      },
+      p3: {
+        caption: '已知條件 2——切線：x 軸掂到 C，所以 r = 10',
+      },
+      p4: {
+        caption: '問咩——(a) C 嘅方程',
+      },
+      p5: {
+        caption: '問咩——(b) 用 k 表示 AB 中點',
+      },
+      p6: {
+        caption: '點解 r = 10——切線距離',
+      },
+      p7: {
+        caption: '(b) 第一步——L：y = −x + k，代入',
+      },
+      p8: {
+        caption: '(b) 第二步——根之和',
+      },
+      p9: {
+        caption: '(b) 第三步——返轉頭搵 x',
+      },
+      p10: {
+        caption: '到你——邊個係中點？',
+      },
+      p11: {
+        caption: '秒殺法——圓心⊥弦必平分',
+      },
+      p12: {
+        caption: '(a)(b) 一齊睇——方程 · 中點',
+      },
+      p13: {
+        caption: '代入 k = 6 驗證',
+      },
+      p14: {
+        caption: '解題指南',
+      },
+    },
+  },
   'dse-2012-p1-q18': {
     title: '2012 DSE 卷一 Q18：直立角錐切模型',
     subtitle: '3D 拆做 2D——正弦定律 → 高度 → 平面角，再比 α 同 β',

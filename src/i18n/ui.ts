@@ -246,6 +246,21 @@ type UiDict = {
   d18GuideLaw4: string
   gotItSubD19: string
   gateChipD19: string
+  gotItSubQ17: string
+  gateChipQ17: string
+  q17QTextA: string
+  q17QTextB: string
+  q17WhatSubA: string
+  q17WhatSubB: string
+  q17GatePulse: string
+  q17WhyB: string
+  q17WhyC: string
+  q17WhyD: string
+  q17GuideLaw0: string
+  q17GuideLaw1: string
+  q17GuideLaw2: string
+  q17GuideLaw3: string
+  q17GuideLaw4: string
   d19QTextA: string
   d19QTextB: string
   d19AskText: string
@@ -529,6 +544,21 @@ export const ui: Record<Locale, UiDict> = {
     d18GuideLaw2: 'heights scale along the edge VA',
     d18GuideLaw3: '(b)(i) two perpendiculars give tan α',
     d18GuideLaw4: '(b)(ii) hypotenuse BH > HH′',
+    gotItSubQ17: 'The tangent fixes r = 10 and the equation; substituting y = −x + k turns C into a quadratic in y, and the mid-point of AB is ((k−4)/2, (k+4)/2) — also the foot of the perpendicular from (6, 10).',
+    gateChipQ17: 'Tap the mid-point',
+    q17QTextA: 'A circle C has its centre at (6, 10),\nand the x-axis is a tangent to C. A line L\nwith slope −1 and y-intercept k cuts C\nat two points, A and B.',
+    q17QTextB: '(a) Find the equation of C. (2 marks)\n(b) In terms of k, find the mid-point of AB. (5 marks)',
+    q17WhatSubA: '(a) find the equation of C (2 marks)',
+    q17WhatSubB: '(b) mid-point of AB, in terms of k (5 marks)',
+    q17GatePulse: 'mid-point M = ?',
+    q17WhyB: 'x and y swapped — y sums to k + 4, x to k − 4',
+    q17WhyC: 'forgot to halve — the mid-point divides by 2',
+    q17WhyD: 'that subtracts the centre, not the root sums',
+    q17GuideLaw0: 'read: centre (6,10) · x-axis tangent',
+    q17GuideLaw1: '(a) tangent → r = 10 → equation',
+    q17GuideLaw2: '(b) substitute L → quadratic in y',
+    q17GuideLaw3: 'sum of roots → mid-y, back-sub → mid-x',
+    q17GuideLaw4: 'mid-point = foot of the perpendicular',
     gotItSubD19: 'Divide the two given years: b² = 1.21 → b = 1.1, a = 210 000; both totals are GP sums, the ratio 1.1ᵐ⁺⁸/2 stays above 1, and the 20 000 000 line is crossed in year 14.',
     gateChipD19: 'Tap the crossing year',
     d19QTextA: 'An airport runs a cargo terminal X. In its nth year of\nservice it handles A(n) tonnes, following the model\nA(n) = ab²ⁿ, where a and b are positive constants.\nThe 1st year handled 254 100 tonnes; the 2nd, 307 461.',
@@ -807,6 +837,21 @@ export const ui: Record<Locale, UiDict> = {
     d18GuideLaw2: '高度沿邊 VA 線性縮放',
     d18GuideLaw3: '(b)(i) 兩條垂直線起 tan α',
     d18GuideLaw4: '(b)(ii) 斜邊 BH > HH′',
+    gotItSubQ17: '切線固定咗 r = 10 同條方程；代入 y = −x + k 就變咗 y 二次方程，AB 中點係 ((k−4)/2, (k+4)/2)——亦係由 (6, 10) 出嘅垂足。',
+    gateChipQ17: '㩒一㩒中點',
+    q17QTextA: '設定：圓 C 嘅圓心喺 (6, 10)，\n而且 x 軸係 C 嘅切線。一條直線 L\n斜率 −1、y 軸截距 k，同 C 相交\n喺 A、B 兩點。',
+    q17QTextB: '(a) 求 C 嘅方程。（2 分）\n(b) 用 k 表示 AB 嘅中點。（5 分）',
+    q17WhatSubA: '(a) 求 C 嘅方程（2 分）',
+    q17WhatSubB: '(b) 用 k 表示 AB 嘅中點（5 分）',
+    q17GatePulse: '中點 M = ?',
+    q17WhyB: 'x 同 y 掉轉咗——y 加埋係 k + 4，x 加埋係 k − 4',
+    q17WhyC: '唔記得除二——中點要 ÷ 2',
+    q17WhyD: '呢個係減圓心，唔係根嘅和',
+    q17GuideLaw0: '讀題：圓心 (6,10) · x 軸切線',
+    q17GuideLaw1: '(a) 切線 → r = 10 → 方程',
+    q17GuideLaw2: '(b) 代入 L → y 二次方程',
+    q17GuideLaw3: '根和 → 中 y，返轉 → 中 x',
+    q17GuideLaw4: '中點 = 垂足',
     gotItSubD19: '兩年相除：b² = 1.21 → b = 1.1，a = 210 000；兩條總數都係 GP 和，比率 1.1ᵐ⁺⁸/2 永遠大過 1，20 000 000 呢條線喺第 14 年跨過。',
     gateChipD19: '㩒一㩒跨線嗰年',
     d19QTextA: '設定：一個機場營運空運貨站 X，\n開站後第 n 年處理 A(n) 噸貨，\n符合模型 A(n) = ab²ⁿ（a、b 係正常數）。\n第 1 年處理咗 254 100 噸，第 2 年 307 461 噸。',
