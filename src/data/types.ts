@@ -423,6 +423,8 @@ export type CircleLineLabMode =
   | 'question'
   | 'givenC'
   | 'givenTan'
+  | 'givenL'
+  | 'givenAB'
   | 'whatA'
   | 'whatB'
   | 'whyEq'

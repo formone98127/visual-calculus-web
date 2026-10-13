@@ -29,6 +29,16 @@ export const dse2012P1Q17Lessons: Lesson[] = [
         viz: { type: 'circleLineLab', props: { mode: 'givenTan' } },
       },
       {
+        id: 'p3a',
+        caption: 'Given 3 · the line — slope −1, y-intercept k',
+        viz: { type: 'circleLineLab', props: { mode: 'givenL' } },
+      },
+      {
+        id: 'p3b',
+        caption: 'Given 4 · the cut — L meets C at A and B',
+        viz: { type: 'circleLineLab', props: { mode: 'givenAB' } },
+      },
+      {
         id: 'p4',
         caption: 'What is asked — (a) the equation of C',
         viz: { type: 'circleLineLab', props: { mode: 'whatA' } },

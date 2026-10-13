@@ -825,6 +825,12 @@ export const lessonsZhHant: Record<string, LessonText> = {
       p3: {
         caption: '已知條件 2——切線：x 軸掂到 C，所以 r = 10',
       },
+      p3a: {
+        caption: '已知條件 3——直線 L：斜率 −1，y 截距 k',
+      },
+      p3b: {
+        caption: '已知條件 4——L 交 C 於 A、B 兩點',
+      },
       p4: {
         caption: '問咩——(a) C 嘅方程',
       },

@@ -141,6 +141,7 @@ function CircleFig({
   showT,
   showR,
   showLine,
+  showK,
   showChord,
   showPerp,
   showMid,
@@ -149,6 +150,7 @@ function CircleFig({
   showT?: boolean
   showR?: boolean
   showLine?: boolean
+  showK?: boolean
   showChord?: boolean
   showPerp?: boolean
   showMid?: boolean
@@ -187,8 +189,19 @@ function CircleFig({
       {showLine && (
         <g opacity={lu}>
           <line x1={px(-2)} y1={py(14)} x2={px(13)} y2={py(-1.5)} stroke={GOLD} strokeWidth={1.8} />
+          <text x={268} y={100} fontSize={12} fill={MUTED} fontFamily="'Fraunces', Georgia, serif">
+            slope = −1
+          </text>
           <text x={268} y={118} fontSize={12.5} fill={GOLD} fontStyle="italic" fontFamily="'Fraunces', Georgia, serif">
             L : x + y = k
+          </text>
+        </g>
+      )}
+      {showK && (
+        <g opacity={cu}>
+          <circle cx={OX} cy={py(12)} r={4} fill={GOLD} />
+          <text x={OX - 9} y={py(12) + 5} fontSize={13} fill={GOLD} fontStyle="italic" fontFamily="'Fraunces', Georgia, serif">
+            k
           </text>
         </g>
       )}
@@ -309,6 +322,8 @@ export function CircleLineLab({ mode, onInteractComplete }: CircleLineLabProps) 
     question: mode === 'question',
     givenC: mode === 'givenC',
     givenTan: mode === 'givenTan',
+    givenL: mode === 'givenL',
+    givenAB: mode === 'givenAB',
     whatA: mode === 'whatA',
     whatB: mode === 'whatB',
     whyEq: mode === 'whyEq',
@@ -408,6 +423,20 @@ export function CircleLineLab({ mode, onInteractComplete }: CircleLineLabProps) 
         {flags.givenTan && (
           <g>
             <CircleFig u={clamp01((u - 0.05) / 0.9)} showT showR />
+          </g>
+        )}
+
+        {/* ─── p3a · Given 3: the line L ─── */}
+        {flags.givenL && (
+          <g>
+            <CircleFig u={clamp01((u - 0.05) / 0.9)} showLine showK />
+          </g>
+        )}
+
+        {/* ─── p3b · Given 4: L cuts C at A and B ─── */}
+        {flags.givenAB && (
+          <g>
+            <CircleFig u={clamp01((u - 0.05) / 0.9)} showLine showChord />
           </g>
         )}
 
