@@ -612,7 +612,7 @@ export const ui: Record<Locale, UiDict> = {
     topicAlgebraBlurb: '磁磚會相乘。缺一角，補成正方形。咬一口，變成矩形。',
     topicExam: 'DSE 證明題',
     topicExamBlurb: '真．DSE 題目——平行線、全等三角形、一個藏在裡面的角。',
-    gotIt: '懂了',
+    gotIt: '明喇！',
     gotItSub: '兩個小正方形合起來，正好是大正方形。',
     gotItSubAngle: '三個角拼起來，正好是一條直線——180°。',
     gotItSubCircle: '圓環攤開變成三角形——那就是 πr²。',
