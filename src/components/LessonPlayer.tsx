@@ -22,6 +22,7 @@ import type {
   IneqOrLabProps,
   Lesson,
   PyramidLabProps,
+  QuadraticUnitLabProps,
   OddSquareLabProps,
   PolyIdLabProps,
   SimEqLabProps,
@@ -50,6 +51,7 @@ import { ParabolaSignLab } from './ParabolaSignLab'
 import { IneqOrLab } from './IneqOrLab'
 import { PyramidLab } from './PyramidLab'
 import { CargoLab } from './CargoLab'
+import { QuadraticUnitLab } from './QuadraticUnitLab'
 import { DiffSquaresLab } from './DiffSquaresLab'
 import { DistributeLab } from './DistributeLab'
 import { FibonacciLab } from './FibonacciLab'
@@ -99,6 +101,7 @@ const LAB_VIZ = new Set([
   'pyramidLab',
   'cargoLab',
   'circleLineLab',
+  'quadraticUnitLab',
 ])
 
 type Props = {
@@ -107,7 +110,7 @@ type Props = {
 
 /** leading phase word → badge colour class (題目 / 元素 N / 問咩 / 點解 / 驗證 / 到你) */
 const BEAT_TAGS: [RegExp, string][] = [
-  [/^(題目|The question)/, 'tag-q'],
+  [/^(題目|The question|單元|The unit)/, 'tag-q'],
   [/^(已知條件|Given|元素|Element)\s*(\d+)?/, 'tag-el'],
   [/^(問咩|What is asked)/, 'tag-ask'],
   [/^(點解係 GP|點解|Why GP|Why)/, 'tag-why'],
@@ -236,6 +239,7 @@ export function LessonPlayer({ lesson }: Props) {
   const pdProps = (beat?.viz?.props ?? { mode: 'ask' }) as PyramidLabProps
   const cgProps = (beat?.viz?.props ?? { mode: 'ask' }) as CargoLabProps
   const clProps = (beat?.viz?.props ?? { mode: 'figure' }) as CircleLineLabProps
+  const quProps = (beat?.viz?.props ?? { mode: 'figure' }) as QuadraticUnitLabProps
 
   const onLabInteract = () => {
     setGateOk(true)
@@ -273,10 +277,11 @@ export function LessonPlayer({ lesson }: Props) {
       'dse-2012-p1-q17': t.gotItSubQ17,
       'dse-2012-p1-q18': t.gotItSubD18,
       'dse-2012-p1-q19': t.gotItSubD19,
+      'unit1-quadratic': t.gotItSubU1,
     }[lesson.id] ?? t.gotItSub
 
   const gateChip =
-    ({ 'dse-q8': t.gateChipCong, 'dse-2012-q1': t.gateChipIndex, 'dse-2012-q2': t.gateChipD2, 'dse-2012-q3': t.gateChipD3, 'dse-2012-q4': t.gateChipD4, 'dse-2012-q5': t.gateChipD5, 'dse-2012-q6': t.gateChipD6, 'dse-2012-q7': t.gateChipD7, 'dse-2012-p1-q17': t.gateChipQ17, 'dse-2012-p1-q18': t.gateChipD18, 'dse-2012-p1-q19': t.gateChipD19 }[lesson.id] as
+    ({ 'dse-q8': t.gateChipCong, 'dse-2012-q1': t.gateChipIndex, 'dse-2012-q2': t.gateChipD2, 'dse-2012-q3': t.gateChipD3, 'dse-2012-q4': t.gateChipD4, 'dse-2012-q5': t.gateChipD5, 'dse-2012-q6': t.gateChipD6, 'dse-2012-q7': t.gateChipD7, 'dse-2012-p1-q17': t.gateChipQ17, 'dse-2012-p1-q18': t.gateChipD18, 'dse-2012-p1-q19': t.gateChipD19, 'unit1-quadratic': t.gateChipU1 }[lesson.id] as
       | string
       | undefined) ?? t.gateChip
 
@@ -534,6 +539,12 @@ export function LessonPlayer({ lesson }: Props) {
                 {vizType === 'circleLineLab' && (
                   <CircleLineLab
                     mode={clProps.mode}
+                    onInteractComplete={onLabInteract}
+                  />
+                )}
+                {vizType === 'quadraticUnitLab' && (
+                  <QuadraticUnitLab
+                    mode={quProps.mode}
                     onInteractComplete={onLabInteract}
                   />
                 )}

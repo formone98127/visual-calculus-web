@@ -473,6 +473,38 @@ export type CargoLabProps = {
   onInteractComplete?: () => void
 }
 
+export type QuadraticUnitLabMode =
+  | 'figure'
+  | 'question'
+  | 'given1'
+  | 'given2'
+  | 'given3'
+  | 'given4'
+  | 'whatA'
+  | 'whatB'
+  | 'why'
+  | 'factor'
+  | 'zeros'
+  | 'strategy'
+  | 'formula'
+  | 'plug'
+  | 'surd'
+  | 'graphTool'
+  | 'disc'
+  | 'three'
+  | 'complex'
+  | 'roots'
+  | 'gate'
+  | 'slick'
+  | 'answer'
+  | 'verify'
+  | 'guide'
+
+export type QuadraticUnitLabProps = {
+  mode: QuadraticUnitLabMode
+  onInteractComplete?: () => void
+}
+
 export type WavesProps = {
   mode?: 'sin' | 'cos' | 'both' | 'sinDeriv' | 'cosDeriv' | 'all'
 }
@@ -516,6 +548,7 @@ export type Beat = {
       | 'pyramidLab'
       | 'cargoLab'
       | 'circleLineLab'
+      | 'quadraticUnitLab'
       | 'waves'
       | 'formula'
       | 'none'
@@ -550,6 +583,7 @@ export type Beat = {
       | PyramidLabProps
       | CargoLabProps
       | CircleLineLabProps
+      | QuadraticUnitLabProps
       | WavesProps
   }
 }

@@ -287,6 +287,30 @@ type UiDict = {
   d19GuideLaw2: string
   d19GuideLaw3: string
   d19GuideLaw4: string
+  gotItSubU1: string
+  gateChipU1: string
+  u1QTextA: string
+  u1QTextB: string
+  u1Given1Sub: string
+  u1WhatSubA: string
+  u1WhatSubB: string
+  u1WhyText: string
+  u1StrategySub: string
+  u1SurdSub: string
+  u1GraphSub: string
+  u1DiscSub: string
+  u1ComplexSub: string
+  u1RootsSub: string
+  u1GatePulse: string
+  u1WhyB: string
+  u1WhyC: string
+  u1WhyD: string
+  u1VerifySub: string
+  u1GuideLaw0: string
+  u1GuideLaw1: string
+  u1GuideLaw2: string
+  u1GuideLaw3: string
+  u1GuideLaw4: string
   missing: string
   backHome: string
   waveSinDeriv: string
@@ -587,6 +611,30 @@ export const ui: Record<Locale, UiDict> = {
     d19GuideLaw2: '(a) A(4) ≈ 450 153.65 · GP sum S(n)',
     d19GuideLaw3: '(b)(i) ratio 1.1ᵐ⁺⁸/2 ≥ 1.1⁹/2 > 1',
     d19GuideLaw4: '(b)(ii) T(14) > 20 000 000 → n = 14',
+    gotItSubU1: 'Three tools — factor, formula, graph; Δ = b²−4ac judges the roots; α+β = −b/a and αβ = c/a turn roots back into equations — all walked through one equation, x² − 4x − 4 = 0.',
+    gateChipU1: 'Pin down k',
+    u1QTextA: 'The unit is built around one equation: ax² + bx + c = 0\n(a ≠ 0), every coefficient a real number. You solve it three\nways — factorise it, use the quadratic formula, or draw\ny = ax² + bx + c and read the x-intercepts.',
+    u1QTextB: 'Then it asks more: use Δ = b² − 4ac to tell the nature of the\nroots; use α + β = −b/a and αβ = c/a to build equations from\nroots; and, beyond the core, meet numbers of the form a ± bi.',
+    u1Given1Sub: 'the same form every time — name a, b, c before anything else',
+    u1WhatSubA: 'objectives 1.1 · 1.3 · 1.4 — by factor, formula, or graph',
+    u1WhatSubB: 'objectives 1.5 · 1.2 · 1.7 · 1.8 — judge, build, go past ℝ',
+    u1WhyText: 'solving = the x-intercepts of y = ax² + bx + c',
+    u1StrategySub: 'product −4, sum −4 has no integer pair — switch to the formula',
+    u1SurdSub: 'you may stop here — simplifying surds is non-foundation',
+    u1GraphSub: 'same two numbers, read off the graph',
+    u1DiscSub: 'the discriminant already knows the answer',
+    u1ComplexSub: 'precisely: two nonreal roots a ± bi (non-foundation)',
+    u1RootsSub: 'no solving needed — the coefficients hand them over',
+    u1GatePulse: 'Δ > 0 → k = ?',
+    u1WhyB: 'Δ = 0 — the parabola only touches: one double root, not two',
+    u1WhyC: 'Δ < 0 — no real root at all',
+    u1WhyD: 'k = 4 sneaks in — but that is the double-root case',
+    u1VerifySub: 'k = 3 gives two · k = 4 gives one (double) · k = 5 gives none',
+    u1GuideLaw0: 'read: ax²+bx+c = 0 · a ≠ 0 · real coefficients',
+    u1GuideLaw1: 'factorable? do it — zero product',
+    u1GuideLaw2: 'not factorable → formula, stop at the surd',
+    u1GuideLaw3: 'Δ = b²−4ac judges the roots before you solve',
+    u1GuideLaw4: 'α+β = −b/a · αβ = c/a → build equations from roots',
     missing: 'Lesson not found.',
     backHome: 'Back to catalog',
     waveSinDeriv: 'slope of red ≈ blue',
@@ -880,6 +928,30 @@ export const ui: Record<Locale, UiDict> = {
     d19GuideLaw2: '(a) A(4) ≈ 450 153.65 · GP 和 S(n)',
     d19GuideLaw3: '(b)(i) 比率 1.1ᵐ⁺⁸/2 ≥ 1.1⁹/2 > 1',
     d19GuideLaw4: '(b)(ii) T(14) > 20 000 000 → 第 14 年',
+    gotItSubU1: '三件工具——因式、公式、圖像；Δ = b²−4ac 判根；α+β = −b/a 同 αβ = c/a 由根砌返方程——成條主線行晒一次 x² − 4x − 4 = 0。',
+    gateChipU1: 'pin 死 k',
+    u1QTextA: '成個單元圍住一條式：ax² + bx + c = 0（a ≠ 0），\n所有係數都係實數。解佢有三件工具——因式分解、\n求根公式，或者畫 y = ax² + bx + c，\n喺圖度讀 x 軸交點。',
+    u1QTextB: '之後仲要求多啲：用 Δ = b² − 4ac 判斷根嘅性質；\n用 α + β = −b/a 同 αβ = c/a 由根砌返方程；\n延伸部分仲會遇上一種新數 a ± bi。',
+    u1Given1Sub: '每次都係同一個樣——動手之前先認返 a、b、c',
+    u1WhatSubA: '學習目標 1.1 · 1.3 · 1.4——因式、公式、圖像都得',
+    u1WhatSubB: '學習目標 1.5 · 1.2 · 1.7 · 1.8——判根·起式·走出實數',
+    u1WhyText: '解方程 = 搵 y = ax² + bx + c 嘅 x 軸交點',
+    u1StrategySub: '積 −4、和 −4 嘅整數配對唔存在——轉用公式',
+    u1SurdSub: '到呢度停得——化簡根式屬非基礎課程',
+    u1GraphSub: '同樣兩個數，喺圖度讀返出嚟',
+    u1DiscSub: '判別式早就知道答案',
+    u1ComplexSub: '精確講法：兩個非實根 a ± bi（非基礎）',
+    u1RootsSub: '唔使解——係數直接交出嚟',
+    u1GatePulse: 'Δ > 0 → k = ?',
+    u1WhyB: 'Δ = 0——拋物線只係掂到：一個雙根，唔係兩個',
+    u1WhyC: 'Δ < 0——連一個實根都冇',
+    u1WhyD: 'k = 4 都入得——不過嗰個係雙根情況',
+    u1VerifySub: 'k = 3 兩個根 · k = 4 淨一個（雙根）· k = 5 一個都冇',
+    u1GuideLaw0: '讀題：ax²+bx+c = 0 · a ≠ 0 · 實係數',
+    u1GuideLaw1: '因式到就做——零乘性質',
+    u1GuideLaw2: '因式唔到 → 公式，根式停手',
+    u1GuideLaw3: 'Δ = b²−4ac 未解先判根',
+    u1GuideLaw4: 'α+β = −b/a · αβ = c/a → 由根起式',
     missing: '找不到這一課。',
     backHome: '回到目錄',
     waveSinDeriv: '紅線斜率 ≈ 藍線',

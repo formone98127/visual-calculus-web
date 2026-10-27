@@ -27,6 +27,7 @@ import { pythagorasLessons } from './pythagoras'
 import { squareTriLessons } from './squareTri'
 import { tenBundleLessons } from './tenBundle'
 import { lessons as trigLessons } from './trigDerivatives'
+import { unit1QuadraticLessons } from './unit1quadratic'
 import { zeroPairLessons } from './zeroPair'
 
 export const heroLessonIds = [
@@ -105,6 +106,13 @@ export const topics: Topic[] = [
     lessons: [...dseQ8Lessons, ...dse2012Q1Lessons, ...dse2012Q2Lessons, ...dse2012Q3Lessons, ...dse2012Q4Lessons, ...dse2012Q5Lessons, ...dse2012Q6Lessons, ...dse2012Q7Lessons, ...dse2012P1Q17Lessons, ...dse2012P1Q18Lessons, ...dse2012P1Q19Lessons],
   },
   {
+    id: 'syllabus',
+    title: 'Syllabus, unit by unit',
+    blurb: 'The official learning units, opened up visually — what the curriculum asks, one beat at a time.',
+    source: 'EDB Explanatory Notes to SS Math Curriculum (Dec 2021) · Learning Unit 1 · pp. 1–3',
+    lessons: [...unit1QuadraticLessons],
+  },
+  {
     id: 'practice',
     title: 'Practice',
     blurb: 'More lessons to swipe through.',
@@ -145,6 +153,7 @@ export const allLessons: Lesson[] = [
   ...dse2012P1Q17Lessons,
   ...dse2012P1Q18Lessons,
   ...dse2012P1Q19Lessons,
+  ...unit1QuadraticLessons,
   ...trigLessons,
 ]
 
